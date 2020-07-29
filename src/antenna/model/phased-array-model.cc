@@ -116,7 +116,14 @@ PhasedArrayModel::GetBeamformingVector(void) const
   return m_beamformingVector;
 }
 
-
+//SILVIA
+const PhasedArrayModel::ComplexVector &
+PhasedArrayModel::GetSteeringVector(const Angles a) const
+{
+  NS_LOG_FUNCTION (this);
+  // need to calculates
+  return ;
+}
 
 //SILVIA
 void

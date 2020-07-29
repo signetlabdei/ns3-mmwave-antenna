@@ -102,6 +102,13 @@ public:
   
   //SILVIA
   /**
+   * Returns the steering vector that points toward the specified position
+   * \return the current beamforming vector
+   */
+  const ComplexVector & GetSteeringVector (const Angles a) const;
+  
+  //SILVIA
+  /**
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
