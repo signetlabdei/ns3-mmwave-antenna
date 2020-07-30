@@ -1,10 +1,8 @@
-#ifndef PHASED_ARRAY_MODEL_H_
-#define PHASED_ARRAY_MODEL_H_
+#ifndef UNIFORM_PLANAR_ARRAY_H_
+#define UNIFORM_PLANAR_ARRAY_H_
 
-#include <ns3/antenna-model.h>
-//SILVIA
-#include <ns3/angles.h>
-#include <complex>
+#include <ns3/object.h>
+#include "phased-array-model.h"
 
 // SILVIA: Remember to remove all SILVIA comments, each SILVIA comments means something Silvia modified to keep track of what I modified myself (in case I forgot some)
 
@@ -16,28 +14,18 @@ namespace ns3 {
  *
  * \brief Class implementing the phased array model
  * 
- * \note SILVIA: old note....to update! the current implementation supports the modeling of antenna arrays 
+ * \note the current implementation supports the modeling of antenna arrays 
  * composed of a single panel and with single (vertical) polarization.
  */
-class PhasedArrayModel : public Object
+class UniformPlanarArray : public PhasedArrayModel
 {
 public:
 
-  /**
-   * Constructor
-   */
-  PhasedArrayModel (void);
-
-  /**
-   * Destructor
-   */
-  virtual ~PhasedArrayModel (void);
-
   // inherited from Object
   static TypeId GetTypeId (void);
-
-  typedef std::vector<std::complex<double> > ComplexVector; //!< type definition for complex vectors
   
+  
+  // SILVIA: ALL THESE ARE INHERITED FROM PHASED ARRAY MODEL  
   /**
    * Returns the horizontal and vertical components of the antenna element field
    * pattern at the specified direction. Only vertical polarization is considered.
@@ -48,16 +36,18 @@ public:
    */
   virtual std::pair<double, double> GetElementFieldPattern (Angles a) const;
 
-  /**
+  
+   // SILVIA: modified the numbering 
+   /** 
    * Returns the location of the antenna element with the specified
    * index assuming the left bottom corner is (0,0,0), normalized
    * with respect to the wavelength.
-   * Antenna elements are scanned row by row, left to right and bottom to top.
+   * Antenna elements are numbered as specified in Sec. 7.3
    * For example, an antenna with 2 rows and 3 columns will be ordered as follows:
    * ^ z
-   * |  3 4 5
-   * |  0 1 2
-   * ----------> y
+   * |  (1,0) (1,1) (1,2)
+   * |  (0,0) (0,1) (0,2)
+   * ---------------------> y
    *
    * \param index index of the antenna element
    * \return the 3D vector that represents the position of the element
@@ -75,7 +65,6 @@ public:
    * \return whether the transmission is set to omni
    */
   virtual bool IsOmniTx (void) const;
-
 
   /**
    * Change the antenna model to omnidirectional (ignoring the beams)
@@ -120,13 +109,29 @@ public:
    * \return the current beamforming vector
    */
   virtual const AntennaModel & GetAntennaElement (void) const;
-  
-  
-  ComplexVector m_beamformingVector; //!< the beamforming vector in use
-  AntennaModel m_antennaElement; //SILVIA: !< the model of the antenna element in use
 
+private:
+  /**
+   * Returns the radiation power pattern of a single antenna element in dB,
+   * generated according to Table 7.3-1 in 3GPP TR 38.901
+   * \param vAngleRadian the vertical angle in radians
+   * \param hAngleRadian the horizontal angle in radians
+   * \return the radiation power pattern in dB
+   */
+  double GetRadiationPattern (double vAngleRadian, double hAngleRadian) const;
+    
+
+  bool m_isOmniTx; //!< true if the antenna is configured for omni transmissions
+  uint32_t m_numColumns; //!< number of columns
+  uint32_t m_numRows; //!< number of rows
+  double m_disV; //!< antenna spacing in the vertical direction in multiples of wave length
+  double m_disH; //!< antenna spacing in the horizontal direction in multiples of wave length
+  double m_alpha; //!< the bearing angle in radians
+  double m_beta; //!< the downtilt angle in radians
+  double m_gE; //!< directional gain of a single antenna element (dBi)
+  bool m_isIsotropic; //!< if true, antenna elements are isotropic
 };
 
 } /* namespace ns3 */
 
-#endif /* SRC_PHASED_ARRAY_MODEL_H_ */
+#endif /* SRC_UNIFORM_PLANAR_ARRAY_H_ */
