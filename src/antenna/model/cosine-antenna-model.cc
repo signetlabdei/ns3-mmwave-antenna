@@ -62,19 +62,39 @@ CosineAntennaModel::GetTypeId ()
   return tid;
 }
 
+// SILVIA: Fixed it to use m_verticalBeamwidthRadians and m_horizontalBeamwidthRadians 
 void 
-CosineAntennaModel::SetBeamwidth (double beamwidthDegrees)
+CosineAntennaModel::SetBeamwidth (double verticalbeamwidthDegrees, double horizontalbeamwidthDegrees = std::numeric_limits<double>::infinity())
 { 
-  NS_LOG_FUNCTION (this << beamwidthDegrees);
-  m_beamwidthRadians = DegreesToRadians (beamwidthDegrees);
-  m_exponent = -3.0 / (20 * std::log10 (std::cos (m_beamwidthRadians / 4.0)));
-  NS_LOG_LOGIC (this << " m_exponent = " << m_exponent);
+  if isinf(horizontalbeamwidthDegrees)
+  {
+    m_verticalexponent = 0;    
+    m_verticalbeamwidthRadians = std::numeric_limits<double>::infinity();
+  }
+  // SILVIA: needed the else? Why those coefficients to calculate the m_exponent?
+  else
+  {
+    NS_LOG_FUNCTION (this << verticalbeamwidthDegrees);
+    m_verticalbeamwidthRadians = DegreesToRadians (verticalbeamwidthDegrees);
+    m_verticalexponent = -3.0 / (20 * std::log10 (std::cos (m_verticalBeamwidthRadians / 4.0)));
+    NS_LOG_LOGIC (this << " m_verticalexponent = " << m_verticalexponent);
+  }
+  
+  
+  NS_LOG_FUNCTION (this << horizontalbeamwidthDegrees);
+  m_horizontalbeamwidthRadians = DegreesToRadians (horizontalbeamwidthDegrees);
+  m_horizontalexponent = -3.0 / (20 * std::log10 (std::cos (m_horizontalbeamwidthRadians / 4.0)));
+  NS_LOG_LOGIC (this << " m_horizontalexponent = " << m_horizontalexponent);
 }
 
-double
+// SILVIA: Fixed it to use m_verticalBeamwidthRadians and m_horizontalBeamwidthRadians 
+std::pair<double, double> 
 CosineAntennaModel::GetBeamwidth () const
 {
-  return RadiansToDegrees (m_beamwidthRadians);
+  double verticalbeamwidthDegrees = RadiansToDegrees (m_verticalbeamwidthRadians);
+  double horizontalbeamwidthDegrees = RadiansToDegrees (m_horizontalbeamwidthRadians);
+    
+  return std::make_pair (verticalbeamwidthDegrees, horizontalbeamwidthDegrees);
 }
 
 void 
