@@ -101,7 +101,7 @@ public:
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
-  virtual void SetAntennaElement (const AntennaModel &antennaElement);
+  void SetAntennaElement (Ptr<AntennaModel> antennaElement);
 
   /**
    * Returns the beamforming vector that is currently being used
