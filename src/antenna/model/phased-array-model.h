@@ -83,7 +83,7 @@ public:
    * Returns the steering vector that points toward the specified position
    * \return the current beamforming vector
    */
-  virtual const ComplexVector & GetSteeringVector (const Angles a) const;
+  ComplexVector GetSteeringVector (const Angles a) const;
   
   //SILVIA
   /**
