@@ -4,7 +4,6 @@
 #include <ns3/angles.h>
 #include <complex>
 
-// SILVIA: Remember to remove all SILVIA comments, each SILVIA comments means something Silvia modified to keep track of what I modified myself (in case I forgot some)
 
 namespace ns3 {
    
@@ -22,16 +21,20 @@ public:
    * Constructor
    */
   virtual PhasedArrayModel (void);
+  
 
   /**
    * Destructor
    */
   virtual ~PhasedArrayModel (void);
+  
 
   // inherited from Object
   static TypeId GetTypeId (void);
+  
 
   typedef std::vector<std::complex<double> > ComplexVector; //!< type definition for complex vectors
+  
   
   /**
    * Returns the horizontal and vertical components of the antenna element field
@@ -43,6 +46,7 @@ public:
    */
   virtual std::pair<double, double> GetElementFieldPattern (Angles a) const = 0;
 
+  
   /**
    * Returns the location of the antenna element with the specified
    * index, normalized with respect to the wavelength.
@@ -51,45 +55,49 @@ public:
    */
   virtual Vector GetElementLocation (uint32_t idx) const = 0;
 
+  
   /**
    * Returns the number of antenna elements
    * \return the number of antenna elements
    */
   virtual uint32_t GetNumberOfElements (void) const = 0;
 
+  
   /**
    * Sets the beamforming vector to be used
    * \param beamformingVector the beamforming vector
    */
   void SetBeamformingVector (const ComplexVector &beamformingVector);
   
-  //SILVIA
+
   /**
    * Sets the beamforming vector to point towards the specified position
    * \param beamformingVector the beamforming vector
    */
   void SetBeamformingVector (const Angles a);
 
+  
   /**
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */
   const ComplexVector & GetBeamformingVector (void) const;
   
-  //SILVIA
+
   /**
    * Returns the steering vector that points toward the specified position
    * \return the current beamforming vector
    */
   ComplexVector GetSteeringVector (const Angles a) const;
   
-  //SILVIA
+
   /**
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
   void SetAntennaElement (const AntennaModel &antennaElement);
 
+  
   /**
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
@@ -99,7 +107,7 @@ public:
   
   
   ComplexVector m_beamformingVector; //!< the beamforming vector in use
-  Ptr<AntennaModel> m_antennaElement; //SILVIA: !< the model of the antenna element in use
+  Ptr<AntennaModel> m_antennaElement; //!< the model of the antenna element in use
 
 };
 

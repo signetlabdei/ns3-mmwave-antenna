@@ -31,8 +31,6 @@ PhasedArrayModel::SetBeamformingVector (const ComplexVector &beamformingVector)
 }
 
 
-//SILVIA: considering radius equal to 1
-//SILVIA: the vector component calculated with (7.1-6), given the desired angle
 void
 PhasedArrayModel::SetBeamformingVector (const Angles a)
 {
@@ -49,7 +47,7 @@ PhasedArrayModel::GetBeamformingVector() const
 }
 
 
-//SILVIA: the vector component calculated with (7.1-6), given the desired angle
+// The vector components calculated with (7.1-6), given the desired angle
 const PhasedArrayModel::ComplexVector &
 PhasedArrayModel::GetSteeringVector(const Angles a) const
 {
@@ -59,7 +57,6 @@ PhasedArrayModel::GetSteeringVector(const Angles a) const
 }
 
 
-//SILVIA
 void
 PhasedArrayModel::SetAntennaElement (const AntennaModel &antennaElement)
 {
@@ -68,7 +65,6 @@ PhasedArrayModel::SetAntennaElement (const AntennaModel &antennaElement)
 }
 
 
-//SILVIA
 const PhasedArrayModel::AntennaModel &
 PhasedArrayModel::GetAntennaElement() const
 {

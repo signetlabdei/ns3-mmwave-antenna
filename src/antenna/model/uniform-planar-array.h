@@ -4,7 +4,6 @@
 #include <ns3/object.h>
 #include "phased-array-model.h"
 
-// SILVIA: Remember to remove all SILVIA comments, each SILVIA comments means something Silvia modified to keep track of what I modified myself (in case I forgot some)
 
 namespace ns3 {
    
@@ -36,8 +35,7 @@ public:
   // inherited from Object
   static TypeId GetTypeId (void);
   
-  
-  // SILVIA: ALL THESE ARE INHERITED FROM PHASED ARRAY MODEL  
+   
   /**
    * Returns the horizontal and vertical components of the antenna element field
    * pattern at the specified direction. Only vertical polarization is considered.
@@ -49,7 +47,6 @@ public:
   virtual std::pair<double, double> GetElementFieldPattern (Angles a) const override;
 
   
-   // SILVIA: modified the numbering 
    /** 
    * Returns the location of the antenna element with the specified
    * index assuming the left bottom corner is (0,0,0), normalized
