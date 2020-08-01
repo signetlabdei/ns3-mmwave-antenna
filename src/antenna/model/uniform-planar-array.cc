@@ -148,7 +148,8 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   // NOTE we assume a fixed slant angle of 0 degrees
   double thetaPrime = std::acos (cos (m_beta)*cos (a.theta) + sin (m_beta)*cos (a.phi-m_alpha)*sin (a.theta));
   double phiPrime = std::arg (std::complex<double> (cos (m_beta)*sin (a.theta)*cos (a.phi-m_alpha) - sin (m_beta)*cos (a.theta), sin (a.phi-m_alpha)*sin (a.theta)));
-  NS_LOG_DEBUG (a.theta << " " << thetaPrime << " " << a.phi << " " << phiPrime);
+  Angles aPrime (phiPrime, thetaPrime);
+  NS_LOG_DEBUG (a << " -> " << aPrime);
 
   double aPrimeDb = GetRadiationPattern (thetaPrime, phiPrime);
   double aPrime = pow (10, aPrimeDb / 10); // convert to linear
