@@ -48,79 +48,9 @@ UniformPlanarArray::GetTypeId (void)
                DoubleValue (0.0),
                MakeDoubleAccessor (&UniformPlanarArray::m_beta),
                MakeDoubleChecker<double> (0, M_PI))
-    .AddAttribute ("ElementGain",
-               "Directional gain of an antenna element in dBi",
-               DoubleValue (4.97),
-               MakeDoubleAccessor (&UniformPlanarArray::m_gE),
-               MakeDoubleChecker<double> (0, 8))
   ;
   return tid;
 }
-
-bool
-UniformPlanarArray::IsOmniTx () const
-{
-  NS_LOG_FUNCTION (this);
-  return m_isOmniTx;
-}
-
-void
-UniformPlanarArray::ChangeToOmniTx ()
-{
-  NS_LOG_FUNCTION (this);
-  m_isOmniTx = true;
-}
-
-void
-UniformPlanarArray::SetBeamformingVector (const ComplexVector &beamformingVector)
-{
-  NS_LOG_FUNCTION (this);
-  m_isOmniTx = false;
-  m_beamformingVector = beamformingVector;
-}
-
-//SILVIA: considering radius equal to 1
-//SILVIA: the vector component calculated with (7.1-6), given the desired angle
-void
-UniformPlanarArray::SetBeamformingVector (const Angles a)
-{
-  NS_LOG_FUNCTION (this << a);
-  m_isOmniTx = false;
-  m_beamformingVector = GetBeamformingVector (a);
-}
-
-const UniformPlanarArray::ComplexVector &
-UniformPlanarArray::GetBeamformingVector() const
-{
-  NS_LOG_FUNCTION (this);
-  return m_beamformingVector;
-}
-
-//SILVIA: the vector component calculated with (7.1-6), given the desired angle
-const UniformPlanarArray::ComplexVector &
-UniformPlanarArray::GetSteeringVector(const Angles a) const
-{
-  NS_LOG_FUNCTION (this);
-  ComplexVector steeringVector = (sin(a.theta) * cos(a.phi) , sin(a.theta)*sin(a.phi), cos(a.theta));  
-  return steeringVector;
-}
-
-//SILVIA
-void
-UniformPlanarArray::SetAntennaElement (const AntennaModel &antennaElement)
-{
-  NS_LOG_FUNCTION (this);
-  m_antennaElement = antennaElement;
-}
-
-//SILVIA
-const UniformPlanarArray::AntennaModel &
-UniformPlanarArray::GetAntennaElement() const
-{
-  NS_LOG_FUNCTION (this);
-  return m_antennaElement;
-}
-
 
 
 std::pair<double, double>

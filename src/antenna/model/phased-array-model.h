@@ -63,25 +63,25 @@ public:
    * Sets the beamforming vector to be used
    * \param beamformingVector the beamforming vector
    */
-  void SetBeamformingVector (const ComplexVector &beamformingVector);
+  virtual void SetBeamformingVector (const ComplexVector &beamformingVector);
   
   //SILVIA
   /**
-   * Sets the beamforming vector to point towards the specified angle
-   * \param a the target angle
+   * Sets the beamforming vector to point towards the specified position
+   * \param beamformingVector the beamforming vector
    */
-  void SetBeamformingVector (const Angles a);
+  virtual void SetBeamformingVector (const Angles a);
 
   /**
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */
-  const ComplexVector & GetBeamformingVector (void) const;
+  virtual const ComplexVector & GetBeamformingVector (void) const;
   
   //SILVIA
   /**
-   * Returns the steering vector pointing towards the specified angle
-   * \return the beamforming vector
+   * Returns the steering vector that points toward the specified position
+   * \return the current beamforming vector
    */
   virtual const ComplexVector & GetSteeringVector (const Angles a) const;
   
@@ -90,13 +90,14 @@ public:
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
-  void SetAntennaElement (Ptr<AntennaModel> antennaElement);
+  virtual void SetAntennaElement (const AntennaModel &antennaElement);
 
   /**
-   * Returns the antenna element of the array
-   * \return the antenna element
+   * Returns the beamforming vector that is currently being used
+   * \return the current beamforming vector
    */
-  Ptr<const AntennaModel> GetAntennaElement (void) const;
+  virtual const AntennaModel & GetAntennaElement (void) const;
+
   
   
   ComplexVector m_beamformingVector; //!< the beamforming vector in use

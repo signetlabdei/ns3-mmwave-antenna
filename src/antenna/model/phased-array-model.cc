@@ -16,10 +16,12 @@ PhasedArrayModel::PhasedArrayModel ()
     
 }
 
+
 PhasedArrayModel::~PhasedArrayModel ()
 {
 
 }
+
 
 TypeId
 PhasedArrayModel::GetTypeId ()
@@ -29,6 +31,60 @@ PhasedArrayModel::GetTypeId ()
     .SetGroupName("Antenna")
   ;
   return tid;
+}
+
+
+void
+PhasedArrayModel::SetBeamformingVector (const ComplexVector &beamformingVector)
+{
+  NS_LOG_FUNCTION (this);
+  m_beamformingVector = beamformingVector;
+}
+
+
+//SILVIA: considering radius equal to 1
+//SILVIA: the vector component calculated with (7.1-6), given the desired angle
+void
+PhasedArrayModel::SetBeamformingVector (const Angles a)
+{
+  NS_LOG_FUNCTION (this << a);
+  m_beamformingVector = GetBeamformingVector (a);
+}
+
+
+const PhasedArrayModel::ComplexVector &
+PhasedArrayModel::GetBeamformingVector() const
+{
+  NS_LOG_FUNCTION (this);
+  return m_beamformingVector;
+}
+
+
+//SILVIA: the vector component calculated with (7.1-6), given the desired angle
+const PhasedArrayModel::ComplexVector &
+PhasedArrayModel::GetSteeringVector(const Angles a) const
+{
+  NS_LOG_FUNCTION (this);
+  ComplexVector steeringVector = (sin(a.theta) * cos(a.phi) , sin(a.theta)*sin(a.phi), cos(a.theta));  
+  return steeringVector;
+}
+
+
+//SILVIA
+void
+PhasedArrayModel::SetAntennaElement (const AntennaModel &antennaElement)
+{
+  NS_LOG_FUNCTION (this);
+  m_antennaElement = antennaElement;
+}
+
+
+//SILVIA
+const PhasedArrayModel::AntennaModel &
+PhasedArrayModel::GetAntennaElement() const
+{
+  NS_LOG_FUNCTION (this);
+  return m_antennaElement;
 }
 
 

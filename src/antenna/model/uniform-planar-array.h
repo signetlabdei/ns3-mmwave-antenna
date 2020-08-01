@@ -60,45 +60,7 @@ public:
    */
   virtual uint64_t GetNumberOfElements (void) const;
 
-  /**
-   * Sets the beamforming vector to be used
-   * \param beamformingVector the beamforming vector
-   */
-  virtual void SetBeamformingVector (const ComplexVector &beamformingVector);
   
-  //SILVIA
-  /**
-   * Sets the beamforming vector to point towards the specified position
-   * \param beamformingVector the beamforming vector
-   */
-  virtual void SetBeamformingVector (const Angles a);
-
-  /**
-   * Returns the beamforming vector that is currently being used
-   * \return the current beamforming vector
-   */
-  virtual const ComplexVector & GetBeamformingVector (void) const;
-  
-  //SILVIA
-  /**
-   * Returns the steering vector that points toward the specified position
-   * \return the current beamforming vector
-   */
-  virtual const ComplexVector & GetSteeringVector (const Angles a) const;
-  
-  //SILVIA
-  /**
-   * Sets the antenna model to be used
-   * \param AntennaModel the antenna model
-   */
-  virtual void SetAntennaElement (const AntennaModel &antennaElement);
-
-  /**
-   * Returns the beamforming vector that is currently being used
-   * \return the current beamforming vector
-   */
-  virtual const AntennaModel & GetAntennaElement (void) const;
-
 private:
   /**
    * Returns the radiation power pattern of a single antenna element in dB,
@@ -117,7 +79,7 @@ private:
   double m_disH; //!< antenna spacing in the horizontal direction in multiples of wave length
   double m_alpha; //!< the bearing angle in radians
   double m_beta; //!< the downtilt angle in radians
-  double m_gE; //!< directional gain of a single antenna element (dBi)
+ 
 };
 
 } /* namespace ns3 */
