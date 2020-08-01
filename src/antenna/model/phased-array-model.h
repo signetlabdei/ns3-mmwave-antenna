@@ -14,10 +14,7 @@ namespace ns3 {
 /**
  * \ingroup antenna
  *
- * \brief Class implementing the phased array model
- * 
- * \note SILVIA: old note....to update! the current implementation supports the modeling of antenna arrays 
- * composed of a single panel and with single (vertical) polarization.
+ * \brief Class implementing the phased array model virtual base class.
  */
 class PhasedArrayModel : public Object
 {
