@@ -50,19 +50,11 @@ public:
 
   /**
    * Returns the location of the antenna element with the specified
-   * index assuming the left bottom corner is (0,0,0), normalized
-   * with respect to the wavelength.
-   * Antenna elements are scanned row by row, left to right and bottom to top.
-   * For example, an antenna with 2 rows and 3 columns will be ordered as follows:
-   * ^ z
-   * |  3 4 5
-   * |  0 1 2
-   * ----------> y
-   *
-   * \param index index of the antenna element
+   * index, normalized with respect to the wavelength.
+   * \param idx index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  virtual Vector GetElementLocation (uint64_t row, uint64_t col) const;
+  virtual Vector GetElementLocation (uint32_t idx) const = 0;
 
   /**
    * Returns the number of antenna elements
