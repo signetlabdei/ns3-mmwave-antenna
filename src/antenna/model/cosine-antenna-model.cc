@@ -62,7 +62,7 @@ CosineAntennaModel::GetTypeId ()
   return tid;
 }
 
-// SILVIA: Fixed it to use m_verticalBeamwidthRadians and m_horizontalBeamwidthRadians 
+
 void 
 CosineAntennaModel::SetBeamwidth (double verticalbeamwidthDegrees, double horizontalbeamwidthDegrees = std::numeric_limits<double>::infinity())
 { 

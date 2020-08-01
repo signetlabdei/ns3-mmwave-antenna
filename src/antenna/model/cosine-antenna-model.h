@@ -52,8 +52,10 @@ public:
 
 
   // attribute getters/setters
-  void SetBeamwidth (double verticalbeamwidthDegrees, double horizontalbeamwidthDegrees);
-  std::pair<double, double> GetBeamwidth () const;
+  void SetVerticalBeamwidth (double verticalbeamwidthDegrees);
+  void SetHorizontalBeamwidth (double horizontalbeamwidthDegrees);
+  double GetVerticalBeamwidth () const;
+  double GetHorizontalBeamwidth () const;
   void SetOrientation (double orientationDegrees);
   double GetOrientation () const;
 
