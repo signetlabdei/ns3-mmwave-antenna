@@ -139,6 +139,13 @@ std::ostream& operator<< ( std::ostream& os, const Angles& a);
  */
 std::istream &operator >> (std::istream &is, Angles &a);
 
+
+/** 
+ * Normalize the phi angle
+ */
+void NormalizeAngles (void);
+
+
 } // namespace ns3
 
 #endif // ANGLES_H
