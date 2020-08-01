@@ -29,6 +29,7 @@ UniformPlanarArray::GetTypeId (void)
   static TypeId tid = TypeId ("ns3::UniformPlanarArray")
     .SetParent<Object> ()
     .AddConstructor<UniformPlanarArray> ()
+    .SetGroupName("Antenna")
     .AddAttribute ("AntennaHorizontalSpacing",
                "Horizontal spacing between antenna elements, in multiples of wave length",
                DoubleValue (0.5),
