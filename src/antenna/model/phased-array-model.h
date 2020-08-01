@@ -111,7 +111,7 @@ public:
   
   
   ComplexVector m_beamformingVector; //!< the beamforming vector in use
-  AntennaModel m_antennaElement; //SILVIA: !< the model of the antenna element in use
+  Ptr<AntennaModel> m_antennaElement; //SILVIA: !< the model of the antenna element in use
 
 };
 
