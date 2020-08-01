@@ -1,5 +1,5 @@
-#ifndef UNIFORM_PLANAR_ARRAY_H_
-#define UNIFORM_PLANAR_ARRAY_H_
+#ifndef UNIFORM_PLANAR_ARRAY_H
+#define UNIFORM_PLANAR_ARRAY_H
 
 #include <ns3/object.h>
 #include "phased-array-model.h"
