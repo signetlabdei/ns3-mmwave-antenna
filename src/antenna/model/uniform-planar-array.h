@@ -12,7 +12,7 @@ namespace ns3 {
 /**
  * \ingroup antenna
  *
- * \brief Class implementing the phased array model
+ * \brief Class implementing Uniform Planar Array (UPA) model.
  * 
  * \note the current implementation supports the modeling of antenna arrays 
  * composed of a single panel and with single (vertical) polarization.
