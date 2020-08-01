@@ -46,7 +46,7 @@ public:
    *         of the field pattern and the second element is the vertical
    *         component of the field pattern
    */
-  virtual std::pair<double, double> GetElementFieldPattern (Angles a) const;
+  virtual std::pair<double, double> GetElementFieldPattern (Angles a) const = 0;
 
   /**
    * Returns the location of the antenna element with the specified
