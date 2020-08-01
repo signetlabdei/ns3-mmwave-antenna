@@ -1,8 +1,6 @@
 #ifndef PHASED_ARRAY_MODEL_H
 #define PHASED_ARRAY_MODEL_H
 
-#include <ns3/antenna-model.h>
-//SILVIA
 #include <ns3/angles.h>
 #include <complex>
 
@@ -63,20 +61,20 @@ public:
    * Sets the beamforming vector to be used
    * \param beamformingVector the beamforming vector
    */
-  virtual void SetBeamformingVector (const ComplexVector &beamformingVector);
+  void SetBeamformingVector (const ComplexVector &beamformingVector);
   
   //SILVIA
   /**
    * Sets the beamforming vector to point towards the specified position
    * \param beamformingVector the beamforming vector
    */
-  virtual void SetBeamformingVector (const Angles a);
+  void SetBeamformingVector (const Angles a);
 
   /**
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */
-  virtual const ComplexVector & GetBeamformingVector (void) const;
+  const ComplexVector & GetBeamformingVector (void) const;
   
   //SILVIA
   /**
@@ -90,13 +88,13 @@ public:
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
-  virtual void SetAntennaElement (const AntennaModel &antennaElement);
+  void SetAntennaElement (const AntennaModel &antennaElement);
 
   /**
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */
-  virtual const AntennaModel & GetAntennaElement (void) const;
+  const AntennaModel & GetAntennaElement (void) const;
 
   
   

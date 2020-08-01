@@ -52,27 +52,17 @@ public:
    * \param index index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  virtual Vector GetElementLocation (uint64_t row, uint64_t col) const;
+  virtual Vector GetElementLocation (uint64_t row, uint64_t col) const override;
 
   /**
    * Returns the number of antenna elements
    * \return the number of antenna elements
    */
-  virtual uint64_t GetNumberOfElements (void) const;
+  virtual uint64_t GetNumberOfElements (void) const override;
 
   
 private:
-  /**
-   * Returns the radiation power pattern of a single antenna element in dB,
-   * generated according to Table 7.3-1 in 3GPP TR 38.901
-   * \param vAngleRadian the vertical angle in radians
-   * \param hAngleRadian the horizontal angle in radians
-   * \return the radiation power pattern in dB
-   */
-  double GetRadiationPattern (double vAngleRadian, double hAngleRadian) const;
     
-
-  bool m_isOmniTx; //!< true if the antenna is configured for omni transmissions
   uint32_t m_numColumns; //!< number of columns
   uint32_t m_numRows; //!< number of rows
   double m_disV; //!< antenna spacing in the vertical direction in multiples of wave length

@@ -48,7 +48,7 @@ void
 PhasedArrayModel::SetBeamformingVector (const Angles a)
 {
   NS_LOG_FUNCTION (this << a);
-  m_beamformingVector = GetBeamformingVector (a);
+  m_beamformingVector = GetSteeringVector (a);
 }
 
 
