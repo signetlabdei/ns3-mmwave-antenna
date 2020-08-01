@@ -74,7 +74,7 @@ public:
    * Sets the beamforming vector to be used
    * \param beamformingVector the beamforming vector
    */
-  virtual void SetBeamformingVector (const ComplexVector &beamformingVector);
+  void SetBeamformingVector (const ComplexVector &beamformingVector);
   
   //SILVIA
   /**
