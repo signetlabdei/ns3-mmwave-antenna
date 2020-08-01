@@ -117,4 +117,4 @@ public:
 
 } /* namespace ns3 */
 
-#endif /* SRC_PHASED_ARRAY_MODEL_H_ */
+#endif /* PHASED_ARRAY_MODEL_H */
