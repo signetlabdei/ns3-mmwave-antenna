@@ -71,18 +71,6 @@ public:
   virtual uint64_t GetNumberOfElements (void) const;
 
   /**
-   * Returns true if the antenna is configured for omnidirectional transmissions
-   * \return whether the transmission is set to omni
-   */
-  virtual bool IsOmniTx (void) const;
-
-
-  /**
-   * Change the antenna model to omnidirectional (ignoring the beams)
-   */
-  virtual void ChangeToOmniTx (void);
-
-  /**
    * Sets the beamforming vector to be used
    * \param beamformingVector the beamforming vector
    */

@@ -53,11 +53,6 @@ UniformPlanarArray::GetTypeId (void)
                DoubleValue (4.97),
                MakeDoubleAccessor (&UniformPlanarArray::m_gE),
                MakeDoubleChecker<double> (0, 8))
-    .AddAttribute ("IsotropicElements",
-               "If true, use an isotropic radiation pattern (for testing purposes)",
-               BooleanValue (false),
-               MakeBooleanAccessor (&UniformPlanarArray::m_isIsotropic),
-               MakeBooleanChecker ())
   ;
   return tid;
 }
