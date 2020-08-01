@@ -122,4 +122,4 @@ private:
 
 } /* namespace ns3 */
 
-#endif /* SRC_UNIFORM_PLANAR_ARRAY_H_ */
+#endif /* UNIFORM_PLANAR_ARRAY_H */
