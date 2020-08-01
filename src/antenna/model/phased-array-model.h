@@ -79,7 +79,7 @@ public:
   //SILVIA
   /**
    * Sets the beamforming vector to point towards the specified angle
-   * \param beamformingVector the beamforming vector
+   * \param a the target angle
    */
   void SetBeamformingVector (const Angles a);
 
