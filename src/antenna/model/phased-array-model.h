@@ -87,7 +87,7 @@ public:
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */
-  virtual const ComplexVector & GetBeamformingVector (void) const;
+  const ComplexVector & GetBeamformingVector (void) const;
   
   //SILVIA
   /**
