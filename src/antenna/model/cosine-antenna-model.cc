@@ -66,7 +66,7 @@ CosineAntennaModel::GetTypeId ()
 void 
 CosineAntennaModel::SetBeamwidth (double verticalbeamwidthDegrees, double horizontalbeamwidthDegrees = std::numeric_limits<double>::infinity())
 { 
-  if isinf(horizontalbeamwidthDegrees)
+  if isinf(verticalbeamwidthDegrees)
   {
     m_verticalexponent = 0;    
     m_verticalbeamwidthRadians = std::numeric_limits<double>::infinity();
@@ -145,4 +145,3 @@ CosineAntennaModel::GetGainDb (Angles a)
 
 
 }
-
