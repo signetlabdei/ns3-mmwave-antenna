@@ -21,7 +21,7 @@ public:
   /**
    * Constructor
    */
-  PhasedArrayModel (void);
+  virtual PhasedArrayModel (void);
 
   /**
    * Destructor

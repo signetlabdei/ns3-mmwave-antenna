@@ -118,14 +118,7 @@ CosineAntennaModel::GetGainDb (Angles a)
   double phi = a.phi - m_orientationRadians;
 
   // make sure phi is in (-pi, pi]
-  while (phi <= -M_PI)
-    {
-      phi += M_PI+M_PI;
-    }
-  while (phi > M_PI)
-    {
-      phi -= M_PI+M_PI;
-    }
+  a.NormalizeAngles();
 
   NS_LOG_LOGIC ("phi = " << phi );
 

@@ -11,17 +11,6 @@ NS_LOG_COMPONENT_DEFINE ("PhasedArrayModel");
 
 NS_OBJECT_ENSURE_REGISTERED (PhasedArrayModel);
 
-PhasedArrayModel::PhasedArrayModel ()
-{
-    
-}
-
-
-PhasedArrayModel::~PhasedArrayModel ()
-{
-
-}
-
 
 TypeId
 PhasedArrayModel::GetTypeId ()

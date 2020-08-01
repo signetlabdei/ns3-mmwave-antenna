@@ -12,6 +12,17 @@ NS_LOG_COMPONENT_DEFINE ("UniformPlanarArray");
 NS_OBJECT_ENSURE_REGISTERED (UniformPlanarArray);
 
 
+
+UniformPlanarArray::UniformPlanarArray () : PhasedArrayModel()
+{
+  
+}  
+  
+UniformPlanarArray::~UniformPlanarArray () : PhasedArrayModel()
+{
+    
+}
+
 TypeId
 UniformPlanarArray::GetTypeId (void)
 {
@@ -57,6 +68,7 @@ std::pair<double, double>
 UniformPlanarArray::GetElementFieldPattern (Angles a) const
 {
   NS_LOG_FUNCTION (this);
+  
 
   // normalize phi (if needed)
   a.NormalizeAngles();

@@ -21,6 +21,18 @@ class UniformPlanarArray : public PhasedArrayModel
 {
 public:
 
+  /**
+   * Constructor
+   */
+  UniformPlanarArray (void);
+
+  
+  /**
+   * Destructor
+   */
+  ~UniformPlanarArray (void);
+    
+  
   // inherited from Object
   static TypeId GetTypeId (void);
   
