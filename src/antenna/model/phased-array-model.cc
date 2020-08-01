@@ -26,7 +26,7 @@ PhasedArrayModel::GetTypeId ()
 {
   static TypeId tid = TypeId ("ns3::PhasedArrayModel")
     .SetParent<Object> ()
-    .SetGroupName("PhasedArray")
+    .SetGroupName("Antenna")
   ;
   return tid;
 }
