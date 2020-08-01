@@ -86,8 +86,7 @@ UniformPlanarArray::SetBeamformingVector (const Angles a)
 {
   NS_LOG_FUNCTION (this);
   m_isOmniTx = false;
-  ComplexVector beamformingVector = (sin(a.theta) * cos(a.phi) , sin(a.theta)*sin(a.phi), cos(a.theta));  
-  m_beamformingVector = beamformingVector;
+  m_beamformingVector = GetBeamformingVector (a);
 }
 
 const UniformPlanarArray::ComplexVector &
