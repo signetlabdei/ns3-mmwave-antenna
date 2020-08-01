@@ -81,7 +81,7 @@ public:
    * Sets the beamforming vector to point towards the specified position
    * \param beamformingVector the beamforming vector
    */
-  virtual void SetBeamformingVector (const Angles a);
+  void SetBeamformingVector (const Angles a);
 
   /**
    * Returns the beamforming vector that is currently being used
