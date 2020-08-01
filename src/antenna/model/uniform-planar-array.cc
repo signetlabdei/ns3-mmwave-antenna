@@ -151,8 +151,12 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   Angles aPrime (phiPrime, thetaPrime);
   NS_LOG_DEBUG (a << " -> " << aPrime);
 
-  double aPrimeDb = GetRadiationPattern (thetaPrime, phiPrime);
-  double aPrime = pow (10, aPrimeDb / 10); // convert to linear
+   // compute the antenna element field pattern in the vertical polarization using
+  // eq. 7.3-4 in 3GPP TR 38.901
+  // NOTE we assume vertical polarization, hence the field pattern in the
+  // horizontal polarization is 0
+  double aPrimeDb = m_antennaElement.GetGainDb (aPrime);
+  double fieldThetaPrime = pow (10, aPrimeDb / 20); // convert to linear magnitude
 
   // compute psi using eq. 7.1-15 in 3GPP TR 38.901, assuming that the slant 
   // angle (gamma) is 0
