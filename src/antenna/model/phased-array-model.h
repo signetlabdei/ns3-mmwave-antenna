@@ -68,7 +68,7 @@ public:
    * Returns the number of antenna elements
    * \return the number of antenna elements
    */
-  virtual uint64_t GetNumberOfElements (void) const;
+  virtual uint32_t GetNumberOfElements (void) const = 0;
 
   /**
    * Sets the beamforming vector to be used
