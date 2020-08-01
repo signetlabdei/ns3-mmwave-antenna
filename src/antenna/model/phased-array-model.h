@@ -104,10 +104,10 @@ public:
   void SetAntennaElement (Ptr<AntennaModel> antennaElement);
 
   /**
-   * Returns the beamforming vector that is currently being used
-   * \return the current beamforming vector
+   * Returns the antenna element of the array
+   * \return the antenna element
    */
-  virtual const AntennaModel & GetAntennaElement (void) const;
+  Ptr<const AntennaModel> GetAntennaElement (void) const;
   
   
   ComplexVector m_beamformingVector; //!< the beamforming vector in use
