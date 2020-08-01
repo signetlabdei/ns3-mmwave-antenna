@@ -169,7 +169,7 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   // in 3GPP TR 38.901
   double fieldTheta = cos (psi) * fieldThetaPrime;
   double fieldPhi = sin (psi) * fieldThetaPrime;
-  NS_LOG_DEBUG (a.phi/M_PI*180 << " " << a.theta/M_PI*180 << " " << fieldTheta*fieldTheta + fieldPhi*fieldPhi);
+  NS_LOG_DEBUG (RadiansToDegrees (a.phi) << " " << RadiansToDegrees (a.theta) << " " << fieldTheta*fieldTheta + fieldPhi*fieldPhi);
 
   return std::make_pair (fieldPhi, fieldTheta);
 }
