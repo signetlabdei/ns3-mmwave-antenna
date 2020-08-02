@@ -63,22 +63,50 @@ CosineAntennaModel::GetTypeId ()
 }
 
 
+double CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians)
+{
+  double exponent = 0;
+  if !(isinf(beamwidthRadians))
+  {
+    exponent = -3.0 / (20 * std::log10 (std::cos (BeamwidthRadians / 4.0)));
+  }
+  return exponent;
+}
+
+
 void 
-CosineAntennaModel::SetBeamwidth (double verticalbeamwidthDegrees, double horizontalbeamwidthDegrees = std::numeric_limits<double>::infinity())
-{ 
+CosineAntennaModel::SetVerticalBeamwidth (double verticalbeamwidthDegrees)
+{
   if isinf(verticalbeamwidthDegrees)
   {
-    m_verticalexponent = 0;    
     m_verticalbeamwidthRadians = std::numeric_limits<double>::infinity();
   }
-  // SILVIA: needed the else? Why those coefficients to calculate the m_exponent?
   else
   {
-    NS_LOG_FUNCTION (this << verticalbeamwidthDegrees);
     m_verticalbeamwidthRadians = DegreesToRadians (verticalbeamwidthDegrees);
-    m_verticalexponent = -3.0 / (20 * std::log10 (std::cos (m_verticalBeamwidthRadians / 4.0)));
-    NS_LOG_LOGIC (this << " m_verticalexponent = " << m_verticalexponent);
+    m_verticalexponent = GetExponentFromBeamwidth(m_verticalbeamwidthRadians);
   }
+}
+
+
+void 
+CosineAntennaModel::SetHorizontalBeamwidth (double horizontalbeamwidthDegrees)
+{
+  if isinf(horizontalbeamwidthDegrees)
+  {
+    m_horizontalbeamwidthRadians = std::numeric_limits<double>::infinity();
+  }
+  else
+  {
+    m_horizontalbeamwidthRadians = DegreesToRadians (horizontalbeamwidthDegrees);
+    m_horizontalexponent = GetExponentFromBeamwidth(m_horizontalbeamwidthRadians);
+  }
+}
+
+void 
+SetBeamwidth (double verticalbeamwidthDegrees, double horizontalbeamwidthDegrees = std::numeric_limits<double>::infinity())
+{ 
+  
   
   
   NS_LOG_FUNCTION (this << horizontalbeamwidthDegrees);
@@ -87,7 +115,23 @@ CosineAntennaModel::SetBeamwidth (double verticalbeamwidthDegrees, double horizo
   NS_LOG_LOGIC (this << " m_horizontalexponent = " << m_horizontalexponent);
 }
 
-// SILVIA: Fixed it to use m_verticalBeamwidthRadians and m_horizontalBeamwidthRadians 
+
+double
+CosineAntennaModel::GetVerticalBeamwidth ()
+{
+    
+    
+}
+
+double
+CosineAntennaModel::GetHorizontalBeamwidth ()
+{
+    
+    
+}
+
+
+
 std::pair<double, double> 
 CosineAntennaModel::GetBeamwidth () const
 {

@@ -55,13 +55,15 @@ public:
   void SetVerticalBeamwidth (double verticalbeamwidthDegrees);
   void SetHorizontalBeamwidth (double horizontalbeamwidthDegrees);
   double GetVerticalBeamwidth () const;
-  double GetHorizontalBeamwidth () const;
+  double GetHorizontalBeamwidth () const = std::numeric_limits<double>::infinity();
   void SetOrientation (double orientationDegrees);
   double GetOrientation () const;
 
 private:
 
-  /**
+    double GetExponentFromBeamwidth(double beamwidthRadians);
+    
+   /**
    * this is the variable "n" in the paper by Chunjian
    * 
    */
