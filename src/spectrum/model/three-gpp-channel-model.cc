@@ -742,8 +742,8 @@ ThreeGppChannelModel::ChannelMatrixNeedsUpdate (Ptr<const ThreeGppChannelMatrix>
 Ptr<const MatrixBasedChannelModel::ChannelMatrix>
 ThreeGppChannelModel::GetChannel (Ptr<const MobilityModel> aMob,
                                   Ptr<const MobilityModel> bMob,
-                                  Ptr<const ThreeGppAntennaArrayModel> aAntenna,
-                                  Ptr<const ThreeGppAntennaArrayModel> bAntenna)
+                                  Ptr<const UniformPlanarArray> aAntenna,
+                                  Ptr<const UniformPlanarArray> bAntenna)
 {
   NS_LOG_FUNCTION (this);
 
@@ -812,8 +812,8 @@ ThreeGppChannelModel::GetChannel (Ptr<const MobilityModel> aMob,
 
 Ptr<ThreeGppChannelModel::ThreeGppChannelMatrix>
 ThreeGppChannelModel::GetNewChannel (Vector locUT, bool los, bool o2i,
-                                     Ptr<const ThreeGppAntennaArrayModel> sAntenna,
-                                     Ptr<const ThreeGppAntennaArrayModel> uAntenna,
+                                     Ptr<const UniformPlanarArray> sAntenna,
+                                     Ptr<const UniformPlanarArray> uAntenna,
                                      Angles &uAngle, Angles &sAngle,
                                      double dis2D, double hBS, double hUT) const
 {

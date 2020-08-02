@@ -307,11 +307,11 @@ def register_types(module):
     typehandlers.add_type_alias('void ( * ) ( ns3::Ptr< ns3::SpectrumValue > )', 'ns3::SpectrumValue::TracedCallback')
     typehandlers.add_type_alias('void ( * ) ( ns3::Ptr< ns3::SpectrumValue > )*', 'ns3::SpectrumValue::TracedCallback*')
     typehandlers.add_type_alias('void ( * ) ( ns3::Ptr< ns3::SpectrumValue > )&', 'ns3::SpectrumValue::TracedCallback&')
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel [class]
-    module.add_class('ThreeGppAntennaArrayModel', parent=root_module['ns3::Object'], import_from_module='ns.antenna')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::ThreeGppAntennaArrayModel::ComplexVector')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::ThreeGppAntennaArrayModel::ComplexVector*')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::ThreeGppAntennaArrayModel::ComplexVector&')
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray [class]
+    module.add_class('UniformPlanarArray', parent=root_module['ns3::Object'], import_from_module='ns.antenna')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::UniformPlanarArray::ComplexVector')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::UniformPlanarArray::ComplexVector*')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::UniformPlanarArray::ComplexVector&')
     ## three-gpp-spectrum-propagation-loss-model.h (module 'spectrum'): ns3::ThreeGppSpectrumPropagationLossModel [class]
     module.add_class('ThreeGppSpectrumPropagationLossModel', parent=root_module['ns3::SpectrumPropagationLossModel'])
     ## propagation-loss-model.h (module 'propagation'): ns3::ThreeLogDistancePropagationLossModel [class]
@@ -953,7 +953,7 @@ def register_methods(root_module):
     register_Ns3SpectrumPropagationLossModel_methods(root_module, root_module['ns3::SpectrumPropagationLossModel'])
     register_Ns3SpectrumSignalParameters_methods(root_module, root_module['ns3::SpectrumSignalParameters'])
     register_Ns3SpectrumValue_methods(root_module, root_module['ns3::SpectrumValue'])
-    register_Ns3ThreeGppAntennaArrayModel_methods(root_module, root_module['ns3::ThreeGppAntennaArrayModel'])
+    register_Ns3UniformPlanarArray_methods(root_module, root_module['ns3::UniformPlanarArray'])
     register_Ns3ThreeGppSpectrumPropagationLossModel_methods(root_module, root_module['ns3::ThreeGppSpectrumPropagationLossModel'])
     register_Ns3ThreeLogDistancePropagationLossModel_methods(root_module, root_module['ns3::ThreeLogDistancePropagationLossModel'])
     register_Ns3TraceFadingLossModel_methods(root_module, root_module['ns3::TraceFadingLossModel'])
@@ -5023,49 +5023,49 @@ def register_Ns3SpectrumValue_methods(root_module, cls):
                    [])
     return
 
-def register_Ns3ThreeGppAntennaArrayModel_methods(root_module, cls):
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ThreeGppAntennaArrayModel(ns3::ThreeGppAntennaArrayModel const & arg0) [constructor]
-    cls.add_constructor([param('ns3::ThreeGppAntennaArrayModel const &', 'arg0')])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ThreeGppAntennaArrayModel() [constructor]
+def register_Ns3UniformPlanarArray_methods(root_module, cls):
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray::UniformPlanarArray(ns3::UniformPlanarArray const & arg0) [constructor]
+    cls.add_constructor([param('ns3::UniformPlanarArray const &', 'arg0')])
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray::UniformPlanarArray() [constructor]
     cls.add_constructor([])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::ThreeGppAntennaArrayModel::ChangeToOmniTx() [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::UniformPlanarArray::ChangeToOmniTx() [member function]
     cls.add_method('ChangeToOmniTx', 
                    'void', 
                    [])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ComplexVector const & ns3::ThreeGppAntennaArrayModel::GetBeamformingVector() const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray::ComplexVector const & ns3::UniformPlanarArray::GetBeamformingVector() const [member function]
     cls.add_method('GetBeamformingVector', 
-                   'ns3::ThreeGppAntennaArrayModel::ComplexVector const &', 
+                   'ns3::UniformPlanarArray::ComplexVector const &', 
                    [], 
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): std::pair<double, double> ns3::ThreeGppAntennaArrayModel::GetElementFieldPattern(ns3::Angles a) const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): std::pair<double, double> ns3::UniformPlanarArray::GetElementFieldPattern(ns3::Angles a) const [member function]
     cls.add_method('GetElementFieldPattern', 
                    'std::pair< double, double >', 
                    [param('ns3::Angles', 'a')], 
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::Vector ns3::ThreeGppAntennaArrayModel::GetElementLocation(uint64_t index) const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::Vector ns3::UniformPlanarArray::GetElementLocation(uint64_t index) const [member function]
     cls.add_method('GetElementLocation', 
                    'ns3::Vector', 
                    [param('uint64_t', 'index')], 
                    is_const=True, is_virtual=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): uint64_t ns3::ThreeGppAntennaArrayModel::GetNumberOfElements() const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): uint64_t ns3::UniformPlanarArray::GetNumberOfElements() const [member function]
     cls.add_method('GetNumberOfElements', 
                    'uint64_t', 
                    [], 
                    is_const=True, is_virtual=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): static ns3::TypeId ns3::ThreeGppAntennaArrayModel::GetTypeId() [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): static ns3::TypeId ns3::UniformPlanarArray::GetTypeId() [member function]
     cls.add_method('GetTypeId', 
                    'ns3::TypeId', 
                    [], 
                    is_static=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): bool ns3::ThreeGppAntennaArrayModel::IsOmniTx() const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): bool ns3::UniformPlanarArray::IsOmniTx() const [member function]
     cls.add_method('IsOmniTx', 
                    'bool', 
                    [], 
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::ThreeGppAntennaArrayModel::SetBeamformingVector(ns3::ThreeGppAntennaArrayModel::ComplexVector const & beamformingVector) [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::UniformPlanarArray::SetBeamformingVector(ns3::UniformPlanarArray::ComplexVector const & beamformingVector) [member function]
     cls.add_method('SetBeamformingVector', 
                    'void', 
-                   [param('ns3::ThreeGppAntennaArrayModel::ComplexVector const &', 'beamformingVector')])
+                   [param('ns3::UniformPlanarArray::ComplexVector const &', 'beamformingVector')])
     return
 
 def register_Ns3ThreeGppSpectrumPropagationLossModel_methods(root_module, cls):
@@ -5073,10 +5073,10 @@ def register_Ns3ThreeGppSpectrumPropagationLossModel_methods(root_module, cls):
     cls.add_constructor([param('ns3::ThreeGppSpectrumPropagationLossModel const &', 'arg0')])
     ## three-gpp-spectrum-propagation-loss-model.h (module 'spectrum'): ns3::ThreeGppSpectrumPropagationLossModel::ThreeGppSpectrumPropagationLossModel() [constructor]
     cls.add_constructor([])
-    ## three-gpp-spectrum-propagation-loss-model.h (module 'spectrum'): void ns3::ThreeGppSpectrumPropagationLossModel::AddDevice(ns3::Ptr<ns3::NetDevice> n, ns3::Ptr<const ns3::ThreeGppAntennaArrayModel> a) [member function]
+    ## three-gpp-spectrum-propagation-loss-model.h (module 'spectrum'): void ns3::ThreeGppSpectrumPropagationLossModel::AddDevice(ns3::Ptr<ns3::NetDevice> n, ns3::Ptr<const ns3::UniformPlanarArray> a) [member function]
     cls.add_method('AddDevice', 
                    'void', 
-                   [param('ns3::Ptr< ns3::NetDevice >', 'n'), param('ns3::Ptr< ns3::ThreeGppAntennaArrayModel const >', 'a')])
+                   [param('ns3::Ptr< ns3::NetDevice >', 'n'), param('ns3::Ptr< ns3::UniformPlanarArray const >', 'a')])
     ## three-gpp-spectrum-propagation-loss-model.h (module 'spectrum'): ns3::Ptr<ns3::SpectrumValue> ns3::ThreeGppSpectrumPropagationLossModel::DoCalcRxPowerSpectralDensity(ns3::Ptr<const ns3::SpectrumValue> txPsd, ns3::Ptr<const ns3::MobilityModel> a, ns3::Ptr<const ns3::MobilityModel> b) const [member function]
     cls.add_method('DoCalcRxPowerSpectralDensity', 
                    'ns3::Ptr< ns3::SpectrumValue >', 
@@ -7178,10 +7178,10 @@ def register_Ns3MatrixBasedChannelModel_methods(root_module, cls):
     cls.add_constructor([])
     ## matrix-based-channel-model.h (module 'spectrum'): ns3::MatrixBasedChannelModel::MatrixBasedChannelModel(ns3::MatrixBasedChannelModel const & arg0) [constructor]
     cls.add_constructor([param('ns3::MatrixBasedChannelModel const &', 'arg0')])
-    ## matrix-based-channel-model.h (module 'spectrum'): ns3::Ptr<const ns3::MatrixBasedChannelModel::ChannelMatrix> ns3::MatrixBasedChannelModel::GetChannel(ns3::Ptr<const ns3::MobilityModel> aMob, ns3::Ptr<const ns3::MobilityModel> bMob, ns3::Ptr<const ns3::ThreeGppAntennaArrayModel> aAntenna, ns3::Ptr<const ns3::ThreeGppAntennaArrayModel> bAntenna) [member function]
+    ## matrix-based-channel-model.h (module 'spectrum'): ns3::Ptr<const ns3::MatrixBasedChannelModel::ChannelMatrix> ns3::MatrixBasedChannelModel::GetChannel(ns3::Ptr<const ns3::MobilityModel> aMob, ns3::Ptr<const ns3::MobilityModel> bMob, ns3::Ptr<const ns3::UniformPlanarArray> aAntenna, ns3::Ptr<const ns3::UniformPlanarArray> bAntenna) [member function]
     cls.add_method('GetChannel', 
                    'ns3::Ptr< ns3::MatrixBasedChannelModel::ChannelMatrix const >', 
-                   [param('ns3::Ptr< ns3::MobilityModel const >', 'aMob'), param('ns3::Ptr< ns3::MobilityModel const >', 'bMob'), param('ns3::Ptr< ns3::ThreeGppAntennaArrayModel const >', 'aAntenna'), param('ns3::Ptr< ns3::ThreeGppAntennaArrayModel const >', 'bAntenna')], 
+                   [param('ns3::Ptr< ns3::MobilityModel const >', 'aMob'), param('ns3::Ptr< ns3::MobilityModel const >', 'bMob'), param('ns3::Ptr< ns3::UniformPlanarArray const >', 'aAntenna'), param('ns3::Ptr< ns3::UniformPlanarArray const >', 'bAntenna')], 
                    is_virtual=True, is_pure_virtual=True)
     ## matrix-based-channel-model.h (module 'spectrum'): static uint32_t ns3::MatrixBasedChannelModel::GetKey(uint32_t x1, uint32_t x2) [member function]
     cls.add_method('GetKey', 
@@ -8538,10 +8538,10 @@ def register_Ns3ThreeGppChannelModel_methods(root_module, cls):
                    'void', 
                    [], 
                    is_virtual=True)
-    ## three-gpp-channel-model.h (module 'spectrum'): ns3::Ptr<const ns3::MatrixBasedChannelModel::ChannelMatrix> ns3::ThreeGppChannelModel::GetChannel(ns3::Ptr<const ns3::MobilityModel> aMob, ns3::Ptr<const ns3::MobilityModel> bMob, ns3::Ptr<const ns3::ThreeGppAntennaArrayModel> aAntenna, ns3::Ptr<const ns3::ThreeGppAntennaArrayModel> bAntenna) [member function]
+    ## three-gpp-channel-model.h (module 'spectrum'): ns3::Ptr<const ns3::MatrixBasedChannelModel::ChannelMatrix> ns3::ThreeGppChannelModel::GetChannel(ns3::Ptr<const ns3::MobilityModel> aMob, ns3::Ptr<const ns3::MobilityModel> bMob, ns3::Ptr<const ns3::UniformPlanarArray> aAntenna, ns3::Ptr<const ns3::UniformPlanarArray> bAntenna) [member function]
     cls.add_method('GetChannel', 
                    'ns3::Ptr< ns3::MatrixBasedChannelModel::ChannelMatrix const >', 
-                   [param('ns3::Ptr< ns3::MobilityModel const >', 'aMob'), param('ns3::Ptr< ns3::MobilityModel const >', 'bMob'), param('ns3::Ptr< ns3::ThreeGppAntennaArrayModel const >', 'aAntenna'), param('ns3::Ptr< ns3::ThreeGppAntennaArrayModel const >', 'bAntenna')], 
+                   [param('ns3::Ptr< ns3::MobilityModel const >', 'aMob'), param('ns3::Ptr< ns3::MobilityModel const >', 'bMob'), param('ns3::Ptr< ns3::UniformPlanarArray const >', 'aAntenna'), param('ns3::Ptr< ns3::UniformPlanarArray const >', 'bAntenna')], 
                    is_virtual=True)
     ## three-gpp-channel-model.h (module 'spectrum'): ns3::Ptr<ns3::ChannelConditionModel> ns3::ThreeGppChannelModel::GetChannelConditionModel() const [member function]
     cls.add_method('GetChannelConditionModel', 

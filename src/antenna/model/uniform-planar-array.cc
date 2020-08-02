@@ -15,12 +15,12 @@ NS_OBJECT_ENSURE_REGISTERED (UniformPlanarArray);
 
 UniformPlanarArray::UniformPlanarArray () : PhasedArrayModel()
 {
-  
-}  
-  
+
+}
+
 UniformPlanarArray::~UniformPlanarArray () : PhasedArrayModel()
 {
-    
+
 }
 
 TypeId
@@ -69,7 +69,7 @@ std::pair<double, double>
 UniformPlanarArray::GetElementFieldPattern (Angles a) const
 {
   NS_LOG_FUNCTION (this);
-  
+
 
   // normalize phi (if needed)
   a.NormalizeAngles();
@@ -91,7 +91,7 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   double aPrimeDb = m_antennaElement.GetGainDb (aPrime);
   double fieldThetaPrime = pow (10, aPrimeDb / 20); // convert to linear magnitude
 
-  // compute psi using eq. 7.1-15 in 3GPP TR 38.901, assuming that the slant 
+  // compute psi using eq. 7.1-15 in 3GPP TR 38.901, assuming that the slant
   // angle (gamma) is 0
   double psi = std::arg (std::complex<double> (cos (m_beta) * sin (a.theta) - sin (m_beta) * cos (a.theta)* cos (a.phi - m_alpha), sin (m_beta)* sin (a.phi-m_alpha)));
   NS_LOG_DEBUG ("psi " << psi);
@@ -136,4 +136,3 @@ UniformPlanarArray::GetNumberOfElements (void) const
 }
 
 } /* namespace ns3 */
- 

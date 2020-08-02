@@ -51,7 +51,7 @@ public:
   typedef std::vector<double> DoubleVector; //!< type definition for vectors of doubles
   typedef std::vector<DoubleVector> Double2DVector; //!< type definition for matrices of doubles
   typedef std::vector<Double2DVector> Double3DVector; //!< type definition for 3D matrices of doubles
-  typedef std::vector<ThreeGppAntennaArrayModel::ComplexVector> Complex2DVector; //!< type definition for complex matrices
+  typedef std::vector<UniformPlanarArray::ComplexVector> Complex2DVector; //!< type definition for complex matrices
   typedef std::vector<Complex2DVector> Complex3DVector; //!< type definition for complex 3D matrices
 
 
@@ -108,8 +108,8 @@ public:
    */
   virtual Ptr<const ChannelMatrix> GetChannel (Ptr<const MobilityModel> aMob,
                                                Ptr<const MobilityModel> bMob,
-                                               Ptr<const ThreeGppAntennaArrayModel> aAntenna,
-                                               Ptr<const ThreeGppAntennaArrayModel> bAntenna) = 0;
+                                               Ptr<const UniformPlanarArray> aAntenna,
+                                               Ptr<const UniformPlanarArray> bAntenna) = 0;
   
   /**
    * Calculate the channel key using the Cantor function

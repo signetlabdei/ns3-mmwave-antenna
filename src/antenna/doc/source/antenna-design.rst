@@ -13,7 +13,7 @@ The Antenna module provides:
 
  #. a new base class (AntennaModel) that provides an interface for the modeling of the radiation pattern of an antenna;
  #. a set of classes derived from this base class that each models the radiation pattern of different types of antennas;
- #. the class ThreeGppAntennaArrayModel, which implements the antenna model described in 3GPP TR 38.901
+ #. the class UniformPlanarArray, which implements the antenna model described in 3GPP TR 38.901
 
 
 ------------
@@ -108,10 +108,10 @@ antenna. Note that this radiation pattern is independent of the inclination angl
 :math:`\theta`.
 
 -------------------------
-ThreeGppAntennaArrayModel
+UniformPlanarArray
 -------------------------
 
-The class ThreeGppAntennaArrayModel implements the antenna model described in
+The class UniformPlanarArray implements the antenna model described in
 3GPP TR 38.901 [38901]_, which is used by the classes ThreeGppSpectrumPropagationLossModel
 and ThreeGppChannelModel.
 Each instance of this class models an isotropic rectangular antenna array composed  

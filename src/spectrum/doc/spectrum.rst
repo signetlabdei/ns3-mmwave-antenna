@@ -658,7 +658,7 @@ The method DoCalcRxPowerSpectralDensity uses m_deviceAntennaMap to obtain the
 antenna objects associated to the transmitting and receiving devices, and calls
 the method GetCurrentBeamformingVector to retrieve the beamforming vectors.
 For each device using the channel, the m_deviceAntennaMap contains the associated
-antenna object of type ThreeGppAntennaArrayModel. Since the mapping is one-to-one,
+antenna object of type UniformPlanarArray. Since the mapping is one-to-one,
 the model supports a single antenna object for each device.
 The m_deviceAntennaMap has to be initialized by inserting the device-antenna
 pairs using the method AddDevice.

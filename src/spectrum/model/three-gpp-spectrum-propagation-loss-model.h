@@ -45,7 +45,7 @@ class ChannelCondition;
  * returns the PSD of the received signal.
  *
  * \see MatrixBasedChannelModel
- * \see ThreeGppAntennaArrayModel
+ * \see UniformPlanarArray
  * \see ChannelCondition
  */
 class ThreeGppSpectrumPropagationLossModel : public SpectrumPropagationLossModel
@@ -84,9 +84,9 @@ public:
   /**
    * Add a device-antenna pair
    * \param n a pointer to the NetDevice
-   * \param a a pointer to the associated ThreeGppAntennaArrayModel
+   * \param a a pointer to the associated UniformPlanarArray
    */
-  void AddDevice (Ptr<NetDevice> n, Ptr<const ThreeGppAntennaArrayModel> a);
+  void AddDevice (Ptr<NetDevice> n, Ptr<const UniformPlanarArray> a);
 
 
   /**
@@ -135,10 +135,10 @@ private:
    */
   struct LongTerm : public SimpleRefCount<LongTerm>
   {
-    ThreeGppAntennaArrayModel::ComplexVector m_longTerm; //!< vector containing the long term component for each cluster
+    UniformPlanarArray::ComplexVector m_longTerm; //!< vector containing the long term component for each cluster
     Ptr<const MatrixBasedChannelModel::ChannelMatrix> m_channel; //!< pointer to the channel matrix used to compute the long term
-    ThreeGppAntennaArrayModel::ComplexVector m_sW; //!< the beamforming vector for the node s used to compute the long term
-    ThreeGppAntennaArrayModel::ComplexVector m_uW; //!< the beamforming vector for the node u used to compute the long term
+    UniformPlanarArray::ComplexVector m_sW; //!< the beamforming vector for the node s used to compute the long term
+    UniformPlanarArray::ComplexVector m_uW; //!< the beamforming vector for the node u used to compute the long term
   };
 
   /**
@@ -158,10 +158,10 @@ private:
    * \param bW the beamforming vector of the second device
    * \return vector containing the long term compoenent for each cluster
    */
-  ThreeGppAntennaArrayModel::ComplexVector GetLongTerm (uint32_t aId, uint32_t bId,
+  UniformPlanarArray::ComplexVector GetLongTerm (uint32_t aId, uint32_t bId,
                                                         Ptr<const MatrixBasedChannelModel::ChannelMatrix> channelMatrix,
-                                                        const ThreeGppAntennaArrayModel::ComplexVector &aW,
-                                                        const ThreeGppAntennaArrayModel::ComplexVector &bW) const;
+                                                        const UniformPlanarArray::ComplexVector &aW,
+                                                        const UniformPlanarArray::ComplexVector &bW) const;
   /**
    * Computes the long term component
    * \param channelMatrix the channel matrix H
@@ -169,9 +169,9 @@ private:
    * \param uW the beamforming vector of the u device
    * \return the long term component
    */
-  ThreeGppAntennaArrayModel::ComplexVector CalcLongTerm (Ptr<const MatrixBasedChannelModel::ChannelMatrix> channelMatrix,
-                                                         const ThreeGppAntennaArrayModel::ComplexVector &sW,
-                                                         const ThreeGppAntennaArrayModel::ComplexVector &uW) const;
+  UniformPlanarArray::ComplexVector CalcLongTerm (Ptr<const MatrixBasedChannelModel::ChannelMatrix> channelMatrix,
+                                                         const UniformPlanarArray::ComplexVector &sW,
+                                                         const UniformPlanarArray::ComplexVector &uW) const;
 
   /**
    * Computes the beamforming gain and applies it to the tx PSD
@@ -183,11 +183,11 @@ private:
    * \return the rx PSD
    */
   Ptr<SpectrumValue> CalcBeamformingGain (Ptr<SpectrumValue> txPsd,
-                                          ThreeGppAntennaArrayModel::ComplexVector longTerm,
+                                          UniformPlanarArray::ComplexVector longTerm,
                                           Ptr<const MatrixBasedChannelModel::ChannelMatrix> params,
                                           const Vector &sSpeed, const Vector &uSpeed) const;
 
-  std::unordered_map <uint32_t, Ptr<const ThreeGppAntennaArrayModel> > m_deviceAntennaMap; //!< map containig the <node, antenna> associations
+  std::unordered_map <uint32_t, Ptr<const UniformPlanarArray> > m_deviceAntennaMap; //!< map containig the <node, antenna> associations
   mutable std::unordered_map < uint32_t, Ptr<const LongTerm> > m_longTermMap; //!< map containing the long term components
   Ptr<MatrixBasedChannelModel> m_channelModel; //!< the model to generate the channel matrix
 };

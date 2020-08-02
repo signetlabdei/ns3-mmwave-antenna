@@ -57,9 +57,9 @@ static Ptr<ThreeGppSpectrumPropagationLossModel> m_spectrumLossModel; //!< the S
  * \param otherDevice the device towards which point the beam
  */
 static void
-DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<ThreeGppAntennaArrayModel> thisAntenna, Ptr<NetDevice> otherDevice)
+DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<UniformPlanarArray> thisAntenna, Ptr<NetDevice> otherDevice)
 {
-  ThreeGppAntennaArrayModel::ComplexVector antennaWeights;
+  UniformPlanarArray::ComplexVector antennaWeights;
 
   // retrieve the position of the two devices
   Vector aPos = thisDevice->GetNode ()->GetObject<MobilityModel> ()->GetPosition ();
@@ -232,8 +232,8 @@ main (int argc, char *argv[])
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the antenna objects and set their dimensions
-  Ptr<ThreeGppAntennaArrayModel> txAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
-  Ptr<ThreeGppAntennaArrayModel> rxAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
+  Ptr<UniformPlanarArray> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
+  Ptr<UniformPlanarArray> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
 
   // initialize the devices in the ThreeGppSpectrumPropagationLossModel
   m_spectrumLossModel->AddDevice (txDev, txAntenna);

@@ -71,7 +71,7 @@ private:
    * \param txAntenna the antenna object associated to the first node
    * \param rxAntenna the antenna object associated to the second node
    */
-  void DoComputeNorm (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<ThreeGppAntennaArrayModel> txAntenna, Ptr<ThreeGppAntennaArrayModel> rxAntenna);
+  void DoComputeNorm (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<UniformPlanarArray> txAntenna, Ptr<UniformPlanarArray> rxAntenna);
 
   std::vector<double> m_normVector; //!< each element is the norm of a channel realization
 };
@@ -86,7 +86,7 @@ ThreeGppChannelMatrixComputationTest::~ThreeGppChannelMatrixComputationTest ()
 }
 
 void
-ThreeGppChannelMatrixComputationTest::DoComputeNorm (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<ThreeGppAntennaArrayModel> txAntenna, Ptr<ThreeGppAntennaArrayModel> rxAntenna)
+ThreeGppChannelMatrixComputationTest::DoComputeNorm (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<UniformPlanarArray> txAntenna, Ptr<UniformPlanarArray> rxAntenna)
 {
   uint64_t txAntennaElements = txAntenna->GetNumberOfElements ();
   uint64_t rxAntennaElements = rxAntenna->GetNumberOfElements ();
@@ -153,8 +153,8 @@ ThreeGppChannelMatrixComputationTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<ThreeGppAntennaArrayModel> txAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "IsotropicElements", BooleanValue (true));
-  Ptr<ThreeGppAntennaArrayModel> rxAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "IsotropicElements", BooleanValue (true));
+  Ptr<UniformPlanarArray> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "IsotropicElements", BooleanValue (true));
+  Ptr<UniformPlanarArray> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "IsotropicElements", BooleanValue (true));
 
   // generate the channel matrix
   Ptr<const ThreeGppChannelModel::ChannelMatrix> channelMatrix = channelModel->GetChannel (txMob, rxMob, txAntenna, rxAntenna);
@@ -235,7 +235,7 @@ private:
    * \param rxAntenna the antenna object associated to the second node
    * \param update whether if the channel matrix should be updated or not
    */
-  void DoGetChannel (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<ThreeGppAntennaArrayModel> txAntenna, Ptr<ThreeGppAntennaArrayModel> rxAntenna, bool update);
+  void DoGetChannel (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<UniformPlanarArray> txAntenna, Ptr<UniformPlanarArray> rxAntenna, bool update);
 
   Ptr<const ThreeGppChannelModel::ChannelMatrix> m_currentChannel; //!< used by DoGetChannel to store the current channel matrix
 };
@@ -250,7 +250,7 @@ ThreeGppChannelMatrixUpdateTest::~ThreeGppChannelMatrixUpdateTest ()
 }
 
 void
-ThreeGppChannelMatrixUpdateTest::DoGetChannel (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<ThreeGppAntennaArrayModel> txAntenna, Ptr<ThreeGppAntennaArrayModel> rxAntenna, bool update)
+ThreeGppChannelMatrixUpdateTest::DoGetChannel (Ptr<ThreeGppChannelModel> channelModel, Ptr<MobilityModel> txMob, Ptr<MobilityModel> rxMob, Ptr<UniformPlanarArray> txAntenna, Ptr<UniformPlanarArray> rxAntenna, bool update)
 {
   // retrieve the channel matrix
   Ptr<const ThreeGppChannelModel::ChannelMatrix> channelMatrix = channelModel->GetChannel (txMob, rxMob, txAntenna, rxAntenna);
@@ -312,8 +312,8 @@ ThreeGppChannelMatrixUpdateTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<ThreeGppAntennaArrayModel> txAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "IsotropicElements", BooleanValue (true));
-  Ptr<ThreeGppAntennaArrayModel> rxAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "IsotropicElements", BooleanValue (true));
+  Ptr<UniformPlanarArray> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "IsotropicElements", BooleanValue (true));
+  Ptr<UniformPlanarArray> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "IsotropicElements", BooleanValue (true));
 
   // check if the channel matrix is correctly updated
 
@@ -367,7 +367,7 @@ private:
    * \param otherDevice the device to communicate with
    * \param otherAntenna the antenna object associated to otherDevice
    */
-  void DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<ThreeGppAntennaArrayModel> thisAntenna, Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna);
+  void DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<UniformPlanarArray> thisAntenna, Ptr<NetDevice> otherDevice, Ptr<UniformPlanarArray> otherAntenna);
 
   /**
    * Test of the long term component is correctly updated when the channel
@@ -400,9 +400,9 @@ ThreeGppSpectrumPropagationLossModelTest::~ThreeGppSpectrumPropagationLossModelT
 }
 
 void
-ThreeGppSpectrumPropagationLossModelTest::DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<ThreeGppAntennaArrayModel> thisAntenna, Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna)
+ThreeGppSpectrumPropagationLossModelTest::DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<UniformPlanarArray> thisAntenna, Ptr<NetDevice> otherDevice, Ptr<UniformPlanarArray> otherAntenna)
 {
-  ThreeGppAntennaArrayModel::ComplexVector antennaWeights;
+  UniformPlanarArray::ComplexVector antennaWeights;
 
   Vector aPos = thisDevice->GetNode ()->GetObject<MobilityModel> ()->GetPosition ();
   Vector bPos = otherDevice->GetNode ()->GetObject<MobilityModel> ()->GetPosition ();
@@ -499,8 +499,8 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<ThreeGppAntennaArrayModel> txAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
-  Ptr<ThreeGppAntennaArrayModel> rxAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
+  Ptr<UniformPlanarArray> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
+  Ptr<UniformPlanarArray> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
 
   // initialize ThreeGppSpectrumPropagationLossModel
   lossModel->AddDevice (txDev, txAntenna);
@@ -526,7 +526,7 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   // 2) check if the long term is updated when changing the BF vector
   // change the position of the rx device and recompute the beamforming vectors
   rxMob->SetPosition (Vector (10.0, 5.0, 10.0));
-  ThreeGppAntennaArrayModel::ComplexVector txBfVector = txAntenna->GetBeamformingVector ();
+  UniformPlanarArray::ComplexVector txBfVector = txAntenna->GetBeamformingVector ();
   txBfVector [0] = std::complex<double> (0.0, 0.0);
   txAntenna->SetBeamformingVector (txBfVector);
 

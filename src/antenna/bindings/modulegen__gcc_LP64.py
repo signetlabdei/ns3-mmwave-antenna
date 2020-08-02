@@ -86,11 +86,11 @@ def register_types(module):
     module.add_class('SimpleRefCount', template_parameters=['ns3::Hash::Implementation', 'ns3::empty', 'ns3::DefaultDeleter<ns3::Hash::Implementation>'], automatic_type_narrowing=True, memory_policy=cppclass.ReferenceCountingMethodsPolicy(incref_method='Ref', decref_method='Unref', peekref_method='GetReferenceCount'), parent=root_module['ns3::empty'], import_from_module='ns.core')
     ## simple-ref-count.h (module 'core'): ns3::SimpleRefCount<ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> > [class]
     module.add_class('SimpleRefCount', template_parameters=['ns3::TraceSourceAccessor', 'ns3::empty', 'ns3::DefaultDeleter<ns3::TraceSourceAccessor>'], automatic_type_narrowing=True, memory_policy=cppclass.ReferenceCountingMethodsPolicy(incref_method='Ref', decref_method='Unref', peekref_method='GetReferenceCount'), parent=root_module['ns3::empty'], import_from_module='ns.core')
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel [class]
-    module.add_class('ThreeGppAntennaArrayModel', parent=root_module['ns3::Object'])
-    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::ThreeGppAntennaArrayModel::ComplexVector')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::ThreeGppAntennaArrayModel::ComplexVector*')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::ThreeGppAntennaArrayModel::ComplexVector&')
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray [class]
+    module.add_class('UniformPlanarArray', parent=root_module['ns3::Object'])
+    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::UniformPlanarArray::ComplexVector')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::UniformPlanarArray::ComplexVector*')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::UniformPlanarArray::ComplexVector&')
     ## trace-source-accessor.h (module 'core'): ns3::TraceSourceAccessor [class]
     module.add_class('TraceSourceAccessor', parent=root_module['ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> >'], import_from_module='ns.core')
     ## antenna-model.h (module 'antenna'): ns3::AntennaModel [class]
@@ -222,7 +222,7 @@ def register_methods(root_module):
     register_Ns3SimpleRefCount__Ns3CallbackImplBase_Ns3Empty_Ns3DefaultDeleter__lt__ns3CallbackImplBase__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::CallbackImplBase, ns3::empty, ns3::DefaultDeleter<ns3::CallbackImplBase> >'])
     register_Ns3SimpleRefCount__Ns3HashImplementation_Ns3Empty_Ns3DefaultDeleter__lt__ns3HashImplementation__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::Hash::Implementation, ns3::empty, ns3::DefaultDeleter<ns3::Hash::Implementation> >'])
     register_Ns3SimpleRefCount__Ns3TraceSourceAccessor_Ns3Empty_Ns3DefaultDeleter__lt__ns3TraceSourceAccessor__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> >'])
-    register_Ns3ThreeGppAntennaArrayModel_methods(root_module, root_module['ns3::ThreeGppAntennaArrayModel'])
+    register_Ns3UniformPlanarArray_methods(root_module, root_module['ns3::UniformPlanarArray'])
     register_Ns3TraceSourceAccessor_methods(root_module, root_module['ns3::TraceSourceAccessor'])
     register_Ns3AntennaModel_methods(root_module, root_module['ns3::AntennaModel'])
     register_Ns3AttributeAccessor_methods(root_module, root_module['ns3::AttributeAccessor'])
@@ -902,49 +902,49 @@ def register_Ns3SimpleRefCount__Ns3TraceSourceAccessor_Ns3Empty_Ns3DefaultDelete
     cls.add_constructor([param('ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter< ns3::TraceSourceAccessor > > const &', 'o')])
     return
 
-def register_Ns3ThreeGppAntennaArrayModel_methods(root_module, cls):
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ThreeGppAntennaArrayModel(ns3::ThreeGppAntennaArrayModel const & arg0) [constructor]
-    cls.add_constructor([param('ns3::ThreeGppAntennaArrayModel const &', 'arg0')])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ThreeGppAntennaArrayModel() [constructor]
+def register_Ns3UniformPlanarArray_methods(root_module, cls):
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray::UniformPlanarArray(ns3::UniformPlanarArray const & arg0) [constructor]
+    cls.add_constructor([param('ns3::UniformPlanarArray const &', 'arg0')])
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray::UniformPlanarArray() [constructor]
     cls.add_constructor([])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::ThreeGppAntennaArrayModel::ChangeToOmniTx() [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::UniformPlanarArray::ChangeToOmniTx() [member function]
     cls.add_method('ChangeToOmniTx', 
                    'void', 
                    [])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ComplexVector const & ns3::ThreeGppAntennaArrayModel::GetBeamformingVector() const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::UniformPlanarArray::ComplexVector const & ns3::UniformPlanarArray::GetBeamformingVector() const [member function]
     cls.add_method('GetBeamformingVector', 
-                   'ns3::ThreeGppAntennaArrayModel::ComplexVector const &', 
+                   'ns3::UniformPlanarArray::ComplexVector const &', 
                    [], 
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): std::pair<double, double> ns3::ThreeGppAntennaArrayModel::GetElementFieldPattern(ns3::Angles a) const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): std::pair<double, double> ns3::UniformPlanarArray::GetElementFieldPattern(ns3::Angles a) const [member function]
     cls.add_method('GetElementFieldPattern', 
                    'std::pair< double, double >', 
                    [param('ns3::Angles', 'a')], 
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::Vector ns3::ThreeGppAntennaArrayModel::GetElementLocation(uint64_t index) const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::Vector ns3::UniformPlanarArray::GetElementLocation(uint64_t index) const [member function]
     cls.add_method('GetElementLocation', 
                    'ns3::Vector', 
                    [param('uint64_t', 'index')], 
                    is_const=True, is_virtual=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): uint64_t ns3::ThreeGppAntennaArrayModel::GetNumberOfElements() const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): uint64_t ns3::UniformPlanarArray::GetNumberOfElements() const [member function]
     cls.add_method('GetNumberOfElements', 
                    'uint64_t', 
                    [], 
                    is_const=True, is_virtual=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): static ns3::TypeId ns3::ThreeGppAntennaArrayModel::GetTypeId() [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): static ns3::TypeId ns3::UniformPlanarArray::GetTypeId() [member function]
     cls.add_method('GetTypeId', 
                    'ns3::TypeId', 
                    [], 
                    is_static=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): bool ns3::ThreeGppAntennaArrayModel::IsOmniTx() const [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): bool ns3::UniformPlanarArray::IsOmniTx() const [member function]
     cls.add_method('IsOmniTx', 
                    'bool', 
                    [], 
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::ThreeGppAntennaArrayModel::SetBeamformingVector(ns3::ThreeGppAntennaArrayModel::ComplexVector const & beamformingVector) [member function]
+    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::UniformPlanarArray::SetBeamformingVector(ns3::UniformPlanarArray::ComplexVector const & beamformingVector) [member function]
     cls.add_method('SetBeamformingVector', 
                    'void', 
-                   [param('ns3::ThreeGppAntennaArrayModel::ComplexVector const &', 'beamformingVector')])
+                   [param('ns3::UniformPlanarArray::ComplexVector const &', 'beamformingVector')])
     return
 
 def register_Ns3TraceSourceAccessor_methods(root_module, cls):

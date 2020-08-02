@@ -117,8 +117,8 @@ public:
    */
   Ptr<const ChannelMatrix> GetChannel (Ptr<const MobilityModel> aMob,
                                        Ptr<const MobilityModel> bMob,
-                                       Ptr<const ThreeGppAntennaArrayModel> aAntenna,
-                                       Ptr<const ThreeGppAntennaArrayModel> bAntenna) override;
+                                       Ptr<const UniformPlanarArray> aAntenna,
+                                       Ptr<const UniformPlanarArray> bAntenna) override;
   /**
    * \brief Assign a fixed random variable stream number to the random variables
    * used by this model.
@@ -214,8 +214,8 @@ private:
    * \return the channel realization
    */
   Ptr<ThreeGppChannelMatrix> GetNewChannel (Vector locUT, bool los, bool o2i,
-                                            Ptr<const ThreeGppAntennaArrayModel> sAntenna,
-                                            Ptr<const ThreeGppAntennaArrayModel> uAntenna,
+                                            Ptr<const UniformPlanarArray> sAntenna,
+                                            Ptr<const UniformPlanarArray> uAntenna,
                                             Angles &uAngle, Angles &sAngle,
                                             double dis2D, double hBS, double hUT) const;
 
