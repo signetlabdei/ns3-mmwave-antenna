@@ -56,13 +56,17 @@ std::istream &operator >> (std::istream &is, Angles &a)
   return is;
 }
 
-void NormalizeAngles ();
+void NormalizeAngles (Angles a)
 {
   a.phi = fmod (a.phi + M_PI, 2 * M_PI);
   if (a.phi < 0)
+  {
       a.phi += M_PI;
+  }
   else 
+  {
       a.phi -= M_PI;
+  }      
 }
 
 
