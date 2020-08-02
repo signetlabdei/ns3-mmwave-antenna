@@ -27,7 +27,7 @@
 #include "ns3/pointer.h"
 #include "ns3/node-container.h"
 #include "ns3/constant-position-mobility-model.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/uniform-planar-array.h"
 #include "ns3/three-gpp-channel-model.h"
 #include "ns3/simple-net-device.h"
 #include "ns3/simulator.h"

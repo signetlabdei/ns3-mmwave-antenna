@@ -26,7 +26,7 @@
 #include <ns3/object.h>
 #include <ns3/nstime.h>
 #include <ns3/vector.h>
-#include <ns3/three-gpp-antenna-array-model.h>
+#include <ns3/uniform-planar-array.h>
 #include <tuple>
 
 namespace ns3 {

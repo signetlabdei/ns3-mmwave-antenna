@@ -30,7 +30,7 @@
 
 #include "ns3/core-module.h"
 #include "ns3/three-gpp-channel-model.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/uniform-planar-array.h"
 #include <fstream>
 #include "ns3/three-gpp-spectrum-propagation-loss-model.h"
 #include "ns3/net-device.h"

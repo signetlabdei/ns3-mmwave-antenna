@@ -23,7 +23,7 @@
 #include "ns3/log.h"
 #include "three-gpp-spectrum-propagation-loss-model.h"
 #include "ns3/net-device.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/uniform-planar-array.h"
 #include "ns3/node.h"
 #include "ns3/channel-condition-model.h"
 #include "ns3/double.h"
