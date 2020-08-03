@@ -52,10 +52,10 @@ public:
 
 
   // attribute getters/setters
-  void SetVerticalBeamwidth (double verticalbeamwidthDegrees);
-  void SetHorizontalBeamwidth (double horizontalbeamwidthDegrees);
-  double GetVerticalBeamwidth () const;
-  double GetHorizontalBeamwidth () const = std::numeric_limits<double>::infinity();
+  void SetVerticalBeamwidth (double verticalBeamwidthDegrees);
+  void SetHorizontalBeamwidth (double horizontalBeamwidthDegrees);
+  double GetVerticalBeamwidth ();
+  double GetHorizontalBeamwidth () = std::numeric_limits<double>::infinity();
   void SetOrientation (double orientationDegrees);
   double GetOrientation () const;
 

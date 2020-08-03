@@ -143,7 +143,7 @@ std::istream &operator >> (std::istream &is, Angles &a);
 /** 
  * Normalize the phi angle
  */
-void NormalizeAngles (void);
+void NormalizeAngles (Angles &a);
 
 
 } // namespace ns3

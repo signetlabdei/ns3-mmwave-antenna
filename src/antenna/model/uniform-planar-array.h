@@ -1,6 +1,7 @@
 #ifndef UNIFORM_PLANAR_ARRAY_H
 #define UNIFORM_PLANAR_ARRAY_H
 
+
 #include <ns3/object.h>
 #include "phased-array-model.h"
 
@@ -44,7 +45,7 @@ public:
    *         of the field pattern and the second element is the vertical
    *         component of the field pattern
    */
-  virtual std::pair<double, double> GetElementFieldPattern (Angles a) const override;
+  std::pair<double, double> GetElementFieldPattern (Angles a) const override;
 
   
    /** 
@@ -61,13 +62,13 @@ public:
    * \param index index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  virtual Vector GetElementLocation (uint64_t row, uint64_t col) const override;
+  Vector GetElementLocation (uint64_t row, uint64_t col) const override;
 
   /**
    * Returns the number of antenna elements
    * \return the number of antenna elements
    */
-  virtual uint64_t GetNumberOfElements (void) const override;
+  uint64_t GetNumberOfElements (void) const override;
 
   
 private:

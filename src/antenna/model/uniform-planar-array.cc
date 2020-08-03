@@ -1,5 +1,5 @@
 
-#include "phased-array-model.h"
+#include "uniform-planar-array.h"
 #include "ns3/log.h"
 #include "ns3/double.h"
 #include "ns3/uinteger.h"
@@ -18,7 +18,7 @@ UniformPlanarArray::UniformPlanarArray () : PhasedArrayModel()
 
 }
 
-UniformPlanarArray::~UniformPlanarArray () : PhasedArrayModel()
+UniformPlanarArray::~UniformPlanarArray ()
 {
 
 }
@@ -72,7 +72,7 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
 
 
   // normalize phi (if needed)
-  a.NormalizeAngles();
+  NormalizeAngles(a);
 
   NS_ASSERT_MSG (a.theta >= 0 && a.theta <= M_PI, "The vertical angle should be between 0 and M_PI");
   NS_ASSERT_MSG (a.phi >= -M_PI && a.phi <= M_PI, "The horizontal angle should be between -M_PI and M_PI");
@@ -88,7 +88,8 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   // eq. 7.3-4 in 3GPP TR 38.901
   // NOTE we assume vertical polarization, hence the field pattern in the
   // horizontal polarization is 0
-  double aPrimeDb = m_antennaElement.GetGainDb (aPrime);
+  
+  double aPrimeDb = m_antennaElement->GetGainDb (aPrime);
   double fieldThetaPrime = pow (10, aPrimeDb / 20); // convert to linear magnitude
 
   // compute psi using eq. 7.1-15 in 3GPP TR 38.901, assuming that the slant
@@ -129,10 +130,10 @@ UniformPlanarArray::GetElementLocation (uint64_t row, uint64_t col) const
 }
 
 uint64_t
-UniformPlanarArray::GetNumberOfElements (void) const
+UniformPlanarArray::GetNumberOfElements () const
 {
-  NS_LOG_FUNCTION (this);
-  return m_numRows*m_numColumns;
+  uint64_t numElements = m_numRows*m_numColumns;
+  return numElements;
 }
 
 } /* namespace ns3 */

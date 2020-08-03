@@ -1,9 +1,10 @@
 #ifndef PHASED_ARRAY_MODEL_H
 #define PHASED_ARRAY_MODEL_H
 
+#include <ns3/object.h>
 #include <ns3/angles.h>
 #include <complex>
-
+#include "antenna-model.h"
 
 namespace ns3 {
 
@@ -20,7 +21,7 @@ public:
   /**
    * Constructor
    */
-  virtual PhasedArrayModel (void);
+  PhasedArrayModel (void);
 
 
   /**
@@ -60,7 +61,7 @@ public:
    * Returns the number of antenna elements
    * \return the number of antenna elements
    */
-  virtual uint32_t GetNumberOfElements (void) const = 0;
+  virtual uint64_t GetNumberOfElements (void) const = 0;
 
 
   /**
