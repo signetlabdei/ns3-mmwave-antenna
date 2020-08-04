@@ -62,7 +62,7 @@ public:
    * \param index index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  Vector GetElementLocation (uint64_t row, uint64_t col) const override;
+  Vector GetElementLocation (uint64_t idx) const override;
 
   /**
    * Returns the number of antenna elements

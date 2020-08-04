@@ -73,7 +73,7 @@ PhasedArrayModel::SetAntennaElement (const Ptr<AntennaModel> &antennaElement)
 }
 
 
-const PhasedArrayModel::Ptr<AntennaModel> &
+const Ptr<AntennaModel> &
 PhasedArrayModel::GetAntennaElement() const
 {
   NS_LOG_FUNCTION (this);
