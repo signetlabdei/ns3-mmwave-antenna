@@ -86,11 +86,11 @@ def register_types(module):
     module.add_class('SimpleRefCount', template_parameters=['ns3::Hash::Implementation', 'ns3::empty', 'ns3::DefaultDeleter<ns3::Hash::Implementation>'], automatic_type_narrowing=True, memory_policy=cppclass.ReferenceCountingMethodsPolicy(incref_method='Ref', decref_method='Unref', peekref_method='GetReferenceCount'), parent=root_module['ns3::empty'], import_from_module='ns.core')
     ## simple-ref-count.h (module 'core'): ns3::SimpleRefCount<ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> > [class]
     module.add_class('SimpleRefCount', template_parameters=['ns3::TraceSourceAccessor', 'ns3::empty', 'ns3::DefaultDeleter<ns3::TraceSourceAccessor>'], automatic_type_narrowing=True, memory_policy=cppclass.ReferenceCountingMethodsPolicy(incref_method='Ref', decref_method='Unref', peekref_method='GetReferenceCount'), parent=root_module['ns3::empty'], import_from_module='ns.core')
-    ## uniform-planar-array.h (module 'antenna'): ns3::UniformPlanarArray [class]
-    module.add_class('UniformPlanarArray', parent=root_module['ns3::Object'])
-    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::UniformPlanarArray::ComplexVector')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::UniformPlanarArray::ComplexVector*')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::UniformPlanarArray::ComplexVector&')
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel [class]
+    module.add_class('PhasedArrayModel', parent=root_module['ns3::Object'])
+    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::PhasedArrayModel::ComplexVector')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::PhasedArrayModel::ComplexVector*')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::PhasedArrayModel::ComplexVector&')
     ## trace-source-accessor.h (module 'core'): ns3::TraceSourceAccessor [class]
     module.add_class('TraceSourceAccessor', parent=root_module['ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> >'], import_from_module='ns.core')
     ## antenna-model.h (module 'antenna'): ns3::AntennaModel [class]
@@ -222,7 +222,7 @@ def register_methods(root_module):
     register_Ns3SimpleRefCount__Ns3CallbackImplBase_Ns3Empty_Ns3DefaultDeleter__lt__ns3CallbackImplBase__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::CallbackImplBase, ns3::empty, ns3::DefaultDeleter<ns3::CallbackImplBase> >'])
     register_Ns3SimpleRefCount__Ns3HashImplementation_Ns3Empty_Ns3DefaultDeleter__lt__ns3HashImplementation__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::Hash::Implementation, ns3::empty, ns3::DefaultDeleter<ns3::Hash::Implementation> >'])
     register_Ns3SimpleRefCount__Ns3TraceSourceAccessor_Ns3Empty_Ns3DefaultDeleter__lt__ns3TraceSourceAccessor__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> >'])
-    register_Ns3UniformPlanarArray_methods(root_module, root_module['ns3::UniformPlanarArray'])
+    register_Ns3PhasedArrayModel_methods(root_module, root_module['ns3::PhasedArrayModel'])
     register_Ns3TraceSourceAccessor_methods(root_module, root_module['ns3::TraceSourceAccessor'])
     register_Ns3AntennaModel_methods(root_module, root_module['ns3::AntennaModel'])
     register_Ns3AttributeAccessor_methods(root_module, root_module['ns3::AttributeAccessor'])
@@ -902,49 +902,44 @@ def register_Ns3SimpleRefCount__Ns3TraceSourceAccessor_Ns3Empty_Ns3DefaultDelete
     cls.add_constructor([param('ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter< ns3::TraceSourceAccessor > > const &', 'o')])
     return
 
-def register_Ns3UniformPlanarArray_methods(root_module, cls):
-    ## uniform-planar-array.h (module 'antenna'): ns3::UniformPlanarArray::UniformPlanarArray(ns3::UniformPlanarArray const & arg0) [constructor]
-    cls.add_constructor([param('ns3::UniformPlanarArray const &', 'arg0')])
-    ## uniform-planar-array.h (module 'antenna'): ns3::UniformPlanarArray::UniformPlanarArray() [constructor]
+def register_Ns3PhasedArrayModel_methods(root_module, cls):
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel::PhasedArrayModel(ns3::PhasedArrayModel const & arg0) [constructor]
+    cls.add_constructor([param('ns3::PhasedArrayModel const &', 'arg0')])
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel::PhasedArrayModel() [constructor]
     cls.add_constructor([])
-    ## uniform-planar-array.h (module 'antenna'): void ns3::UniformPlanarArray::ChangeToOmniTx() [member function]
+    ## phased-array-model.h (module 'antenna'): void ns3::PhasedArrayModel::ChangeToOmniTx() [member function]
     cls.add_method('ChangeToOmniTx',
                    'void',
                    [])
-    ## uniform-planar-array.h (module 'antenna'): ns3::UniformPlanarArray::ComplexVector const & ns3::UniformPlanarArray::GetBeamformingVector() const [member function]
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel::ComplexVector const & ns3::PhasedArrayModel::GetBeamformingVector() const [member function]
     cls.add_method('GetBeamformingVector',
-                   'ns3::UniformPlanarArray::ComplexVector const &',
+                   'ns3::PhasedArrayModel::ComplexVector const &',
                    [],
                    is_const=True)
-    ## uniform-planar-array.h (module 'antenna'): std::pair<double, double> ns3::UniformPlanarArray::GetElementFieldPattern(ns3::Angles a) const [member function]
+    ## phased-array-model.h (module 'antenna'): std::pair<double, double> ns3::PhasedArrayModel::GetElementFieldPattern(ns3::Angles a) const [member function]
     cls.add_method('GetElementFieldPattern',
                    'std::pair< double, double >',
                    [param('ns3::Angles', 'a')],
                    is_const=True)
-    ## uniform-planar-array.h (module 'antenna'): ns3::Vector ns3::UniformPlanarArray::GetElementLocation(uint64_t index) const [member function]
+    ## phased-array-model.h (module 'antenna'): ns3::Vector ns3::PhasedArrayModel::GetElementLocation(uint64_t index) const [member function]
     cls.add_method('GetElementLocation',
                    'ns3::Vector',
                    [param('uint64_t', 'index')],
                    is_const=True, is_virtual=True)
-    ## uniform-planar-array.h (module 'antenna'): uint64_t ns3::UniformPlanarArray::GetNumberOfElements() const [member function]
+    ## phased-array-model.h (module 'antenna'): uint64_t ns3::PhasedArrayModel::GetNumberOfElements() const [member function]
     cls.add_method('GetNumberOfElements',
                    'uint64_t',
                    [],
                    is_const=True, is_virtual=True)
-    ## uniform-planar-array.h (module 'antenna'): static ns3::TypeId ns3::UniformPlanarArray::GetTypeId() [member function]
+    ## phased-array-model.h (module 'antenna'): static ns3::TypeId ns3::PhasedArrayModel::GetTypeId() [member function]
     cls.add_method('GetTypeId',
                    'ns3::TypeId',
                    [],
                    is_static=True)
-    ## uniform-planar-array.h (module 'antenna'): bool ns3::UniformPlanarArray::IsOmniTx() const [member function]
-    cls.add_method('IsOmniTx',
-                   'bool',
-                   [],
-                   is_const=True)
-    ## uniform-planar-array.h (module 'antenna'): void ns3::UniformPlanarArray::SetBeamformingVector(ns3::UniformPlanarArray::ComplexVector const & beamformingVector) [member function]
+    ## phased-array-model.h (module 'antenna'): void ns3::PhasedArrayModel::SetBeamformingVector(ns3::PhasedArrayModel::ComplexVector const & beamformingVector) [member function]
     cls.add_method('SetBeamformingVector',
                    'void',
-                   [param('ns3::UniformPlanarArray::ComplexVector const &', 'beamformingVector')])
+                   [param('ns3::PhasedArrayModel::ComplexVector const &', 'beamformingVector')])
     return
 
 def register_Ns3TraceSourceAccessor_methods(root_module, cls):

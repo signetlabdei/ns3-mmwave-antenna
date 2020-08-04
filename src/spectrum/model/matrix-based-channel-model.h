@@ -26,7 +26,7 @@
 #include <ns3/object.h>
 #include <ns3/nstime.h>
 #include <ns3/vector.h>
-#include <ns3/uniform-planar-array.h>
+#include <ns3/phased-array-model.h>
 #include <tuple>
 
 namespace ns3 {
@@ -51,7 +51,7 @@ public:
   typedef std::vector<double> DoubleVector; //!< type definition for vectors of doubles
   typedef std::vector<DoubleVector> Double2DVector; //!< type definition for matrices of doubles
   typedef std::vector<Double2DVector> Double3DVector; //!< type definition for 3D matrices of doubles
-  typedef std::vector<UniformPlanarArray::ComplexVector> Complex2DVector; //!< type definition for complex matrices
+  typedef std::vector<PhasedArrayModel::ComplexVector> Complex2DVector; //!< type definition for complex matrices
   typedef std::vector<Complex2DVector> Complex3DVector; //!< type definition for complex 3D matrices
 
 
@@ -70,7 +70,7 @@ public:
      * Destructor for ChannelMatrix
      */
     virtual ~ChannelMatrix () = default;
-    
+
     /**
      * Returns true if the ChannelMatrix object was generated
      * considering node b as transmitter and node a as receiver.
@@ -108,9 +108,9 @@ public:
    */
   virtual Ptr<const ChannelMatrix> GetChannel (Ptr<const MobilityModel> aMob,
                                                Ptr<const MobilityModel> bMob,
-                                               Ptr<const UniformPlanarArray> aAntenna,
-                                               Ptr<const UniformPlanarArray> bAntenna) = 0;
-  
+                                               Ptr<const PhasedArrayModel> aAntenna,
+                                               Ptr<const PhasedArrayModel> bAntenna) = 0;
+
   /**
    * Calculate the channel key using the Cantor function
    * \param x1 first value

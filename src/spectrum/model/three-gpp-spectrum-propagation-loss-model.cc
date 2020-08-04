@@ -23,7 +23,7 @@
 #include "ns3/log.h"
 #include "three-gpp-spectrum-propagation-loss-model.h"
 #include "ns3/net-device.h"
-#include "ns3/uniform-planar-array.h"
+#include "ns3/phased-array-model.h"
 #include "ns3/node.h"
 #include "ns3/channel-condition-model.h"
 #include "ns3/double.h"
@@ -64,7 +64,7 @@ ThreeGppSpectrumPropagationLossModel::GetTypeId (void)
     .SetParent<SpectrumPropagationLossModel> ()
     .SetGroupName ("Spectrum")
     .AddConstructor<ThreeGppSpectrumPropagationLossModel> ()
-    .AddAttribute("ChannelModel", 
+    .AddAttribute("ChannelModel",
                   "The channel model. It needs to implement the MatrixBasedChannelModel interface",
                   StringValue("ns3::ThreeGppChannelModel"),
                   MakePointerAccessor (&ThreeGppSpectrumPropagationLossModel::SetChannelModel,
@@ -87,7 +87,7 @@ ThreeGppSpectrumPropagationLossModel::GetChannelModel () const
 }
 
 void
-ThreeGppSpectrumPropagationLossModel::AddDevice (Ptr<NetDevice> n, Ptr<const UniformPlanarArray> a)
+ThreeGppSpectrumPropagationLossModel::AddDevice (Ptr<NetDevice> n, Ptr<const PhasedArrayModel> a)
 {
   NS_ASSERT_MSG (m_deviceAntennaMap.find (n->GetNode ()->GetId ()) == m_deviceAntennaMap.end (), "Device is already present in the map");
   m_deviceAntennaMap.insert (std::make_pair (n->GetNode ()->GetId (), a));
@@ -113,10 +113,10 @@ ThreeGppSpectrumPropagationLossModel::GetChannelModelAttribute (const std::strin
   m_channelModel->GetAttribute (name, value);
 }
 
-UniformPlanarArray::ComplexVector
+PhasedArrayModel::ComplexVector
 ThreeGppSpectrumPropagationLossModel::CalcLongTerm (Ptr<const MatrixBasedChannelModel::ChannelMatrix> params,
-                                                    const UniformPlanarArray::ComplexVector &sW,
-                                                    const UniformPlanarArray::ComplexVector &uW) const
+                                                    const PhasedArrayModel::ComplexVector &sW,
+                                                    const PhasedArrayModel::ComplexVector &uW) const
 {
   NS_LOG_FUNCTION (this);
 
@@ -126,7 +126,7 @@ ThreeGppSpectrumPropagationLossModel::CalcLongTerm (Ptr<const MatrixBasedChannel
   NS_LOG_DEBUG ("CalcLongTerm with sAntenna " << sAntenna << " uAntenna " << uAntenna);
   //store the long term part to reduce computation load
   //only the small scale fading needs to be updated if the large scale parameters and antenna weights remain unchanged.
-  UniformPlanarArray::ComplexVector longTerm;
+  PhasedArrayModel::ComplexVector longTerm;
   uint8_t numCluster = static_cast<uint8_t> (params->m_channel[0][0].size ());
 
   for (uint8_t cIndex = 0; cIndex < numCluster; cIndex++)
@@ -148,7 +148,7 @@ ThreeGppSpectrumPropagationLossModel::CalcLongTerm (Ptr<const MatrixBasedChannel
 
 Ptr<SpectrumValue>
 ThreeGppSpectrumPropagationLossModel::CalcBeamformingGain (Ptr<SpectrumValue> txPsd,
-                                                           UniformPlanarArray::ComplexVector longTerm,
+                                                           PhasedArrayModel::ComplexVector longTerm,
                                                            Ptr<const MatrixBasedChannelModel::ChannelMatrix> params,
                                                            const ns3::Vector &sSpeed, const ns3::Vector &uSpeed) const
 {
@@ -163,7 +163,7 @@ ThreeGppSpectrumPropagationLossModel::CalcBeamformingGain (Ptr<SpectrumValue> tx
   // NOTE the update of Doppler is simplified by only taking the center angle of
   // each cluster in to consideration.
   double slotTime = Simulator::Now ().GetSeconds ();
-  UniformPlanarArray::ComplexVector doppler;
+  PhasedArrayModel::ComplexVector doppler;
   for (uint8_t cIndex = 0; cIndex < numCluster; cIndex++)
     {
       //cluster angle angle[direction][n],where, direction = 0(aoa), 1(zoa).
@@ -201,17 +201,17 @@ ThreeGppSpectrumPropagationLossModel::CalcBeamformingGain (Ptr<SpectrumValue> tx
   return tempPsd;
 }
 
-UniformPlanarArray::ComplexVector
+PhasedArrayModel::ComplexVector
 ThreeGppSpectrumPropagationLossModel::GetLongTerm (uint32_t aId, uint32_t bId,
                                                    Ptr<const MatrixBasedChannelModel::ChannelMatrix> channelMatrix,
-                                                   const UniformPlanarArray::ComplexVector &aW,
-                                                   const UniformPlanarArray::ComplexVector &bW) const
+                                                   const PhasedArrayModel::ComplexVector &aW,
+                                                   const PhasedArrayModel::ComplexVector &bW) const
 {
-  UniformPlanarArray::ComplexVector longTerm; // vector containing the long term component for each cluster
+  PhasedArrayModel::ComplexVector longTerm; // vector containing the long term component for each cluster
 
   // check if the channel matrix was generated considering a as the s-node and
   // b as the u-node or viceversa
-  UniformPlanarArray::ComplexVector sW, uW;
+  PhasedArrayModel::ComplexVector sW, uW;
   if (!channelMatrix->IsReverse (aId, bId))
   {
     sW = aW;
@@ -286,12 +286,12 @@ ThreeGppSpectrumPropagationLossModel::DoCalcRxPowerSpectralDensity (Ptr<const Sp
 
   // retrieve the antenna of device a
   NS_ASSERT_MSG (m_deviceAntennaMap.find (aId) != m_deviceAntennaMap.end (), "Antenna not found for node " << aId);
-  Ptr<const UniformPlanarArray> aAntenna = m_deviceAntennaMap.at (aId);
+  Ptr<const PhasedArrayModel> aAntenna = m_deviceAntennaMap.at (aId);
   NS_LOG_DEBUG ("a node " << a->GetObject<Node> () << " antenna " << aAntenna);
 
   // retrieve the antenna of the device b
   NS_ASSERT_MSG (m_deviceAntennaMap.find (bId) != m_deviceAntennaMap.end (), "Antenna not found for device " << bId);
-  Ptr<const UniformPlanarArray> bAntenna = m_deviceAntennaMap.at (bId);
+  Ptr<const PhasedArrayModel> bAntenna = m_deviceAntennaMap.at (bId);
   NS_LOG_DEBUG ("b node " << bId << " antenna " << bAntenna);
 
   if (aAntenna->IsOmniTx () || bAntenna->IsOmniTx () )
@@ -303,11 +303,11 @@ ThreeGppSpectrumPropagationLossModel::DoCalcRxPowerSpectralDensity (Ptr<const Sp
   Ptr<const MatrixBasedChannelModel::ChannelMatrix> channelMatrix = m_channelModel->GetChannel (a, b, aAntenna, bAntenna);
 
   // get the precoding and combining vectors
-  UniformPlanarArray::ComplexVector aW = aAntenna->GetBeamformingVector ();
-  UniformPlanarArray::ComplexVector bW = bAntenna->GetBeamformingVector ();
+  PhasedArrayModel::ComplexVector aW = aAntenna->GetBeamformingVector ();
+  PhasedArrayModel::ComplexVector bW = bAntenna->GetBeamformingVector ();
 
   // retrieve the long term component
-  UniformPlanarArray::ComplexVector longTerm = GetLongTerm (aId, bId, channelMatrix, aW, bW);
+  PhasedArrayModel::ComplexVector longTerm = GetLongTerm (aId, bId, channelMatrix, aW, bW);
 
   // apply the beamforming gain
   rxPsd = CalcBeamformingGain (rxPsd, longTerm, channelMatrix, a->GetVelocity (), b->GetVelocity ());

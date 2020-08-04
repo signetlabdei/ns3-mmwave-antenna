@@ -13,7 +13,7 @@ The Antenna module provides:
 
  #. a new base class (AntennaModel) that provides an interface for the modeling of the radiation pattern of an antenna;
  #. a set of classes derived from this base class that each models the radiation pattern of different types of antennas;
- #. the class UniformPlanarArray, which implements the antenna model described in 3GPP TR 38.901
+ #. the class PhasedArrayModel, which implements the antenna model described in 3GPP TR 38.901
 
 
 ------------
@@ -108,15 +108,15 @@ antenna. Note that this radiation pattern is independent of the inclination angl
 :math:`\theta`.
 
 -------------------------
-UniformPlanarArray
+PhasedArrayModel
 -------------------------
 
-The class UniformPlanarArray implements the antenna model described in
+The class PhasedArrayModel implements the antenna model described in
 3GPP TR 38.901 [38901]_, which is used by the classes ThreeGppSpectrumPropagationLossModel
 and ThreeGppChannelModel.
-Each instance of this class models an isotropic rectangular antenna array composed  
-of a single panel with NxM elements, where N is the number of rows and M is the 
-number of columns, configurable through the attributes "NumRows" and "NumColumns". 
+Each instance of this class models an isotropic rectangular antenna array composed
+of a single panel with NxM elements, where N is the number of rows and M is the
+number of columns, configurable through the attributes "NumRows" and "NumColumns".
 The radiation pattern of the antenna elements follows the model specified in
 Sec. 7.3 of 3GPP TR 38.901; only vertical polarization is considered (i.e.,
 :math:`{\zeta = 0}`).
@@ -126,16 +126,16 @@ By default, the array is orthogonal to the x-axis, pointing towards the positive
 direction, but the orientation can be changed through the attributes "BearingAngle",
 which adjusts the azimuth angle, and "DowntiltAngle", which adjusts the elevation angle.
 The spacing between the horizontal and vertical elements can be configured through
-the attributes "AntennaHorizontalSpacing" and "AntennaVerticalSpacing". 
+the attributes "AntennaHorizontalSpacing" and "AntennaVerticalSpacing".
 
 **Note:**
 
-  * Currently, the model does not support multi-panel antennas, i.e., 
+  * Currently, the model does not support multi-panel antennas, i.e.,
     :math:`N_{g} = M_{g} = 1`.
 
-  * Currently, the model supports only single polarized (i.e., P = 1) antenna 
+  * Currently, the model supports only single polarized (i.e., P = 1) antenna
     panels with vertical polarization (i.e., :math:`{\zeta = 0}`)
-  
+
 
 .. [Balanis] C.A. Balanis, "Antenna Theory - Analysis and Design",  Wiley, 2nd Ed.
 

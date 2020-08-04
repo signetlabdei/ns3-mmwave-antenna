@@ -57,7 +57,7 @@ public:
    * Destructor
    */
   ~ThreeGppChannelModel ();
-  
+
   void DoDispose () override;
 
   /**
@@ -117,8 +117,8 @@ public:
    */
   Ptr<const ChannelMatrix> GetChannel (Ptr<const MobilityModel> aMob,
                                        Ptr<const MobilityModel> bMob,
-                                       Ptr<const UniformPlanarArray> aAntenna,
-                                       Ptr<const UniformPlanarArray> bAntenna) override;
+                                       Ptr<const PhasedArrayModel> aAntenna,
+                                       Ptr<const PhasedArrayModel> bAntenna) override;
   /**
    * \brief Assign a fixed random variable stream number to the random variables
    * used by this model.
@@ -130,15 +130,15 @@ public:
 
 private:
   /**
-   * Extends the struct ChannelMatrix by including information that are used 
+   * Extends the struct ChannelMatrix by including information that are used
    * within the class ThreeGppChannelModel
    */
   struct ThreeGppChannelMatrix : public MatrixBasedChannelModel::ChannelMatrix
   {
     bool m_los; //!< true if LOS, false if NLOS
-    
+
     // TODO these are not currently used, they have to be correctly set when including the spatial consistent update procedure
-    /*The following parameters are stored for spatial consistent updating. The notation is 
+    /*The following parameters are stored for spatial consistent updating. The notation is
     that of 3GPP technical reports, but it can apply also to other channel realizations*/
     MatrixBasedChannelModel::Double2DVector m_nonSelfBlocking; //!< store the blockages
     Vector m_preLocUT; //!< location of UT when generating the previous channel
@@ -214,8 +214,8 @@ private:
    * \return the channel realization
    */
   Ptr<ThreeGppChannelMatrix> GetNewChannel (Vector locUT, bool los, bool o2i,
-                                            Ptr<const UniformPlanarArray> sAntenna,
-                                            Ptr<const UniformPlanarArray> uAntenna,
+                                            Ptr<const PhasedArrayModel> sAntenna,
+                                            Ptr<const PhasedArrayModel> uAntenna,
                                             Angles &uAngle, Angles &sAngle,
                                             double dis2D, double hBS, double hUT) const;
 

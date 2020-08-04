@@ -23,6 +23,7 @@
 #include "three-gpp-channel-model.h"
 #include "ns3/log.h"
 #include "ns3/uniform-planar-array.h"
+#include "ns3/phased-array-model.h"
 #include "ns3/node.h"
 #include "ns3/double.h"
 #include "ns3/string.h"
@@ -742,8 +743,8 @@ ThreeGppChannelModel::ChannelMatrixNeedsUpdate (Ptr<const ThreeGppChannelMatrix>
 Ptr<const MatrixBasedChannelModel::ChannelMatrix>
 ThreeGppChannelModel::GetChannel (Ptr<const MobilityModel> aMob,
                                   Ptr<const MobilityModel> bMob,
-                                  Ptr<const UniformPlanarArray> aAntenna,
-                                  Ptr<const UniformPlanarArray> bAntenna)
+                                  Ptr<const PhasedArrayModel> aAntenna,
+                                  Ptr<const PhasedArrayModel> bAntenna)
 {
   NS_LOG_FUNCTION (this);
 
@@ -812,8 +813,8 @@ ThreeGppChannelModel::GetChannel (Ptr<const MobilityModel> aMob,
 
 Ptr<ThreeGppChannelModel::ThreeGppChannelMatrix>
 ThreeGppChannelModel::GetNewChannel (Vector locUT, bool los, bool o2i,
-                                     Ptr<const UniformPlanarArray> sAntenna,
-                                     Ptr<const UniformPlanarArray> uAntenna,
+                                     Ptr<const PhasedArrayModel> sAntenna,
+                                     Ptr<const PhasedArrayModel> uAntenna,
                                      Angles &uAngle, Angles &sAngle,
                                      double dis2D, double hBS, double hUT) const
 {

@@ -31,6 +31,7 @@
 #include "ns3/core-module.h"
 #include "ns3/three-gpp-channel-model.h"
 #include "ns3/uniform-planar-array.h"
+#include "ns3/phased-array-model.h"
 #include <fstream>
 #include "ns3/three-gpp-spectrum-propagation-loss-model.h"
 #include "ns3/net-device.h"
@@ -57,9 +58,9 @@ static Ptr<ThreeGppSpectrumPropagationLossModel> m_spectrumLossModel; //!< the S
  * \param otherDevice the device towards which point the beam
  */
 static void
-DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<UniformPlanarArray> thisAntenna, Ptr<NetDevice> otherDevice)
+DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<PhasedArrayModel> thisAntenna, Ptr<NetDevice> otherDevice)
 {
-  UniformPlanarArray::ComplexVector antennaWeights;
+  PhasedArrayModel::ComplexVector antennaWeights;
 
   // retrieve the position of the two devices
   Vector aPos = thisDevice->GetNode ()->GetObject<MobilityModel> ()->GetPosition ();
@@ -71,8 +72,8 @@ DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<UniformPlanarArray> thisAntenna, P
   double hAngleRadian = fmod (completeAngle.phi, 2.0 * M_PI); // the azimuth angle
   if (hAngleRadian < 0)
   {
-    hAngleRadian += 2.0 * M_PI;     
-  } 
+    hAngleRadian += 2.0 * M_PI;
+  }
   double vAngleRadian = completeAngle.theta; // the elevation angle
 
   // retrieve the number of antenna elements

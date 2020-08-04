@@ -54,7 +54,7 @@ public:
    * \param idx index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  virtual Vector GetElementLocation (uint64_t row, uint64_t col) const = 0;
+  virtual Vector GetElementLocation (uint64_t idx) const = 0;
 
 
   /**

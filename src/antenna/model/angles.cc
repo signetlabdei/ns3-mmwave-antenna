@@ -88,14 +88,14 @@ Angles::Angles (Vector v, Vector o)
 
 void Angles::NormalizeAngles ()
 {
-  a.phi = fmod (a.phi + M_PI, 2 * M_PI);
-  if (a.phi < 0)
+  this->phi = fmod (this->phi + M_PI, 2 * M_PI);
+  if (this->phi < 0)
   {
-      a.phi += M_PI;
+      this->phi += M_PI;
   }
   else 
   {
-      a.phi -= M_PI;
+      this->phi -= M_PI;
   }      
 }
 
