@@ -72,7 +72,7 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
 
 
   // normalize phi (if needed)
-  NormalizeAngles(a);
+  a.NormalizeAngles();
 
   NS_ASSERT_MSG (a.theta >= 0 && a.theta <= M_PI, "The vertical angle should be between 0 and M_PI");
   NS_ASSERT_MSG (a.phi >= -M_PI && a.phi <= M_PI, "The horizontal angle should be between -M_PI and M_PI");

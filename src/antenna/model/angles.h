@@ -115,6 +115,11 @@ struct Angles
    * 
    */
   double theta;
+  
+  /** 
+  * Normalize the phi angle
+  */
+  void NormalizeAngles (void);
 };
 
 
@@ -140,10 +145,7 @@ std::ostream& operator<< ( std::ostream& os, const Angles& a);
 std::istream &operator >> (std::istream &is, Angles &a);
 
 
-/** 
- * Normalize the phi angle
- */
-void NormalizeAngles (Angles &a);
+
 
 
 } // namespace ns3

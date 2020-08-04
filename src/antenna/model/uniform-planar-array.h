@@ -30,11 +30,11 @@ public:
   /**
    * Destructor
    */
-  ~UniformPlanarArray (void);
+  virtual ~UniformPlanarArray (void);
     
   
   // inherited from Object
-  static TypeId GetTypeId (void);
+  virtual static TypeId GetTypeId (void);
   
    
   /**
