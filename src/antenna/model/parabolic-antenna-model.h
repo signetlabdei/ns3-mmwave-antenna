@@ -66,6 +66,8 @@ private:
   double m_orientationRadians;
 
   double m_maxAttenuation;
+  
+  double m_gEmax;
 };
 
 

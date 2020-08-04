@@ -55,7 +55,12 @@ ParabolicAntennaModel::GetTypeId ()
                    MakeDoubleChecker<double> (-360, 360))
     .AddAttribute ("MaxAttenuation",
                    "The maximum attenuation (dB) of the antenna radiation pattern.",
-                   DoubleValue (20.0),
+                   DoubleValue (30.0),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::m_maxAttenuation),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("MaxDirectionalGain",
+                   "The maximum gain (dB) of the antenna radiation pattern.",
+                   DoubleValue (8.0),
                    MakeDoubleAccessor (&ParabolicAntennaModel::m_maxAttenuation),
                    MakeDoubleChecker<double> ())
   ;
@@ -96,19 +101,12 @@ ParabolicAntennaModel::GetGainDb (Angles a)
   double phi = a.phi - m_orientationRadians;
 
   // make sure phi is in (-pi, pi]
-  while (phi <= -M_PI)
-    {
-      phi += M_PI+M_PI;
-    }
-  while (phi > M_PI)
-    {
-      phi -= M_PI+M_PI;
-    }
+  a.NormalizeAngles();
 
   NS_LOG_LOGIC ("phi = " << phi );
 
-  double gainDb = -std::min (12 * pow (phi / m_beamwidthRadians, 2), m_maxAttenuation);
-
+  double gainDb = std::max(-std::min (12 * pow (phi / m_beamwidthRadians, 2), m_maxAttenuation), m_gEmax);
+  
   NS_LOG_LOGIC ("gain = " << gainDb);
   return gainDb;
 }
