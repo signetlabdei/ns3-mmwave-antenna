@@ -27,7 +27,7 @@ public:
   /**
    * Destructor
    */
-  virtual ~PhasedArrayModel (void);
+  ~PhasedArrayModel (void);
 
 
   // inherited from Object
@@ -54,7 +54,7 @@ public:
    * \param idx index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  virtual Vector GetElementLocation (uint64_t idx) const = 0;
+  virtual Vector GetElementLocation (uint64_t index) const = 0;
 
 
   /**
@@ -89,7 +89,7 @@ public:
    * Returns the steering vector that points toward the specified position
    * \return the current beamforming vector
    */
-  const ComplexVector & GetSteeringVector (const Angles& a) const;
+  const ComplexVector GetSteeringVector (const Angles& a) const;
 
 
   /**

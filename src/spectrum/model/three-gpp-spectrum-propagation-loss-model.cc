@@ -294,12 +294,6 @@ ThreeGppSpectrumPropagationLossModel::DoCalcRxPowerSpectralDensity (Ptr<const Sp
   Ptr<const PhasedArrayModel> bAntenna = m_deviceAntennaMap.at (bId);
   NS_LOG_DEBUG ("b node " << bId << " antenna " << bAntenna);
 
-  if (aAntenna->IsOmniTx () || bAntenna->IsOmniTx () )
-    {
-      NS_LOG_LOGIC ("Omni transmission, do nothing.");
-      return rxPsd;
-    }
-
   Ptr<const MatrixBasedChannelModel::ChannelMatrix> channelMatrix = m_channelModel->GetChannel (a, b, aAntenna, bAntenna);
 
   // get the precoding and combining vectors

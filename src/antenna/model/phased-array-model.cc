@@ -12,6 +12,17 @@ NS_LOG_COMPONENT_DEFINE ("PhasedArrayModel");
 NS_OBJECT_ENSURE_REGISTERED (PhasedArrayModel);
 
 
+PhasedArrayModel::PhasedArrayModel()
+{
+}
+
+
+PhasedArrayModel::~PhasedArrayModel()
+{
+    
+}
+
+
 TypeId
 PhasedArrayModel::GetTypeId ()
 {
@@ -48,7 +59,7 @@ PhasedArrayModel::GetBeamformingVector() const
 
 
 // The vector components calculated with (7.1-6), given the desired angle
-const PhasedArrayModel::ComplexVector &
+const PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetSteeringVector(const Angles& a) const
 {
   NS_LOG_FUNCTION (this);

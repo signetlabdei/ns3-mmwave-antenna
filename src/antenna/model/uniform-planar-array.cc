@@ -110,15 +110,15 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
 
 
 Vector
-UniformPlanarArray::GetElementLocation (uint64_t row, uint64_t col) const
+UniformPlanarArray::GetElementLocation (uint64_t index) const
 {
   NS_LOG_FUNCTION (this);
 
   // compute the element coordinates in the LCS
   // assume the left bottom corner is (0,0,0), and the rectangular antenna array is on the y-z plane.
   double xPrime = 0;
-  double yPrime = m_disH * col;
-  double zPrime = m_disV * row;
+  double yPrime = m_disH * (index % m_numColumns);
+  double zPrime = m_disV * floor (index / m_numColumns);
 
   // convert the coordinates to the GCS using the rotation matrix 7.1-4 in 3GPP
   // TR 38.901

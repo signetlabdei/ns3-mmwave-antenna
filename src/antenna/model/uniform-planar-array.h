@@ -30,7 +30,7 @@ public:
   /**
    * Destructor
    */
-  virtual ~UniformPlanarArray (void);
+  ~UniformPlanarArray (void);
     
   
   // inherited from Object
@@ -48,21 +48,21 @@ public:
   std::pair<double, double> GetElementFieldPattern (Angles a) const override;
 
   
-   /** 
+   /**
    * Returns the location of the antenna element with the specified
    * index assuming the left bottom corner is (0,0,0), normalized
    * with respect to the wavelength.
-   * Antenna elements are numbered as specified in Sec. 7.3
+   * Antenna elements are scanned row by row, left to right and bottom to top.
    * For example, an antenna with 2 rows and 3 columns will be ordered as follows:
    * ^ z
-   * |  (1,0) (1,1) (1,2)
-   * |  (0,0) (0,1) (0,2)
-   * ---------------------> y
+   * |  3 4 5
+   * |  0 1 2
+   * ----------> y
    *
    * \param index index of the antenna element
    * \return the 3D vector that represents the position of the element
    */
-  Vector GetElementLocation (uint64_t idx) const override;
+  Vector GetElementLocation (uint64_t index) const override;
 
   /**
    * Returns the number of antenna elements
