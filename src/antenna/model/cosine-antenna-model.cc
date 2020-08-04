@@ -43,7 +43,7 @@ CosineAntennaModel::GetTypeId ()
     .AddConstructor<CosineAntennaModel> ()
     .AddAttribute ("VerticalBeamwidth",
                    "The 3dB vertical beamwidth (degrees)",
-                   DoubleValue (60),
+                   DoubleValue (std::numeric_limits<double>::infinity()),
                    MakeDoubleAccessor (&CosineAntennaModel::SetVerticalBeamwidth,
                                        &CosineAntennaModel::GetVerticalBeamwidth),
                    MakeDoubleChecker<double> (0, 180))
@@ -91,8 +91,9 @@ CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
   else
   {
     m_verticalBeamwidthRadians = DegreesToRadians (verticalBeamwidthDegrees);
-    m_verticalexponent = GetExponentFromBeamwidth(m_verticalBeamwidthRadians);
   }
+  
+  m_verticalexponent = GetExponentFromBeamwidth(m_verticalBeamwidthRadians);
 }
 
 
@@ -106,25 +107,23 @@ CosineAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
   else
   {
     m_horizontalBeamwidthRadians = DegreesToRadians (horizontalBeamwidthDegrees);
-    m_horizontalexponent = GetExponentFromBeamwidth(m_horizontalBeamwidthRadians);
   }
+  
+  m_horizontalexponent = GetExponentFromBeamwidth(m_horizontalBeamwidthRadians);
 }
 
 
 double
-CosineAntennaModel::GetVerticalBeamwidth ()
+CosineAntennaModel::GetVerticalBeamwidth () const
 {
-  double verticalBeamwidthDegrees = RadiansToDegrees (m_verticalBeamwidthRadians);
-  return verticalBeamwidthDegrees;
+  return RadiansToDegrees (m_verticalBeamwidthRadians);
 }
 
 
 double
-CosineAntennaModel::GetHorizontalBeamwidth ()
+CosineAntennaModel::GetHorizontalBeamwidth () const
 {
-  double horizontalBeamwidthDegrees = RadiansToDegrees (m_horizontalBeamwidthRadians);
-  return horizontalBeamwidthDegrees;
-    
+  return RadiansToDegrees (m_horizontalBeamwidthRadians);    
 }
 
 
@@ -153,8 +152,7 @@ CosineAntennaModel::GetGainDb (Angles a)
   // make sure phi is in (-pi, pi]
   a.NormalizeAngles();
 
-  NS_LOG_LOGIC ("phi = " << phi );
-  NS_LOG_LOGIC ("theta = " << a.theta );
+  NS_LOG_LOGIC ("phi = " << phi << " + theta = " << a.theta );
 
   // element factor: amplitude gain of a single antenna element in linear units
   double ef = (std::pow (std::cos (phi / 2.0), m_horizontalexponent))*(std::pow (std::cos ( a.theta/ 2.0), m_verticalexponent));

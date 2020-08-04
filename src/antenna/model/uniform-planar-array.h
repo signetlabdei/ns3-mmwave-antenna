@@ -34,7 +34,7 @@ public:
     
   
   // inherited from Object
-  virtual static TypeId GetTypeId (void);
+  static TypeId GetTypeId (void);
   
    
   /**

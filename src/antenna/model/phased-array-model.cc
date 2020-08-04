@@ -53,10 +53,10 @@ PhasedArrayModel::GetSteeringVector(const Angles& a) const
 {
   NS_LOG_FUNCTION (this);
   ComplexVector steeringVector;
-  steeringVector.resize (this.GetNumberOfElements ());
-  for (uint64_t i = 0; i < this.GetNumberOfElements (); i++)
+  steeringVector.resize (this->GetNumberOfElements ());
+  for (uint64_t i = 0; i < this->GetNumberOfElements (); i++)
     {
-      loc = this.GetElementLocation (i);
+      Vector loc = this->GetElementLocation (i);
       steeringVector[i] = -2 * M_PI * (sin (a.theta) * cos (a.phi) * loc.x +
                                        sin (a.theta) * sin (a.phi) * loc.y +
                                        cos (a.theta) * loc.z);
