@@ -132,8 +132,7 @@ UniformPlanarArray::GetElementLocation (uint64_t row, uint64_t col) const
 uint64_t
 UniformPlanarArray::GetNumberOfElements () const
 {
-  uint64_t numElements = m_numRows*m_numColumns;
-  return numElements;
+  return numElements = m_numRows*m_numColumns;
 }
 
 } /* namespace ns3 */

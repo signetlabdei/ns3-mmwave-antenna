@@ -3,7 +3,7 @@
 
 
 #include <ns3/object.h>
-#include "phased-array-model.h"
+#include "ns3/phased-array-model.h"
 
 
 namespace ns3 {

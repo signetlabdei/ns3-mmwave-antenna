@@ -58,14 +58,14 @@ PhasedArrayModel::GetSteeringVector(const Angles a) const
 
 
 void
-PhasedArrayModel::SetAntennaElement (const AntennaModel &antennaElement)
+PhasedArrayModel::SetAntennaElement (const Ptr<AntennaModel> &antennaElement)
 {
   NS_LOG_FUNCTION (this);
   m_antennaElement = antennaElement;
 }
 
 
-const PhasedArrayModel::AntennaModel &
+const PhasedArrayModel::Ptr<AntennaModel> &
 PhasedArrayModel::GetAntennaElement() const
 {
   NS_LOG_FUNCTION (this);

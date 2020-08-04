@@ -96,14 +96,14 @@ public:
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
-  void SetAntennaElement (const AntennaModel &antennaElement);
+  void SetAntennaElement (const Ptr<AntennaModel> &antennaElement);
 
 
   /**
-   * Returns the beamforming vector that is currently being used
-   * \return the current beamforming vector
+   * Returns a pointer to the AntennaModel instance used to model the elements of the array
+   * \return pointer to the AntennaModel instance
    */
-  const AntennaModel & GetAntennaElement (void) const;
+  const Ptr<AntennaModel> & GetAntennaElement (void) const;
 
 
 
