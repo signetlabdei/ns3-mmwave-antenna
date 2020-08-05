@@ -70,7 +70,7 @@ CosineAntennaModel::GetTypeId ()
 
 
 double
-CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians)
+CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians) const
 {
   double exponent = 0;
   if (!(std::isinf(beamwidthRadians)))

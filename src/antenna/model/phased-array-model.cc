@@ -58,11 +58,10 @@ PhasedArrayModel::GetBeamformingVector() const
 }
 
 
-// The vector components calculated with (7.1-6), given the desired angle
-const PhasedArrayModel::ComplexVector
+PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetSteeringVector(const Angles& a) const
 {
-  NS_LOG_FUNCTION (this);
+  NS_LOG_FUNCTION (this << a);
   ComplexVector steeringVector;
   steeringVector.resize (this->GetNumberOfElements ());
   for (uint64_t i = 0; i < this->GetNumberOfElements (); i++)
@@ -77,14 +76,14 @@ PhasedArrayModel::GetSteeringVector(const Angles& a) const
 
 
 void
-PhasedArrayModel::SetAntennaElement (const Ptr<AntennaModel> &antennaElement)
+PhasedArrayModel::SetAntennaElement (Ptr<AntennaModel> antennaElement)
 {
   NS_LOG_FUNCTION (this);
   m_antennaElement = antennaElement;
 }
 
 
-const Ptr<AntennaModel> &
+Ptr<const AntennaModel>
 PhasedArrayModel::GetAntennaElement() const
 {
   NS_LOG_FUNCTION (this);

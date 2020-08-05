@@ -28,6 +28,8 @@
 #include "ns3/node-container.h"
 #include "ns3/constant-position-mobility-model.h"
 #include "ns3/phased-array-model.h"
+#include "ns3/uniform-planar-array.h"
+#include "ns3/isotropic-antenna-model.h"
 #include "ns3/three-gpp-channel-model.h"
 #include "ns3/simple-net-device.h"
 #include "ns3/simulator.h"
@@ -153,8 +155,14 @@ ThreeGppChannelMatrixComputationTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "IsotropicElements", BooleanValue (true));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "IsotropicElements", BooleanValue (true));
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
+  
+  Ptr<AntennaModel> isotropicTxAntennaModel = CreateObject<IsotropicAntennaModel> ();
+  Ptr<AntennaModel> isotropicRxAntennaModel = CreateObject<IsotropicAntennaModel> ();
+  
+  txAntenna->SetAntennaElement(isotropicTxAntennaModel);
+  rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
 
   // generate the channel matrix
   Ptr<const ThreeGppChannelModel::ChannelMatrix> channelMatrix = channelModel->GetChannel (txMob, rxMob, txAntenna, rxAntenna);
@@ -312,9 +320,16 @@ ThreeGppChannelMatrixUpdateTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "IsotropicElements", BooleanValue (true));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "IsotropicElements", BooleanValue (true));
-
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
+  
+  Ptr<AntennaModel> isotropicTxAntennaModel = CreateObject<IsotropicAntennaModel> ();
+  Ptr<AntennaModel> isotropicRxAntennaModel = CreateObject<IsotropicAntennaModel> ();
+  
+  txAntenna->SetAntennaElement(isotropicTxAntennaModel);
+  rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
+  
+  
   // check if the channel matrix is correctly updated
 
   // compute the channel matrix for the first time
@@ -411,10 +426,9 @@ ThreeGppSpectrumPropagationLossModelTest::DoBeamforming (Ptr<NetDevice> thisDevi
   Angles completeAngle (bPos,aPos);
 
   double hAngleRadian = fmod (completeAngle.phi, 2.0 * M_PI); // the azimuth angle
-  if (hAngleRadian < 0)
-  {
-    hAngleRadian += 2.0 * M_PI;
-  }
+  
+  completeAngle.NormalizeAngles();
+  
   double vAngleRadian = completeAngle.theta; // the elevation angle
 
   int totNoArrayElements = thisAntenna->GetNumberOfElements ();
@@ -499,8 +513,15 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
+  
+  Ptr<AntennaModel> isotropicTxAntennaModel = CreateObject<IsotropicAntennaModel> ();
+  Ptr<AntennaModel> isotropicRxAntennaModel = CreateObject<IsotropicAntennaModel> ();
+  
+  txAntenna->SetAntennaElement(isotropicTxAntennaModel);
+  rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
+  
 
   // initialize ThreeGppSpectrumPropagationLossModel
   lossModel->AddDevice (txDev, txAntenna);

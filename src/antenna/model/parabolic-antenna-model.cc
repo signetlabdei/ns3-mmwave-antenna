@@ -61,7 +61,7 @@ ParabolicAntennaModel::GetTypeId ()
     .AddAttribute ("MaxDirectionalGain",
                    "The maximum gain (dB) of the antenna radiation pattern.",
                    DoubleValue (8.0),
-                   MakeDoubleAccessor (&ParabolicAntennaModel::m_maxAttenuation),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::m_gEmax),
                    MakeDoubleChecker<double> ())
   ;
   return tid;

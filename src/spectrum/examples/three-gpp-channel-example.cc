@@ -68,12 +68,10 @@ DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<PhasedArrayModel> thisAntenna, Ptr
 
   // compute the azimuth and the elevation angles
   Angles completeAngle (bPos,aPos);
-
-  double hAngleRadian = fmod (completeAngle.phi, 2.0 * M_PI); // the azimuth angle
-  if (hAngleRadian < 0)
-  {
-    hAngleRadian += 2.0 * M_PI;
-  }
+  double hAngleRadian = fmod (completeAngle.phi, 2.0 * M_PI);
+  
+  completeAngle.NormalizeAngles();  
+  
   double vAngleRadian = completeAngle.theta; // the elevation angle
 
   // retrieve the number of antenna elements

@@ -23,7 +23,6 @@
 #include "three-gpp-channel-model.h"
 #include "ns3/log.h"
 #include "ns3/uniform-planar-array.h"
-#include "ns3/phased-array-model.h"
 #include "ns3/node.h"
 #include "ns3/double.h"
 #include "ns3/string.h"

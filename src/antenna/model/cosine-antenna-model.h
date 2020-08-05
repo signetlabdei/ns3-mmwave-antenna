@@ -61,7 +61,7 @@ public:
 
 private:
 
-    double GetExponentFromBeamwidth(double beamwidthRadians);
+  double GetExponentFromBeamwidth(double beamwidthRadians) const;
     
    /**
    * this is the variable "n" in the paper by Chunjian

@@ -27,7 +27,7 @@ public:
   /**
    * Destructor
    */
-  ~PhasedArrayModel (void);
+  virtual ~PhasedArrayModel (void);
 
 
   // inherited from Object
@@ -89,21 +89,21 @@ public:
    * Returns the steering vector that points toward the specified position
    * \return the current beamforming vector
    */
-  const ComplexVector GetSteeringVector (const Angles& a) const;
+  ComplexVector GetSteeringVector (const Angles& a) const;
 
 
   /**
    * Sets the antenna model to be used
    * \param AntennaModel the antenna model
    */
-  void SetAntennaElement (const Ptr<AntennaModel> &antennaElement);
+  void SetAntennaElement (Ptr<AntennaModel> antennaElement);
 
 
   /**
    * Returns a pointer to the AntennaModel instance used to model the elements of the array
    * \return pointer to the AntennaModel instance
    */
-  const Ptr<AntennaModel> & GetAntennaElement (void) const;
+  Ptr<const AntennaModel> GetAntennaElement (void) const;
 
 
 
