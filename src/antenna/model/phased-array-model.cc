@@ -4,6 +4,7 @@
 #include "ns3/double.h"
 #include "ns3/uinteger.h"
 #include "ns3/boolean.h"
+#include "ns3/pointer.h"
 
 namespace ns3 {
 
@@ -29,6 +30,11 @@ PhasedArrayModel::GetTypeId ()
   static TypeId tid = TypeId ("ns3::PhasedArrayModel")
     .SetParent<Object> ()
     .SetGroupName("Antenna")
+    .AddAttribute ("AntennaElement",
+               "A pointer to the antenna element used by the phased array",
+               PointerValue (),
+               MakePointerAccessor (&PhasedArrayModel::m_antennaElement),
+               MakePointerChecker<AntennaModel> ())
   ;
   return tid;
 }
@@ -50,7 +56,7 @@ PhasedArrayModel::SetBeamformingVector (const Angles& a)
 }
 
 
-const PhasedArrayModel::ComplexVector &
+PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetBeamformingVector() const
 {
   NS_LOG_FUNCTION (this);

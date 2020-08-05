@@ -513,6 +513,7 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
+  
   Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
   Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
   
@@ -521,6 +522,12 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   
   txAntenna->SetAntennaElement(isotropicTxAntennaModel);
   rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
+  /*
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(isotropicTxAntennaModel [Ptr<IsotropicAntennaModel>]));
+  
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(txAntennaElements [2]));
+  */
+  
   
 
   // initialize ThreeGppSpectrumPropagationLossModel

@@ -82,12 +82,12 @@ public:
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */
-  const ComplexVector & GetBeamformingVector (void) const;
+  ComplexVector GetBeamformingVector (void) const;
 
 
   /**
    * Returns the steering vector that points toward the specified position
-   * \return the current beamforming vector
+   * \return the steering vector
    */
   ComplexVector GetSteeringVector (const Angles& a) const;
 

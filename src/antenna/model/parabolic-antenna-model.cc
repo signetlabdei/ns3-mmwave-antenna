@@ -103,12 +103,24 @@ ParabolicAntennaModel::GetGainDb (Angles a)
   // make sure phi is in (-pi, pi]
   a.NormalizeAngles();
 
-  NS_LOG_LOGIC ("phi = " << phi );
+  NS_LOG_LOGIC ("phi = " << phi << " + theta = " << a.theta);
+  
+  double phiDeg = RadiansToDegrees(phi);
+  double thetaDeg = RadiansToDegrees(a.theta);
+  
+  // compute the radiation power pattern using equations in table 7.3-1 in
+  // 3GPP TR 38.901
+  double A_M = 30; // front-back ratio expressed in dB
+  double SLA = 30; // side-lobe level limit expressed in dB
 
-  double gainDb = std::max(-std::min (12 * pow (phi / m_beamwidthRadians, 2), m_maxAttenuation), m_gEmax);
+  double A_v = -1 * std::min (SLA,12 * pow ((thetaDeg - 90) / 65,2)); // vertical cut of the radiation power pattern (dB)
+  double A_h = -1 * std::min (A_M,12 * pow (phiDeg / 65,2)); // horizontal cut of the radiation power pattern (dB)
+
+  double gainDb = m_gEmax - 1 * std::min (A_M,- A_v - A_h); // 3D radiation power pattern (dB)
   
   NS_LOG_LOGIC ("gain = " << gainDb);
   return gainDb;
+ 
 }
 
 
