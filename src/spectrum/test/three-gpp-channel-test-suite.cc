@@ -155,14 +155,8 @@ ThreeGppChannelMatrixComputationTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
-  
-  Ptr<AntennaModel> isotropicTxAntennaModel = CreateObject<IsotropicAntennaModel> ();
-  Ptr<AntennaModel> isotropicRxAntennaModel = CreateObject<IsotropicAntennaModel> ();
-  
-  txAntenna->SetAntennaElement(isotropicTxAntennaModel);
-  rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
 
   // generate the channel matrix
   Ptr<const ThreeGppChannelModel::ChannelMatrix> channelMatrix = channelModel->GetChannel (txMob, rxMob, txAntenna, rxAntenna);
@@ -320,15 +314,8 @@ ThreeGppChannelMatrixUpdateTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
-  
-  Ptr<AntennaModel> isotropicTxAntennaModel = CreateObject<IsotropicAntennaModel> ();
-  Ptr<AntennaModel> isotropicRxAntennaModel = CreateObject<IsotropicAntennaModel> ();
-  
-  txAntenna->SetAntennaElement(isotropicTxAntennaModel);
-  rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
-  
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
   
   // check if the channel matrix is correctly updated
 
@@ -511,17 +498,9 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
   
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]));
-  
-  Ptr<AntennaModel> isotropicTxAntennaModel = CreateObject<IsotropicAntennaModel> ();
-  Ptr<AntennaModel> isotropicRxAntennaModel = CreateObject<IsotropicAntennaModel> ();
-  
-  txAntenna->SetAntennaElement(isotropicTxAntennaModel);
-  rxAntenna->SetAntennaElement(isotropicRxAntennaModel);
-  
-
   // initialize ThreeGppSpectrumPropagationLossModel
   lossModel->AddDevice (txDev, txAntenna);
   lossModel->AddDevice (rxDev, rxAntenna);
