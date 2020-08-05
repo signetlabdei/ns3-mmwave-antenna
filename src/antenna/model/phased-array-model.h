@@ -84,7 +84,14 @@ public:
    */
   ComplexVector GetBeamformingVector (void) const;
 
-
+  
+  /**
+   * Returns the beamforming vector that points towards the specified position
+   * \return the beamforming vector
+   */
+  ComplexVector GetBeamformingVector (const Angles& a) const;
+  
+  
   /**
    * Returns the steering vector that points toward the specified position
    * \return the steering vector

@@ -64,6 +64,19 @@ PhasedArrayModel::GetBeamformingVector() const
 }
 
 
+/*PhasedArrayModel::ComplexVector
+PhasedArrayModel::GetBeamformingVector(const Angles& a) const
+{
+  NS_LOG_FUNCTION (this);
+  
+  //std::norm
+  //std::conj  
+  
+  return m_beamformingVector;
+}
+*/
+
+
 PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetSteeringVector(const Angles& a) const
 {
