@@ -54,18 +54,31 @@ public:
 
 
   // attribute getters/setters
-  void SetBeamwidth (double beamwidthDegrees);
-  double GetBeamwidth () const;
+  void SetVerticalBeamwidth (double verticalBeamwidthDegrees);
+  double GetVerticalBeamwidth () const;
+  void SetHorizontalBeamwidth (double horizontalBeamwidthDegrees);
+  double GetHorizontalBeamwidth () const;
+  
   void SetOrientation (double orientationDegrees);
   double GetOrientation () const;
+  
+  void SetSLA_V (double SLA_V);
+  double GetSLA_V () const;
 
+  void SetMaxAttenuation (double maxAttenuation);
+  double GetMaxAttenuation () const;  
+  
 private:
 
-  double m_beamwidthRadians;
+  double m_verticalBeamwidthDegrees;
+  
+  double m_horizontalBeamwidthDegrees;
 
   double m_orientationRadians;
 
   double m_maxAttenuation;
+  
+  double m_SLA_V;
   
   double m_gEmax;
 };

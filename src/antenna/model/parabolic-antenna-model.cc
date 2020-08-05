@@ -41,12 +41,18 @@ ParabolicAntennaModel::GetTypeId ()
     .SetParent<AntennaModel> ()
     .SetGroupName("Antenna")
     .AddConstructor<ParabolicAntennaModel> ()
-    .AddAttribute ("Beamwidth",
-                   "The 3dB beamwidth (degrees)",
-                   DoubleValue (60),
-                   MakeDoubleAccessor (&ParabolicAntennaModel::SetBeamwidth,
-                                       &ParabolicAntennaModel::GetBeamwidth),
+    .AddAttribute ("VerticalBeamwidth",
+                   "The 3dB vertical beamwidth (degrees)",
+                   DoubleValue (65),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::SetVerticalBeamwidth,
+                                       &ParabolicAntennaModel::GetVerticalBeamwidth),
                    MakeDoubleChecker<double> (0, 180))
+    .AddAttribute ("HorizontalBeamwidth",
+                   "The 3dB horizontal beamwidth (degrees)",
+                   DoubleValue (65),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::SetHorizontalBeamwidth,
+                                       &ParabolicAntennaModel::GetHorizontalBeamwidth),
+                   MakeDoubleChecker<double> (-180, 180))
     .AddAttribute ("Orientation",
                    "The angle (degrees) that expresses the orientation of the antenna on the x-y plane relative to the x axis",
                    DoubleValue (0.0),
@@ -56,7 +62,14 @@ ParabolicAntennaModel::GetTypeId ()
     .AddAttribute ("MaxAttenuation",
                    "The maximum attenuation (dB) of the antenna radiation pattern.",
                    DoubleValue (30.0),
-                   MakeDoubleAccessor (&ParabolicAntennaModel::m_maxAttenuation),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::SetMaxAttenuation,
+                                       &ParabolicAntennaModel::GetMaxAttenuation),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("VerticalSideLobeAttenuation",
+                   "The attenuation (dB) of the side lobe in the vertical direction",
+                   DoubleValue (30.0),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::SetSLA_V,
+                                       &ParabolicAntennaModel::GetSLA_V),
                    MakeDoubleChecker<double> ())
     .AddAttribute ("MaxDirectionalGain",
                    "The maximum gain (dB) of the antenna radiation pattern.",
@@ -68,17 +81,34 @@ ParabolicAntennaModel::GetTypeId ()
 }
 
 void 
-ParabolicAntennaModel::SetBeamwidth (double beamwidthDegrees)
+ParabolicAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 { 
-  NS_LOG_FUNCTION (this << beamwidthDegrees);
-  m_beamwidthRadians = DegreesToRadians (beamwidthDegrees);
+  NS_LOG_FUNCTION (this << verticalBeamwidthDegrees);
+  m_verticalBeamwidthDegrees = verticalBeamwidthDegrees;
 }
 
+
 double
-ParabolicAntennaModel::GetBeamwidth () const
+ParabolicAntennaModel::GetVerticalBeamwidth () const
 {
-  return RadiansToDegrees (m_beamwidthRadians);
+  return m_verticalBeamwidthDegrees;
 }
+
+
+void 
+ParabolicAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
+{ 
+  NS_LOG_FUNCTION (this << horizontalBeamwidthDegrees);
+  m_horizontalBeamwidthDegrees = horizontalBeamwidthDegrees;
+}
+
+
+double
+ParabolicAntennaModel::GetHorizontalBeamwidth () const
+{
+  return m_horizontalBeamwidthDegrees;
+}
+
 
 void 
 ParabolicAntennaModel::SetOrientation (double orientationDegrees)
@@ -87,36 +117,63 @@ ParabolicAntennaModel::SetOrientation (double orientationDegrees)
   m_orientationRadians = DegreesToRadians (orientationDegrees);
 }
 
+
 double
 ParabolicAntennaModel::GetOrientation () const
 {
   return RadiansToDegrees (m_orientationRadians);
 }
 
+
+void
+ParabolicAntennaModel::SetSLA_V (double SLA_V)
+{
+  NS_LOG_FUNCTION (this << SLA_V);
+  m_SLA_V = SLA_V;
+}
+
+
+double
+ParabolicAntennaModel::GetSLA_V () const
+{
+  return m_SLA_V;
+}
+
+
+void
+ParabolicAntennaModel::SetMaxAttenuation (double maxAttenuation)
+{
+  NS_LOG_FUNCTION (this << maxAttenuation);
+  m_maxAttenuation = maxAttenuation;
+}
+
+
+double
+ParabolicAntennaModel::GetMaxAttenuation () const
+{
+  return m_maxAttenuation;    
+}
+
+
 double 
 ParabolicAntennaModel::GetGainDb (Angles a)
 {
   NS_LOG_FUNCTION (this << a);
-  // azimuth angle w.r.t. the reference system of the antenna
-  double phi = a.phi - m_orientationRadians;
-
+ 
   // make sure phi is in (-pi, pi]
   a.NormalizeAngles();
 
-  NS_LOG_LOGIC ("phi = " << phi << " + theta = " << a.theta);
+  NS_LOG_LOGIC ("phi = " << a.phi << " + theta = " << a.theta);
   
-  double phiDeg = RadiansToDegrees(phi);
+  double phiDeg = RadiansToDegrees(a.phi);
   double thetaDeg = RadiansToDegrees(a.theta);
-  
+
   // compute the radiation power pattern using equations in table 7.3-1 in
   // 3GPP TR 38.901
-  double A_M = 30; // front-back ratio expressed in dB
-  double SLA = 30; // side-lobe level limit expressed in dB
+  double A_v = -1 * std::min (m_SLA_V,12 * pow ((thetaDeg - 90) / m_verticalBeamwidthDegrees,2)); // vertical cut of the radiation power pattern (dB)
+  double A_h = -1 * std::min (m_maxAttenuation,12 * pow (phiDeg / m_horizontalBeamwidthDegrees,2)); // horizontal cut of the radiation power pattern (dB)
 
-  double A_v = -1 * std::min (SLA,12 * pow ((thetaDeg - 90) / 65,2)); // vertical cut of the radiation power pattern (dB)
-  double A_h = -1 * std::min (A_M,12 * pow (phiDeg / 65,2)); // horizontal cut of the radiation power pattern (dB)
-
-  double gainDb = m_gEmax - 1 * std::min (A_M,- A_v - A_h); // 3D radiation power pattern (dB)
+  double gainDb = m_gEmax - 1 * std::min (m_maxAttenuation,- A_v - A_h); // 3D radiation power pattern (dB)
   
   NS_LOG_LOGIC ("gain = " << gainDb);
   return gainDb;
