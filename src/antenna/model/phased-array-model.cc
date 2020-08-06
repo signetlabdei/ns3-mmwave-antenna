@@ -87,10 +87,9 @@ PhasedArrayModel::GetBeamformingVector(Angles a) const
   ComplexVector beamformingVector = GetSteeringVector(a);
   double norm = ComputeNorm(beamformingVector);
   
-  for (uint64_t i = 0; i < this->GetNumberOfElements (); i++)
+  for (auto i = 0; i < vector.size (); i++)
   {
-    beamformingVector[i].real(beamformingVector[i].real()/norm);
-    beamformingVector[i].imag(- beamformingVector[i].imag()/norm);
+    beamformingVector[i] = std::conj (beamformingVector[i]) / norm;
   }
 
   return beamformingVector;
