@@ -114,8 +114,10 @@ public:
    */
   Ptr<const AntennaModel> GetAntennaElement (void) const;
 
-
-
+protected:
+  
+  double ComputeNorm(const ComplexVector &vector) const;  
+  
   ComplexVector m_beamformingVector; //!< the beamforming vector in use
   Ptr<AntennaModel> m_antennaElement; //!< the model of the antenna element in use
 

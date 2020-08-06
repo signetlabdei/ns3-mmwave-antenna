@@ -64,17 +64,38 @@ PhasedArrayModel::GetBeamformingVector() const
 }
 
 
-/*PhasedArrayModel::ComplexVector
+double
+PhasedArrayModel::ComputeNorm(const ComplexVector &vector) const
+{
+  double norm = 0;
+    
+  for (uint64_t i = 0; i < this->GetNumberOfElements (); i++)
+  {
+    norm += std::pow(vector[i].real(),2) + std::pow(vector[i].imag(),2);
+  }
+  
+  return std::sqrt(norm);
+    
+}
+
+
+PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetBeamformingVector(Angles a) const
 {
   NS_LOG_FUNCTION (this);
   
-  //std::norm
-  //std::conj  
+  ComplexVector beamformingVector = GetSteeringVector(a);
+  double norm = ComputeNorm(beamformingVector);
   
-  return m_beamformingVector;
+  for (uint64_t i = 0; i < this->GetNumberOfElements (); i++)
+  {
+    beamformingVector[i].real(beamformingVector[i].real()/norm);
+    beamformingVector[i].imag(- beamformingVector[i].imag()/norm);
+  }
+
+  return beamformingVector;
 }
-*/
+
 
 
 PhasedArrayModel::ComplexVector
