@@ -116,7 +116,7 @@ public:
 
 protected:
   
-  double ComputeNorm(const ComplexVector &vector) const;  
+  static double ComputeNorm(const ComplexVector &vector);
   
   ComplexVector m_beamformingVector; //!< the beamforming vector in use
   Ptr<AntennaModel> m_antennaElement; //!< the model of the antenna element in use
