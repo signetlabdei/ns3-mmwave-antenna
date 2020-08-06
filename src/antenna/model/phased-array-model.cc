@@ -74,7 +74,7 @@ PhasedArrayModel::ComputeNorm(const ComplexVector &vector)
     norm += std::norm(vector[i]);
   }
   
-  return norm;
+  return std::sqrt(norm);
     
 }
 

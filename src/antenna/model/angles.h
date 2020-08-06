@@ -144,10 +144,6 @@ std::ostream& operator<< ( std::ostream& os, const Angles& a);
  */
 std::istream &operator >> (std::istream &is, Angles &a);
 
-
-
-
-
 } // namespace ns3
 
 #endif // ANGLES_H

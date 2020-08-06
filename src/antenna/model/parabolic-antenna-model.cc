@@ -46,13 +46,13 @@ ParabolicAntennaModel::GetTypeId ()
                    DoubleValue (65),
                    MakeDoubleAccessor (&ParabolicAntennaModel::SetVerticalBeamwidth,
                                        &ParabolicAntennaModel::GetVerticalBeamwidth),
-                   MakeDoubleChecker<double> (0, 180))
+                   MakeDoubleChecker<double> ())
     .AddAttribute ("HorizontalBeamwidth",
                    "The 3dB horizontal beamwidth (degrees)",
                    DoubleValue (65),
                    MakeDoubleAccessor (&ParabolicAntennaModel::SetHorizontalBeamwidth,
                                        &ParabolicAntennaModel::GetHorizontalBeamwidth),
-                   MakeDoubleChecker<double> (-180, 180))
+                   MakeDoubleChecker<double> ())
     .AddAttribute ("Orientation",
                    "The angle (degrees) that expresses the orientation of the antenna on the x-y plane relative to the x axis",
                    DoubleValue (0.0),
@@ -68,8 +68,8 @@ ParabolicAntennaModel::GetTypeId ()
     .AddAttribute ("VerticalSideLobeAttenuation",
                    "The attenuation (dB) of the side lobe in the vertical direction",
                    DoubleValue (30.0),
-                   MakeDoubleAccessor (&ParabolicAntennaModel::SetSLA_V,
-                                       &ParabolicAntennaModel::GetSLA_V),
+                   MakeDoubleAccessor (&ParabolicAntennaModel::SetSlaV,
+                                       &ParabolicAntennaModel::GetSlaV),
                    MakeDoubleChecker<double> ())
     .AddAttribute ("MaxDirectionalGain",
                    "The maximum gain (dB) of the antenna radiation pattern.",
@@ -83,7 +83,10 @@ ParabolicAntennaModel::GetTypeId ()
 void 
 ParabolicAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 { 
+  NS_ASSERT_MSG (verticalBeamwidthDegrees > 0, "Beamwidth must be positive");
+    
   NS_LOG_FUNCTION (this << verticalBeamwidthDegrees);
+  
   m_verticalBeamwidthDegrees = verticalBeamwidthDegrees;
 }
 
@@ -98,7 +101,10 @@ ParabolicAntennaModel::GetVerticalBeamwidth () const
 void 
 ParabolicAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
 { 
+  NS_ASSERT_MSG (horizontalBeamwidthDegrees > 0, "Beamwidth must be positive");
+    
   NS_LOG_FUNCTION (this << horizontalBeamwidthDegrees);
+  
   m_horizontalBeamwidthDegrees = horizontalBeamwidthDegrees;
 }
 
@@ -126,17 +132,17 @@ ParabolicAntennaModel::GetOrientation () const
 
 
 void
-ParabolicAntennaModel::SetSLA_V (double SLA_V)
+ParabolicAntennaModel::SetSlaV (double SlaV)
 {
-  NS_LOG_FUNCTION (this << SLA_V);
-  m_SLA_V = SLA_V;
+  NS_LOG_FUNCTION (this << SlaV);
+  m_SlaV = SlaV;
 }
 
 
 double
-ParabolicAntennaModel::GetSLA_V () const
+ParabolicAntennaModel::GetSlaV () const
 {
-  return m_SLA_V;
+  return m_SlaV;
 }
 
 
@@ -170,7 +176,7 @@ ParabolicAntennaModel::GetGainDb (Angles a)
 
   // compute the radiation power pattern using equations in table 7.3-1 in
   // 3GPP TR 38.901
-  double A_v = -1 * std::min (m_SLA_V,12 * pow ((thetaDeg - 90) / m_verticalBeamwidthDegrees,2)); // vertical cut of the radiation power pattern (dB)
+  double A_v = -1 * std::min (m_SlaV,12 * pow ((thetaDeg - 90) / m_verticalBeamwidthDegrees,2)); // vertical cut of the radiation power pattern (dB)
   double A_h = -1 * std::min (m_maxAttenuation,12 * pow (phiDeg / m_horizontalBeamwidthDegrees,2)); // horizontal cut of the radiation power pattern (dB)
 
   double gainDb = m_gEmax - 1 * std::min (m_maxAttenuation,- A_v - A_h); // 3D radiation power pattern (dB)

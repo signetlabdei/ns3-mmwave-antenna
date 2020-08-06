@@ -51,7 +51,6 @@ public:
 
   // inherited from Object
   static TypeId GetTypeId ();
-
   
   /**
    * this method is expected to be re-implemented by each antenna model 

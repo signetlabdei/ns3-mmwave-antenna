@@ -68,7 +68,7 @@ UniformPlanarArray::GetTypeId (void)
 std::pair<double, double>
 UniformPlanarArray::GetElementFieldPattern (Angles a) const
 {
-  NS_LOG_FUNCTION (this);
+  NS_LOG_FUNCTION (this << a);
 
 
   // normalize phi (if needed)
@@ -112,7 +112,7 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
 Vector
 UniformPlanarArray::GetElementLocation (uint64_t index) const
 {
-  NS_LOG_FUNCTION (this);
+  NS_LOG_FUNCTION (this << index);
 
   // compute the element coordinates in the LCS
   // assume the left bottom corner is (0,0,0), and the rectangular antenna array is on the y-z plane.

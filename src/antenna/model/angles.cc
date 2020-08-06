@@ -56,23 +56,17 @@ std::istream &operator >> (std::istream &is, Angles &a)
   return is;
 }
 
-
-
-
-
 Angles::Angles ()
   : phi (0),
     theta (0)
 {
 }
 
-
 Angles::Angles (double p, double t)
   : phi (p),
     theta (t)
 {
 }
-
 
 Angles::Angles (Vector v)
   : phi (std::atan2 (v.y, v.x)),

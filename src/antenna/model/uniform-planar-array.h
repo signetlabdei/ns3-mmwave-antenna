@@ -30,7 +30,7 @@ public:
   /**
    * Destructor
    */
-  ~UniformPlanarArray (void);
+  virtual ~UniformPlanarArray (void);
     
   
   // inherited from Object

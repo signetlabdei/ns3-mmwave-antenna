@@ -62,8 +62,8 @@ public:
   void SetOrientation (double orientationDegrees);
   double GetOrientation () const;
   
-  void SetSLA_V (double SLA_V);
-  double GetSLA_V () const;
+  void SetSlaV (double SlaV);
+  double GetSlaV () const;
 
   void SetMaxAttenuation (double maxAttenuation);
   double GetMaxAttenuation () const;  
@@ -78,7 +78,7 @@ private:
 
   double m_maxAttenuation;
   
-  double m_SLA_V;
+  double m_SlaV;
   
   double m_gEmax;
 };

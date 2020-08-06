@@ -46,13 +46,13 @@ CosineAntennaModel::GetTypeId ()
                    DoubleValue (std::numeric_limits<double>::infinity()),
                    MakeDoubleAccessor (&CosineAntennaModel::SetVerticalBeamwidth,
                                        &CosineAntennaModel::GetVerticalBeamwidth),
-                   MakeDoubleChecker<double> (0, 180))
+                   MakeDoubleChecker<double> ())
     .AddAttribute ("HorizontalBeamwidth",
                    "The 3dB horizontal beamwidth (degrees)",
                    DoubleValue (60),
                    MakeDoubleAccessor (&CosineAntennaModel::SetHorizontalBeamwidth,
                                        &CosineAntennaModel::GetHorizontalBeamwidth),
-                   MakeDoubleChecker<double> (0, 180))
+                   MakeDoubleChecker<double> ())
     .AddAttribute ("Orientation",
                    "The angle (degrees) that expresses the orientation of the antenna on the x-y plane relative to the x axis",
                    DoubleValue (0.0),
@@ -84,6 +84,8 @@ CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians) const
 void 
 CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 {
+  NS_ASSERT_MSG (verticalBeamwidthDegrees > 0, "Beamwidth must be positive");  
+  
   if (std::isinf(verticalBeamwidthDegrees))
   {
     m_verticalBeamwidthRadians = std::numeric_limits<double>::infinity();
@@ -100,6 +102,8 @@ CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 void 
 CosineAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
 {
+  NS_ASSERT_MSG (horizontalBeamwidthDegrees > 0, "Beamwidth must be positive");
+    
   if (std::isinf(horizontalBeamwidthDegrees))
   {
     m_horizontalBeamwidthRadians = std::numeric_limits<double>::infinity();
