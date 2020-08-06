@@ -41,12 +41,18 @@ CosineAntennaModel::GetTypeId ()
     .SetParent<AntennaModel> ()
     .SetGroupName("Antenna")
     .AddConstructor<CosineAntennaModel> ()
-    .AddAttribute ("Beamwidth",
-                   "The 3dB beamwidth (degrees)",
+    .AddAttribute ("VerticalBeamwidth",
+                   "The 3dB vertical beamwidth (degrees)",
+                   DoubleValue (std::numeric_limits<double>::infinity()),
+                   MakeDoubleAccessor (&CosineAntennaModel::SetVerticalBeamwidth,
+                                       &CosineAntennaModel::GetVerticalBeamwidth),
+                   MakeDoubleChecker<double> ())
+    .AddAttribute ("HorizontalBeamwidth",
+                   "The 3dB horizontal beamwidth (degrees)",
                    DoubleValue (60),
-                   MakeDoubleAccessor (&CosineAntennaModel::SetBeamwidth,
-                                       &CosineAntennaModel::GetBeamwidth),
-                   MakeDoubleChecker<double> (0, 180))
+                   MakeDoubleAccessor (&CosineAntennaModel::SetHorizontalBeamwidth,
+                                       &CosineAntennaModel::GetHorizontalBeamwidth),
+                   MakeDoubleChecker<double> ())
     .AddAttribute ("Orientation",
                    "The angle (degrees) that expresses the orientation of the antenna on the x-y plane relative to the x axis",
                    DoubleValue (0.0),
@@ -62,20 +68,68 @@ CosineAntennaModel::GetTypeId ()
   return tid;
 }
 
-void 
-CosineAntennaModel::SetBeamwidth (double beamwidthDegrees)
-{ 
-  NS_LOG_FUNCTION (this << beamwidthDegrees);
-  m_beamwidthRadians = DegreesToRadians (beamwidthDegrees);
-  m_exponent = -3.0 / (20 * std::log10 (std::cos (m_beamwidthRadians / 4.0)));
-  NS_LOG_LOGIC (this << " m_exponent = " << m_exponent);
-}
 
 double
-CosineAntennaModel::GetBeamwidth () const
+CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians) const
 {
-  return RadiansToDegrees (m_beamwidthRadians);
+  double exponent = 0;
+  if (!(std::isinf(beamwidthRadians)))
+  {
+    exponent = -3.0 / (20 * std::log10 (std::cos (beamwidthRadians / 4.0)));
+  }
+  return exponent;
 }
+
+
+void 
+CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
+{
+  NS_ASSERT_MSG (verticalBeamwidthDegrees > 0, "Beamwidth must be positive");  
+  
+  if (std::isinf(verticalBeamwidthDegrees))
+  {
+    m_verticalBeamwidthRadians = std::numeric_limits<double>::infinity();
+  }
+  else
+  {
+    m_verticalBeamwidthRadians = DegreesToRadians (verticalBeamwidthDegrees);
+  }
+  
+  m_verticalexponent = GetExponentFromBeamwidth(m_verticalBeamwidthRadians);
+}
+
+
+void 
+CosineAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
+{
+  NS_ASSERT_MSG (horizontalBeamwidthDegrees > 0, "Beamwidth must be positive");
+    
+  if (std::isinf(horizontalBeamwidthDegrees))
+  {
+    m_horizontalBeamwidthRadians = std::numeric_limits<double>::infinity();
+  }
+  else
+  {
+    m_horizontalBeamwidthRadians = DegreesToRadians (horizontalBeamwidthDegrees);
+  }
+  
+  m_horizontalexponent = GetExponentFromBeamwidth(m_horizontalBeamwidthRadians);
+}
+
+
+double
+CosineAntennaModel::GetVerticalBeamwidth () const
+{
+  return RadiansToDegrees (m_verticalBeamwidthRadians);
+}
+
+
+double
+CosineAntennaModel::GetHorizontalBeamwidth () const
+{
+  return RadiansToDegrees (m_horizontalBeamwidthRadians);    
+}
+
 
 void 
 CosineAntennaModel::SetOrientation (double orientationDegrees)
@@ -84,11 +138,13 @@ CosineAntennaModel::SetOrientation (double orientationDegrees)
   m_orientationRadians = DegreesToRadians (orientationDegrees);
 }
 
+
 double
 CosineAntennaModel::GetOrientation () const
 {
   return RadiansToDegrees (m_orientationRadians);
 }
+
 
 double 
 CosineAntennaModel::GetGainDb (Angles a)
@@ -98,19 +154,12 @@ CosineAntennaModel::GetGainDb (Angles a)
   double phi = a.phi - m_orientationRadians;
 
   // make sure phi is in (-pi, pi]
-  while (phi <= -M_PI)
-    {
-      phi += M_PI+M_PI;
-    }
-  while (phi > M_PI)
-    {
-      phi -= M_PI+M_PI;
-    }
+  a.NormalizeAngles();
 
-  NS_LOG_LOGIC ("phi = " << phi );
+  NS_LOG_LOGIC ("phi = " << phi << " + theta = " << a.theta );
 
   // element factor: amplitude gain of a single antenna element in linear units
-  double ef = std::pow (std::cos (phi / 2.0), m_exponent);
+  double ef = (std::pow (std::cos (phi / 2.0), m_horizontalexponent))*(std::pow (std::cos ( a.theta/ 2.0), m_verticalexponent));
 
   // the array factor is not considered. Note that if we did consider
   // the array factor, the actual beamwidth would change, and in
@@ -125,4 +174,3 @@ CosineAntennaModel::GetGainDb (Angles a)
 
 
 }
-

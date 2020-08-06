@@ -19,7 +19,7 @@ def module_init():
 
 def register_types(module):
     root_module = module.get_root()
-    
+
     ## angles.h (module 'antenna'): ns3::Angles [struct]
     module.add_class('Angles')
     ## attribute-construction-list.h (module 'core'): ns3::AttributeConstructionList [class]
@@ -86,11 +86,11 @@ def register_types(module):
     module.add_class('SimpleRefCount', template_parameters=['ns3::Hash::Implementation', 'ns3::empty', 'ns3::DefaultDeleter<ns3::Hash::Implementation>'], automatic_type_narrowing=True, memory_policy=cppclass.ReferenceCountingMethodsPolicy(incref_method='Ref', decref_method='Unref', peekref_method='GetReferenceCount'), parent=root_module['ns3::empty'], import_from_module='ns.core')
     ## simple-ref-count.h (module 'core'): ns3::SimpleRefCount<ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> > [class]
     module.add_class('SimpleRefCount', template_parameters=['ns3::TraceSourceAccessor', 'ns3::empty', 'ns3::DefaultDeleter<ns3::TraceSourceAccessor>'], automatic_type_narrowing=True, memory_policy=cppclass.ReferenceCountingMethodsPolicy(incref_method='Ref', decref_method='Unref', peekref_method='GetReferenceCount'), parent=root_module['ns3::empty'], import_from_module='ns.core')
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel [class]
-    module.add_class('ThreeGppAntennaArrayModel', parent=root_module['ns3::Object'])
-    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::ThreeGppAntennaArrayModel::ComplexVector')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::ThreeGppAntennaArrayModel::ComplexVector*')
-    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::ThreeGppAntennaArrayModel::ComplexVector&')
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel [class]
+    module.add_class('PhasedArrayModel', parent=root_module['ns3::Object'])
+    typehandlers.add_type_alias('std::vector< std::complex< double > >', 'ns3::PhasedArrayModel::ComplexVector')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >*', 'ns3::PhasedArrayModel::ComplexVector*')
+    typehandlers.add_type_alias('std::vector< std::complex< double > >&', 'ns3::PhasedArrayModel::ComplexVector&')
     ## trace-source-accessor.h (module 'core'): ns3::TraceSourceAccessor [class]
     module.add_class('TraceSourceAccessor', parent=root_module['ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> >'], import_from_module='ns.core')
     ## antenna-model.h (module 'antenna'): ns3::AntennaModel [class]
@@ -146,26 +146,26 @@ def register_types(module):
     typehandlers.add_type_alias('ns3::Vector3DChecker*', 'ns3::VectorChecker*')
     typehandlers.add_type_alias('ns3::Vector3DChecker&', 'ns3::VectorChecker&')
     module.add_typedef(root_module['ns3::Vector3DChecker'], 'VectorChecker')
-    
+
     ## Register a nested module for the namespace FatalImpl
-    
+
     nested_module = module.add_cpp_namespace('FatalImpl')
     register_types_ns3_FatalImpl(nested_module)
-    
-    
+
+
     ## Register a nested module for the namespace Hash
-    
+
     nested_module = module.add_cpp_namespace('Hash')
     register_types_ns3_Hash(nested_module)
-    
+
 
 def register_types_ns3_FatalImpl(module):
     root_module = module.get_root()
-    
+
 
 def register_types_ns3_Hash(module):
     root_module = module.get_root()
-    
+
     ## hash-function.h (module 'core'): ns3::Hash::Implementation [class]
     module.add_class('Implementation', parent=root_module['ns3::SimpleRefCount< ns3::Hash::Implementation, ns3::empty, ns3::DefaultDeleter<ns3::Hash::Implementation> >'], import_from_module='ns.core')
     typehandlers.add_type_alias('uint32_t ( * ) ( char const *, std::size_t const )', 'ns3::Hash::Hash32Function_ptr')
@@ -174,16 +174,16 @@ def register_types_ns3_Hash(module):
     typehandlers.add_type_alias('uint64_t ( * ) ( char const *, std::size_t const )', 'ns3::Hash::Hash64Function_ptr')
     typehandlers.add_type_alias('uint64_t ( * ) ( char const *, std::size_t const )*', 'ns3::Hash::Hash64Function_ptr*')
     typehandlers.add_type_alias('uint64_t ( * ) ( char const *, std::size_t const )&', 'ns3::Hash::Hash64Function_ptr&')
-    
+
     ## Register a nested module for the namespace Function
-    
+
     nested_module = module.add_cpp_namespace('Function')
     register_types_ns3_Hash_Function(nested_module)
-    
+
 
 def register_types_ns3_Hash_Function(module):
     root_module = module.get_root()
-    
+
     ## hash-fnv.h (module 'core'): ns3::Hash::Function::Fnv1a [class]
     module.add_class('Fnv1a', parent=root_module['ns3::Hash::Implementation'], import_from_module='ns.core')
     ## hash-function.h (module 'core'): ns3::Hash::Function::Hash32 [class]
@@ -222,7 +222,7 @@ def register_methods(root_module):
     register_Ns3SimpleRefCount__Ns3CallbackImplBase_Ns3Empty_Ns3DefaultDeleter__lt__ns3CallbackImplBase__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::CallbackImplBase, ns3::empty, ns3::DefaultDeleter<ns3::CallbackImplBase> >'])
     register_Ns3SimpleRefCount__Ns3HashImplementation_Ns3Empty_Ns3DefaultDeleter__lt__ns3HashImplementation__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::Hash::Implementation, ns3::empty, ns3::DefaultDeleter<ns3::Hash::Implementation> >'])
     register_Ns3SimpleRefCount__Ns3TraceSourceAccessor_Ns3Empty_Ns3DefaultDeleter__lt__ns3TraceSourceAccessor__gt___methods(root_module, root_module['ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter<ns3::TraceSourceAccessor> >'])
-    register_Ns3ThreeGppAntennaArrayModel_methods(root_module, root_module['ns3::ThreeGppAntennaArrayModel'])
+    register_Ns3PhasedArrayModel_methods(root_module, root_module['ns3::PhasedArrayModel'])
     register_Ns3TraceSourceAccessor_methods(root_module, root_module['ns3::TraceSourceAccessor'])
     register_Ns3AntennaModel_methods(root_module, root_module['ns3::AntennaModel'])
     register_Ns3AttributeAccessor_methods(root_module, root_module['ns3::AttributeAccessor'])
@@ -275,23 +275,23 @@ def register_Ns3AttributeConstructionList_methods(root_module, cls):
     ## attribute-construction-list.h (module 'core'): ns3::AttributeConstructionList::AttributeConstructionList() [constructor]
     cls.add_constructor([])
     ## attribute-construction-list.h (module 'core'): void ns3::AttributeConstructionList::Add(std::string name, ns3::Ptr<const ns3::AttributeChecker> checker, ns3::Ptr<ns3::AttributeValue> value) [member function]
-    cls.add_method('Add', 
-                   'void', 
+    cls.add_method('Add',
+                   'void',
                    [param('std::string', 'name'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker'), param('ns3::Ptr< ns3::AttributeValue >', 'value')])
     ## attribute-construction-list.h (module 'core'): ns3::AttributeConstructionList::CIterator ns3::AttributeConstructionList::Begin() const [member function]
-    cls.add_method('Begin', 
-                   'ns3::AttributeConstructionList::CIterator', 
-                   [], 
+    cls.add_method('Begin',
+                   'ns3::AttributeConstructionList::CIterator',
+                   [],
                    is_const=True)
     ## attribute-construction-list.h (module 'core'): ns3::AttributeConstructionList::CIterator ns3::AttributeConstructionList::End() const [member function]
-    cls.add_method('End', 
-                   'ns3::AttributeConstructionList::CIterator', 
-                   [], 
+    cls.add_method('End',
+                   'ns3::AttributeConstructionList::CIterator',
+                   [],
                    is_const=True)
     ## attribute-construction-list.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::AttributeConstructionList::Find(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('Find', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('Find',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True)
     return
 
@@ -314,12 +314,12 @@ def register_Ns3CallbackBase_methods(root_module, cls):
     ## callback.h (module 'core'): ns3::CallbackBase::CallbackBase() [constructor]
     cls.add_constructor([])
     ## callback.h (module 'core'): ns3::Ptr<ns3::CallbackImplBase> ns3::CallbackBase::GetImpl() const [member function]
-    cls.add_method('GetImpl', 
-                   'ns3::Ptr< ns3::CallbackImplBase >', 
-                   [], 
+    cls.add_method('GetImpl',
+                   'ns3::Ptr< ns3::CallbackImplBase >',
+                   [],
                    is_const=True)
     ## callback.h (module 'core'): ns3::CallbackBase::CallbackBase(ns3::Ptr<ns3::CallbackImplBase> impl) [constructor]
-    cls.add_constructor([param('ns3::Ptr< ns3::CallbackImplBase >', 'impl')], 
+    cls.add_constructor([param('ns3::Ptr< ns3::CallbackImplBase >', 'impl')],
                         visibility='protected')
     return
 
@@ -329,9 +329,9 @@ def register_Ns3DefaultDeleter__Ns3AttributeAccessor_methods(root_module, cls):
     ## default-deleter.h (module 'core'): ns3::DefaultDeleter<ns3::AttributeAccessor>::DefaultDeleter(ns3::DefaultDeleter<ns3::AttributeAccessor> const & arg0) [constructor]
     cls.add_constructor([param('ns3::DefaultDeleter< ns3::AttributeAccessor > const &', 'arg0')])
     ## default-deleter.h (module 'core'): static void ns3::DefaultDeleter<ns3::AttributeAccessor>::Delete(ns3::AttributeAccessor * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::AttributeAccessor *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::AttributeAccessor *', 'object')],
                    is_static=True)
     return
 
@@ -341,9 +341,9 @@ def register_Ns3DefaultDeleter__Ns3AttributeChecker_methods(root_module, cls):
     ## default-deleter.h (module 'core'): ns3::DefaultDeleter<ns3::AttributeChecker>::DefaultDeleter(ns3::DefaultDeleter<ns3::AttributeChecker> const & arg0) [constructor]
     cls.add_constructor([param('ns3::DefaultDeleter< ns3::AttributeChecker > const &', 'arg0')])
     ## default-deleter.h (module 'core'): static void ns3::DefaultDeleter<ns3::AttributeChecker>::Delete(ns3::AttributeChecker * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::AttributeChecker *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::AttributeChecker *', 'object')],
                    is_static=True)
     return
 
@@ -353,9 +353,9 @@ def register_Ns3DefaultDeleter__Ns3AttributeValue_methods(root_module, cls):
     ## default-deleter.h (module 'core'): ns3::DefaultDeleter<ns3::AttributeValue>::DefaultDeleter(ns3::DefaultDeleter<ns3::AttributeValue> const & arg0) [constructor]
     cls.add_constructor([param('ns3::DefaultDeleter< ns3::AttributeValue > const &', 'arg0')])
     ## default-deleter.h (module 'core'): static void ns3::DefaultDeleter<ns3::AttributeValue>::Delete(ns3::AttributeValue * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::AttributeValue *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::AttributeValue *', 'object')],
                    is_static=True)
     return
 
@@ -365,9 +365,9 @@ def register_Ns3DefaultDeleter__Ns3CallbackImplBase_methods(root_module, cls):
     ## default-deleter.h (module 'core'): ns3::DefaultDeleter<ns3::CallbackImplBase>::DefaultDeleter(ns3::DefaultDeleter<ns3::CallbackImplBase> const & arg0) [constructor]
     cls.add_constructor([param('ns3::DefaultDeleter< ns3::CallbackImplBase > const &', 'arg0')])
     ## default-deleter.h (module 'core'): static void ns3::DefaultDeleter<ns3::CallbackImplBase>::Delete(ns3::CallbackImplBase * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::CallbackImplBase *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::CallbackImplBase *', 'object')],
                    is_static=True)
     return
 
@@ -377,9 +377,9 @@ def register_Ns3DefaultDeleter__Ns3HashImplementation_methods(root_module, cls):
     ## default-deleter.h (module 'core'): ns3::DefaultDeleter<ns3::Hash::Implementation>::DefaultDeleter(ns3::DefaultDeleter<ns3::Hash::Implementation> const & arg0) [constructor]
     cls.add_constructor([param('ns3::DefaultDeleter< ns3::Hash::Implementation > const &', 'arg0')])
     ## default-deleter.h (module 'core'): static void ns3::DefaultDeleter<ns3::Hash::Implementation>::Delete(ns3::Hash::Implementation * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::Hash::Implementation *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::Hash::Implementation *', 'object')],
                    is_static=True)
     return
 
@@ -389,9 +389,9 @@ def register_Ns3DefaultDeleter__Ns3TraceSourceAccessor_methods(root_module, cls)
     ## default-deleter.h (module 'core'): ns3::DefaultDeleter<ns3::TraceSourceAccessor>::DefaultDeleter(ns3::DefaultDeleter<ns3::TraceSourceAccessor> const & arg0) [constructor]
     cls.add_constructor([param('ns3::DefaultDeleter< ns3::TraceSourceAccessor > const &', 'arg0')])
     ## default-deleter.h (module 'core'): static void ns3::DefaultDeleter<ns3::TraceSourceAccessor>::Delete(ns3::TraceSourceAccessor * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::TraceSourceAccessor *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::TraceSourceAccessor *', 'object')],
                    is_static=True)
     return
 
@@ -403,24 +403,24 @@ def register_Ns3Hasher_methods(root_module, cls):
     ## hash.h (module 'core'): ns3::Hasher::Hasher(ns3::Ptr<ns3::Hash::Implementation> hp) [constructor]
     cls.add_constructor([param('ns3::Ptr< ns3::Hash::Implementation >', 'hp')])
     ## hash.h (module 'core'): uint32_t ns3::Hasher::GetHash32(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
+    cls.add_method('GetHash32',
+                   'uint32_t',
                    [param('char const *', 'buffer'), param('std::size_t const', 'size')])
     ## hash.h (module 'core'): uint32_t ns3::Hasher::GetHash32(std::string const s) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
+    cls.add_method('GetHash32',
+                   'uint32_t',
                    [param('std::string const', 's')])
     ## hash.h (module 'core'): uint64_t ns3::Hasher::GetHash64(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash64', 
-                   'uint64_t', 
+    cls.add_method('GetHash64',
+                   'uint64_t',
                    [param('char const *', 'buffer'), param('std::size_t const', 'size')])
     ## hash.h (module 'core'): uint64_t ns3::Hasher::GetHash64(std::string const s) [member function]
-    cls.add_method('GetHash64', 
-                   'uint64_t', 
+    cls.add_method('GetHash64',
+                   'uint64_t',
                    [param('std::string const', 's')])
     ## hash.h (module 'core'): ns3::Hasher & ns3::Hasher::clear() [member function]
-    cls.add_method('clear', 
-                   'ns3::Hasher &', 
+    cls.add_method('clear',
+                   'ns3::Hasher &',
                    [])
     return
 
@@ -430,58 +430,58 @@ def register_Ns3ObjectBase_methods(root_module, cls):
     ## object-base.h (module 'core'): ns3::ObjectBase::ObjectBase(ns3::ObjectBase const & arg0) [constructor]
     cls.add_constructor([param('ns3::ObjectBase const &', 'arg0')])
     ## object-base.h (module 'core'): void ns3::ObjectBase::GetAttribute(std::string name, ns3::AttributeValue & value) const [member function]
-    cls.add_method('GetAttribute', 
-                   'void', 
-                   [param('std::string', 'name'), param('ns3::AttributeValue &', 'value')], 
+    cls.add_method('GetAttribute',
+                   'void',
+                   [param('std::string', 'name'), param('ns3::AttributeValue &', 'value')],
                    is_const=True)
     ## object-base.h (module 'core'): bool ns3::ObjectBase::GetAttributeFailSafe(std::string name, ns3::AttributeValue & value) const [member function]
-    cls.add_method('GetAttributeFailSafe', 
-                   'bool', 
-                   [param('std::string', 'name'), param('ns3::AttributeValue &', 'value')], 
+    cls.add_method('GetAttributeFailSafe',
+                   'bool',
+                   [param('std::string', 'name'), param('ns3::AttributeValue &', 'value')],
                    is_const=True)
     ## object-base.h (module 'core'): ns3::TypeId ns3::ObjectBase::GetInstanceTypeId() const [member function]
-    cls.add_method('GetInstanceTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetInstanceTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## object-base.h (module 'core'): static ns3::TypeId ns3::ObjectBase::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
     ## object-base.h (module 'core'): void ns3::ObjectBase::SetAttribute(std::string name, ns3::AttributeValue const & value) [member function]
-    cls.add_method('SetAttribute', 
-                   'void', 
+    cls.add_method('SetAttribute',
+                   'void',
                    [param('std::string', 'name'), param('ns3::AttributeValue const &', 'value')])
     ## object-base.h (module 'core'): bool ns3::ObjectBase::SetAttributeFailSafe(std::string name, ns3::AttributeValue const & value) [member function]
-    cls.add_method('SetAttributeFailSafe', 
-                   'bool', 
+    cls.add_method('SetAttributeFailSafe',
+                   'bool',
                    [param('std::string', 'name'), param('ns3::AttributeValue const &', 'value')])
     ## object-base.h (module 'core'): bool ns3::ObjectBase::TraceConnect(std::string name, std::string context, ns3::CallbackBase const & cb) [member function]
-    cls.add_method('TraceConnect', 
-                   'bool', 
+    cls.add_method('TraceConnect',
+                   'bool',
                    [param('std::string', 'name'), param('std::string', 'context'), param('ns3::CallbackBase const &', 'cb')])
     ## object-base.h (module 'core'): bool ns3::ObjectBase::TraceConnectWithoutContext(std::string name, ns3::CallbackBase const & cb) [member function]
-    cls.add_method('TraceConnectWithoutContext', 
-                   'bool', 
+    cls.add_method('TraceConnectWithoutContext',
+                   'bool',
                    [param('std::string', 'name'), param('ns3::CallbackBase const &', 'cb')])
     ## object-base.h (module 'core'): bool ns3::ObjectBase::TraceDisconnect(std::string name, std::string context, ns3::CallbackBase const & cb) [member function]
-    cls.add_method('TraceDisconnect', 
-                   'bool', 
+    cls.add_method('TraceDisconnect',
+                   'bool',
                    [param('std::string', 'name'), param('std::string', 'context'), param('ns3::CallbackBase const &', 'cb')])
     ## object-base.h (module 'core'): bool ns3::ObjectBase::TraceDisconnectWithoutContext(std::string name, ns3::CallbackBase const & cb) [member function]
-    cls.add_method('TraceDisconnectWithoutContext', 
-                   'bool', 
+    cls.add_method('TraceDisconnectWithoutContext',
+                   'bool',
                    [param('std::string', 'name'), param('ns3::CallbackBase const &', 'cb')])
     ## object-base.h (module 'core'): void ns3::ObjectBase::ConstructSelf(ns3::AttributeConstructionList const & attributes) [member function]
-    cls.add_method('ConstructSelf', 
-                   'void', 
-                   [param('ns3::AttributeConstructionList const &', 'attributes')], 
+    cls.add_method('ConstructSelf',
+                   'void',
+                   [param('ns3::AttributeConstructionList const &', 'attributes')],
                    visibility='protected')
     ## object-base.h (module 'core'): void ns3::ObjectBase::NotifyConstructionCompleted() [member function]
-    cls.add_method('NotifyConstructionCompleted', 
-                   'void', 
-                   [], 
+    cls.add_method('NotifyConstructionCompleted',
+                   'void',
+                   [],
                    is_virtual=True, visibility='protected')
     return
 
@@ -491,9 +491,9 @@ def register_Ns3ObjectDeleter_methods(root_module, cls):
     ## object.h (module 'core'): ns3::ObjectDeleter::ObjectDeleter(ns3::ObjectDeleter const & arg0) [constructor]
     cls.add_constructor([param('ns3::ObjectDeleter const &', 'arg0')])
     ## object.h (module 'core'): static void ns3::ObjectDeleter::Delete(ns3::Object * object) [member function]
-    cls.add_method('Delete', 
-                   'void', 
-                   [param('ns3::Object *', 'object')], 
+    cls.add_method('Delete',
+                   'void',
+                   [param('ns3::Object *', 'object')],
                    is_static=True)
     return
 
@@ -516,160 +516,160 @@ def register_Ns3TypeId_methods(root_module, cls):
     ## type-id.h (module 'core'): ns3::TypeId::TypeId(ns3::TypeId const & o) [constructor]
     cls.add_constructor([param('ns3::TypeId const &', 'o')])
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::AddAttribute(std::string name, std::string help, ns3::AttributeValue const & initialValue, ns3::Ptr<const ns3::AttributeAccessor> accessor, ns3::Ptr<const ns3::AttributeChecker> checker, ns3::TypeId::SupportLevel supportLevel=::ns3::TypeId::SupportLevel::SUPPORTED, std::string const & supportMsg="") [member function]
-    cls.add_method('AddAttribute', 
-                   'ns3::TypeId', 
+    cls.add_method('AddAttribute',
+                   'ns3::TypeId',
                    [param('std::string', 'name'), param('std::string', 'help'), param('ns3::AttributeValue const &', 'initialValue'), param('ns3::Ptr< ns3::AttributeAccessor const >', 'accessor'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker'), param('ns3::TypeId::SupportLevel', 'supportLevel', default_value='::ns3::TypeId::SupportLevel::SUPPORTED'), param('std::string const &', 'supportMsg', default_value='""')])
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::AddAttribute(std::string name, std::string help, uint32_t flags, ns3::AttributeValue const & initialValue, ns3::Ptr<const ns3::AttributeAccessor> accessor, ns3::Ptr<const ns3::AttributeChecker> checker, ns3::TypeId::SupportLevel supportLevel=::ns3::TypeId::SupportLevel::SUPPORTED, std::string const & supportMsg="") [member function]
-    cls.add_method('AddAttribute', 
-                   'ns3::TypeId', 
+    cls.add_method('AddAttribute',
+                   'ns3::TypeId',
                    [param('std::string', 'name'), param('std::string', 'help'), param('uint32_t', 'flags'), param('ns3::AttributeValue const &', 'initialValue'), param('ns3::Ptr< ns3::AttributeAccessor const >', 'accessor'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker'), param('ns3::TypeId::SupportLevel', 'supportLevel', default_value='::ns3::TypeId::SupportLevel::SUPPORTED'), param('std::string const &', 'supportMsg', default_value='""')])
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::AddTraceSource(std::string name, std::string help, ns3::Ptr<const ns3::TraceSourceAccessor> accessor, std::string callback, ns3::TypeId::SupportLevel supportLevel=::ns3::TypeId::SupportLevel::SUPPORTED, std::string const & supportMsg="") [member function]
-    cls.add_method('AddTraceSource', 
-                   'ns3::TypeId', 
+    cls.add_method('AddTraceSource',
+                   'ns3::TypeId',
                    [param('std::string', 'name'), param('std::string', 'help'), param('ns3::Ptr< ns3::TraceSourceAccessor const >', 'accessor'), param('std::string', 'callback'), param('ns3::TypeId::SupportLevel', 'supportLevel', default_value='::ns3::TypeId::SupportLevel::SUPPORTED'), param('std::string const &', 'supportMsg', default_value='""')])
     ## type-id.h (module 'core'): ns3::TypeId::AttributeInformation ns3::TypeId::GetAttribute(std::size_t i) const [member function]
-    cls.add_method('GetAttribute', 
-                   'ns3::TypeId::AttributeInformation', 
-                   [param('std::size_t', 'i')], 
+    cls.add_method('GetAttribute',
+                   'ns3::TypeId::AttributeInformation',
+                   [param('std::size_t', 'i')],
                    is_const=True)
     ## type-id.h (module 'core'): std::string ns3::TypeId::GetAttributeFullName(std::size_t i) const [member function]
-    cls.add_method('GetAttributeFullName', 
-                   'std::string', 
-                   [param('std::size_t', 'i')], 
+    cls.add_method('GetAttributeFullName',
+                   'std::string',
+                   [param('std::size_t', 'i')],
                    is_const=True)
     ## type-id.h (module 'core'): std::size_t ns3::TypeId::GetAttributeN() const [member function]
-    cls.add_method('GetAttributeN', 
-                   'std::size_t', 
-                   [], 
+    cls.add_method('GetAttributeN',
+                   'std::size_t',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): ns3::Callback<ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty> ns3::TypeId::GetConstructor() const [member function]
-    cls.add_method('GetConstructor', 
-                   'ns3::Callback< ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >', 
-                   [], 
+    cls.add_method('GetConstructor',
+                   'ns3::Callback< ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty >',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): std::string ns3::TypeId::GetGroupName() const [member function]
-    cls.add_method('GetGroupName', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetGroupName',
+                   'std::string',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): ns3::TypeId::hash_t ns3::TypeId::GetHash() const [member function]
-    cls.add_method('GetHash', 
-                   'ns3::TypeId::hash_t', 
-                   [], 
+    cls.add_method('GetHash',
+                   'ns3::TypeId::hash_t',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): std::string ns3::TypeId::GetName() const [member function]
-    cls.add_method('GetName', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetName',
+                   'std::string',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::GetParent() const [member function]
-    cls.add_method('GetParent', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetParent',
+                   'ns3::TypeId',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): static ns3::TypeId ns3::TypeId::GetRegistered(uint16_t i) [member function]
-    cls.add_method('GetRegistered', 
-                   'ns3::TypeId', 
-                   [param('uint16_t', 'i')], 
+    cls.add_method('GetRegistered',
+                   'ns3::TypeId',
+                   [param('uint16_t', 'i')],
                    is_static=True)
     ## type-id.h (module 'core'): static uint16_t ns3::TypeId::GetRegisteredN() [member function]
-    cls.add_method('GetRegisteredN', 
-                   'uint16_t', 
-                   [], 
+    cls.add_method('GetRegisteredN',
+                   'uint16_t',
+                   [],
                    is_static=True)
     ## type-id.h (module 'core'): std::size_t ns3::TypeId::GetSize() const [member function]
-    cls.add_method('GetSize', 
-                   'std::size_t', 
-                   [], 
+    cls.add_method('GetSize',
+                   'std::size_t',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): ns3::TypeId::TraceSourceInformation ns3::TypeId::GetTraceSource(std::size_t i) const [member function]
-    cls.add_method('GetTraceSource', 
-                   'ns3::TypeId::TraceSourceInformation', 
-                   [param('std::size_t', 'i')], 
+    cls.add_method('GetTraceSource',
+                   'ns3::TypeId::TraceSourceInformation',
+                   [param('std::size_t', 'i')],
                    is_const=True)
     ## type-id.h (module 'core'): std::size_t ns3::TypeId::GetTraceSourceN() const [member function]
-    cls.add_method('GetTraceSourceN', 
-                   'std::size_t', 
-                   [], 
+    cls.add_method('GetTraceSourceN',
+                   'std::size_t',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): uint16_t ns3::TypeId::GetUid() const [member function]
-    cls.add_method('GetUid', 
-                   'uint16_t', 
-                   [], 
+    cls.add_method('GetUid',
+                   'uint16_t',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): bool ns3::TypeId::HasConstructor() const [member function]
-    cls.add_method('HasConstructor', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasConstructor',
+                   'bool',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): bool ns3::TypeId::HasParent() const [member function]
-    cls.add_method('HasParent', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasParent',
+                   'bool',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::HideFromDocumentation() [member function]
-    cls.add_method('HideFromDocumentation', 
-                   'ns3::TypeId', 
+    cls.add_method('HideFromDocumentation',
+                   'ns3::TypeId',
                    [])
     ## type-id.h (module 'core'): bool ns3::TypeId::IsChildOf(ns3::TypeId other) const [member function]
-    cls.add_method('IsChildOf', 
-                   'bool', 
-                   [param('ns3::TypeId', 'other')], 
+    cls.add_method('IsChildOf',
+                   'bool',
+                   [param('ns3::TypeId', 'other')],
                    is_const=True)
     ## type-id.h (module 'core'): bool ns3::TypeId::LookupAttributeByName(std::string name, ns3::TypeId::AttributeInformation * info) const [member function]
-    cls.add_method('LookupAttributeByName', 
-                   'bool', 
-                   [param('std::string', 'name'), param('ns3::TypeId::AttributeInformation *', 'info', transfer_ownership=False)], 
+    cls.add_method('LookupAttributeByName',
+                   'bool',
+                   [param('std::string', 'name'), param('ns3::TypeId::AttributeInformation *', 'info', transfer_ownership=False)],
                    is_const=True)
     ## type-id.h (module 'core'): static ns3::TypeId ns3::TypeId::LookupByHash(ns3::TypeId::hash_t hash) [member function]
-    cls.add_method('LookupByHash', 
-                   'ns3::TypeId', 
-                   [param('uint32_t', 'hash')], 
+    cls.add_method('LookupByHash',
+                   'ns3::TypeId',
+                   [param('uint32_t', 'hash')],
                    is_static=True)
     ## type-id.h (module 'core'): static bool ns3::TypeId::LookupByHashFailSafe(ns3::TypeId::hash_t hash, ns3::TypeId * tid) [member function]
-    cls.add_method('LookupByHashFailSafe', 
-                   'bool', 
-                   [param('uint32_t', 'hash'), param('ns3::TypeId *', 'tid')], 
+    cls.add_method('LookupByHashFailSafe',
+                   'bool',
+                   [param('uint32_t', 'hash'), param('ns3::TypeId *', 'tid')],
                    is_static=True)
     ## type-id.h (module 'core'): static ns3::TypeId ns3::TypeId::LookupByName(std::string name) [member function]
-    cls.add_method('LookupByName', 
-                   'ns3::TypeId', 
-                   [param('std::string', 'name')], 
+    cls.add_method('LookupByName',
+                   'ns3::TypeId',
+                   [param('std::string', 'name')],
                    is_static=True)
     ## type-id.h (module 'core'): ns3::Ptr<const ns3::TraceSourceAccessor> ns3::TypeId::LookupTraceSourceByName(std::string name) const [member function]
-    cls.add_method('LookupTraceSourceByName', 
-                   'ns3::Ptr< ns3::TraceSourceAccessor const >', 
-                   [param('std::string', 'name')], 
+    cls.add_method('LookupTraceSourceByName',
+                   'ns3::Ptr< ns3::TraceSourceAccessor const >',
+                   [param('std::string', 'name')],
                    is_const=True)
     ## type-id.h (module 'core'): ns3::Ptr<const ns3::TraceSourceAccessor> ns3::TypeId::LookupTraceSourceByName(std::string name, ns3::TypeId::TraceSourceInformation * info) const [member function]
-    cls.add_method('LookupTraceSourceByName', 
-                   'ns3::Ptr< ns3::TraceSourceAccessor const >', 
-                   [param('std::string', 'name'), param('ns3::TypeId::TraceSourceInformation *', 'info')], 
+    cls.add_method('LookupTraceSourceByName',
+                   'ns3::Ptr< ns3::TraceSourceAccessor const >',
+                   [param('std::string', 'name'), param('ns3::TypeId::TraceSourceInformation *', 'info')],
                    is_const=True)
     ## type-id.h (module 'core'): bool ns3::TypeId::MustHideFromDocumentation() const [member function]
-    cls.add_method('MustHideFromDocumentation', 
-                   'bool', 
-                   [], 
+    cls.add_method('MustHideFromDocumentation',
+                   'bool',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): bool ns3::TypeId::SetAttributeInitialValue(std::size_t i, ns3::Ptr<const ns3::AttributeValue> initialValue) [member function]
-    cls.add_method('SetAttributeInitialValue', 
-                   'bool', 
+    cls.add_method('SetAttributeInitialValue',
+                   'bool',
                    [param('std::size_t', 'i'), param('ns3::Ptr< ns3::AttributeValue const >', 'initialValue')])
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::SetGroupName(std::string groupName) [member function]
-    cls.add_method('SetGroupName', 
-                   'ns3::TypeId', 
+    cls.add_method('SetGroupName',
+                   'ns3::TypeId',
                    [param('std::string', 'groupName')])
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::SetParent(ns3::TypeId tid) [member function]
-    cls.add_method('SetParent', 
-                   'ns3::TypeId', 
+    cls.add_method('SetParent',
+                   'ns3::TypeId',
                    [param('ns3::TypeId', 'tid')])
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeId::SetSize(std::size_t size) [member function]
-    cls.add_method('SetSize', 
-                   'ns3::TypeId', 
+    cls.add_method('SetSize',
+                   'ns3::TypeId',
                    [param('std::size_t', 'size')])
     ## type-id.h (module 'core'): void ns3::TypeId::SetUid(uint16_t uid) [member function]
-    cls.add_method('SetUid', 
-                   'void', 
+    cls.add_method('SetUid',
+                   'void',
                    [param('uint16_t', 'uid')])
     return
 
@@ -733,9 +733,9 @@ def register_Ns3Vector2D_methods(root_module, cls):
     ## vector.h (module 'core'): ns3::Vector2D::Vector2D() [constructor]
     cls.add_constructor([])
     ## vector.h (module 'core'): double ns3::Vector2D::GetLength() const [member function]
-    cls.add_method('GetLength', 
-                   'double', 
-                   [], 
+    cls.add_method('GetLength',
+                   'double',
+                   [],
                    is_const=True)
     ## vector.h (module 'core'): ns3::Vector2D::x [variable]
     cls.add_instance_attribute('x', 'double', is_const=False)
@@ -760,9 +760,9 @@ def register_Ns3Vector3D_methods(root_module, cls):
     ## vector.h (module 'core'): ns3::Vector3D::Vector3D() [constructor]
     cls.add_constructor([])
     ## vector.h (module 'core'): double ns3::Vector3D::GetLength() const [member function]
-    cls.add_method('GetLength', 
-                   'double', 
-                   [], 
+    cls.add_method('GetLength',
+                   'double',
+                   [],
                    is_const=True)
     ## vector.h (module 'core'): ns3::Vector3D::x [variable]
     cls.add_instance_attribute('x', 'double', is_const=False)
@@ -783,64 +783,64 @@ def register_Ns3Object_methods(root_module, cls):
     ## object.h (module 'core'): ns3::Object::Object() [constructor]
     cls.add_constructor([])
     ## object.h (module 'core'): void ns3::Object::AggregateObject(ns3::Ptr<ns3::Object> other) [member function]
-    cls.add_method('AggregateObject', 
-                   'void', 
+    cls.add_method('AggregateObject',
+                   'void',
                    [param('ns3::Ptr< ns3::Object >', 'other')])
     ## object.h (module 'core'): void ns3::Object::Dispose() [member function]
-    cls.add_method('Dispose', 
-                   'void', 
+    cls.add_method('Dispose',
+                   'void',
                    [])
     ## object.h (module 'core'): ns3::Object::AggregateIterator ns3::Object::GetAggregateIterator() const [member function]
-    cls.add_method('GetAggregateIterator', 
-                   'ns3::Object::AggregateIterator', 
-                   [], 
+    cls.add_method('GetAggregateIterator',
+                   'ns3::Object::AggregateIterator',
+                   [],
                    is_const=True)
     ## object.h (module 'core'): ns3::TypeId ns3::Object::GetInstanceTypeId() const [member function]
-    cls.add_method('GetInstanceTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetInstanceTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_const=True, is_virtual=True)
     ## object.h (module 'core'): ns3::Ptr<ns3::Object> ns3::Object::GetObject() const [member function]
-    cls.add_method('GetObject', 
-                   'ns3::Ptr< ns3::Object >', 
-                   [], 
+    cls.add_method('GetObject',
+                   'ns3::Ptr< ns3::Object >',
+                   [],
                    template_parameters=['ns3::Object'], is_const=True, custom_template_method_name='GetObject')
     ## object.h (module 'core'): ns3::Ptr<ns3::Object> ns3::Object::GetObject(ns3::TypeId tid) const [member function]
-    cls.add_method('GetObject', 
-                   'ns3::Ptr< ns3::Object >', 
-                   [param('ns3::TypeId', 'tid')], 
+    cls.add_method('GetObject',
+                   'ns3::Ptr< ns3::Object >',
+                   [param('ns3::TypeId', 'tid')],
                    template_parameters=['ns3::Object'], is_const=True, custom_template_method_name='GetObject')
     ## object.h (module 'core'): static ns3::TypeId ns3::Object::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
     ## object.h (module 'core'): void ns3::Object::Initialize() [member function]
-    cls.add_method('Initialize', 
-                   'void', 
+    cls.add_method('Initialize',
+                   'void',
                    [])
     ## object.h (module 'core'): bool ns3::Object::IsInitialized() const [member function]
-    cls.add_method('IsInitialized', 
-                   'bool', 
-                   [], 
+    cls.add_method('IsInitialized',
+                   'bool',
+                   [],
                    is_const=True)
     ## object.h (module 'core'): ns3::Object::Object(ns3::Object const & o) [constructor]
-    cls.add_constructor([param('ns3::Object const &', 'o')], 
+    cls.add_constructor([param('ns3::Object const &', 'o')],
                         visibility='protected')
     ## object.h (module 'core'): void ns3::Object::DoDispose() [member function]
-    cls.add_method('DoDispose', 
-                   'void', 
-                   [], 
+    cls.add_method('DoDispose',
+                   'void',
+                   [],
                    is_virtual=True, visibility='protected')
     ## object.h (module 'core'): void ns3::Object::DoInitialize() [member function]
-    cls.add_method('DoInitialize', 
-                   'void', 
-                   [], 
+    cls.add_method('DoInitialize',
+                   'void',
+                   [],
                    is_virtual=True, visibility='protected')
     ## object.h (module 'core'): void ns3::Object::NotifyNewAggregate() [member function]
-    cls.add_method('NotifyNewAggregate', 
-                   'void', 
-                   [], 
+    cls.add_method('NotifyNewAggregate',
+                   'void',
+                   [],
                    is_virtual=True, visibility='protected')
     return
 
@@ -850,13 +850,13 @@ def register_Ns3ObjectAggregateIterator_methods(root_module, cls):
     ## object.h (module 'core'): ns3::Object::AggregateIterator::AggregateIterator() [constructor]
     cls.add_constructor([])
     ## object.h (module 'core'): bool ns3::Object::AggregateIterator::HasNext() const [member function]
-    cls.add_method('HasNext', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasNext',
+                   'bool',
+                   [],
                    is_const=True)
     ## object.h (module 'core'): ns3::Ptr<const ns3::Object> ns3::Object::AggregateIterator::Next() [member function]
-    cls.add_method('Next', 
-                   'ns3::Ptr< ns3::Object const >', 
+    cls.add_method('Next',
+                   'ns3::Ptr< ns3::Object const >',
                    [])
     return
 
@@ -902,49 +902,40 @@ def register_Ns3SimpleRefCount__Ns3TraceSourceAccessor_Ns3Empty_Ns3DefaultDelete
     cls.add_constructor([param('ns3::SimpleRefCount< ns3::TraceSourceAccessor, ns3::empty, ns3::DefaultDeleter< ns3::TraceSourceAccessor > > const &', 'o')])
     return
 
-def register_Ns3ThreeGppAntennaArrayModel_methods(root_module, cls):
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ThreeGppAntennaArrayModel(ns3::ThreeGppAntennaArrayModel const & arg0) [constructor]
-    cls.add_constructor([param('ns3::ThreeGppAntennaArrayModel const &', 'arg0')])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ThreeGppAntennaArrayModel() [constructor]
+def register_Ns3PhasedArrayModel_methods(root_module, cls):
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel::PhasedArrayModel(ns3::PhasedArrayModel const & arg0) [constructor]
+    cls.add_constructor([param('ns3::PhasedArrayModel const &', 'arg0')])
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel::PhasedArrayModel() [constructor]
     cls.add_constructor([])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::ThreeGppAntennaArrayModel::ChangeToOmniTx() [member function]
-    cls.add_method('ChangeToOmniTx', 
-                   'void', 
-                   [])
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::ThreeGppAntennaArrayModel::ComplexVector const & ns3::ThreeGppAntennaArrayModel::GetBeamformingVector() const [member function]
-    cls.add_method('GetBeamformingVector', 
-                   'ns3::ThreeGppAntennaArrayModel::ComplexVector const &', 
-                   [], 
+    ## phased-array-model.h (module 'antenna'): ns3::PhasedArrayModel::ComplexVector const & ns3::PhasedArrayModel::GetBeamformingVector() const [member function]
+    cls.add_method('GetBeamformingVector',
+                   'ns3::PhasedArrayModel::ComplexVector const &',
+                   [],
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): std::pair<double, double> ns3::ThreeGppAntennaArrayModel::GetElementFieldPattern(ns3::Angles a) const [member function]
-    cls.add_method('GetElementFieldPattern', 
-                   'std::pair< double, double >', 
-                   [param('ns3::Angles', 'a')], 
+    ## phased-array-model.h (module 'antenna'): std::pair<double, double> ns3::PhasedArrayModel::GetElementFieldPattern(ns3::Angles a) const [member function]
+    cls.add_method('GetElementFieldPattern',
+                   'std::pair< double, double >',
+                   [param('ns3::Angles', 'a')],
                    is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): ns3::Vector ns3::ThreeGppAntennaArrayModel::GetElementLocation(uint64_t index) const [member function]
-    cls.add_method('GetElementLocation', 
-                   'ns3::Vector', 
-                   [param('uint64_t', 'index')], 
+    ## phased-array-model.h (module 'antenna'): ns3::Vector ns3::PhasedArrayModel::GetElementLocation(uint64_t index) const [member function]
+    cls.add_method('GetElementLocation',
+                   'ns3::Vector',
+                   [param('uint64_t', 'index')],
                    is_const=True, is_virtual=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): uint64_t ns3::ThreeGppAntennaArrayModel::GetNumberOfElements() const [member function]
-    cls.add_method('GetNumberOfElements', 
-                   'uint64_t', 
-                   [], 
+    ## phased-array-model.h (module 'antenna'): uint64_t ns3::PhasedArrayModel::GetNumberOfElements() const [member function]
+    cls.add_method('GetNumberOfElements',
+                   'uint64_t',
+                   [],
                    is_const=True, is_virtual=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): static ns3::TypeId ns3::ThreeGppAntennaArrayModel::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    ## phased-array-model.h (module 'antenna'): static ns3::TypeId ns3::PhasedArrayModel::GetTypeId() [member function]
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): bool ns3::ThreeGppAntennaArrayModel::IsOmniTx() const [member function]
-    cls.add_method('IsOmniTx', 
-                   'bool', 
-                   [], 
-                   is_const=True)
-    ## three-gpp-antenna-array-model.h (module 'antenna'): void ns3::ThreeGppAntennaArrayModel::SetBeamformingVector(ns3::ThreeGppAntennaArrayModel::ComplexVector const & beamformingVector) [member function]
-    cls.add_method('SetBeamformingVector', 
-                   'void', 
-                   [param('ns3::ThreeGppAntennaArrayModel::ComplexVector const &', 'beamformingVector')])
+    ## phased-array-model.h (module 'antenna'): void ns3::PhasedArrayModel::SetBeamformingVector(ns3::PhasedArrayModel::ComplexVector const & beamformingVector) [member function]
+    cls.add_method('SetBeamformingVector',
+                   'void',
+                   [param('ns3::PhasedArrayModel::ComplexVector const &', 'beamformingVector')])
     return
 
 def register_Ns3TraceSourceAccessor_methods(root_module, cls):
@@ -953,24 +944,24 @@ def register_Ns3TraceSourceAccessor_methods(root_module, cls):
     ## trace-source-accessor.h (module 'core'): ns3::TraceSourceAccessor::TraceSourceAccessor() [constructor]
     cls.add_constructor([])
     ## trace-source-accessor.h (module 'core'): bool ns3::TraceSourceAccessor::Connect(ns3::ObjectBase * obj, std::string context, ns3::CallbackBase const & cb) const [member function]
-    cls.add_method('Connect', 
-                   'bool', 
-                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('std::string', 'context'), param('ns3::CallbackBase const &', 'cb')], 
+    cls.add_method('Connect',
+                   'bool',
+                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('std::string', 'context'), param('ns3::CallbackBase const &', 'cb')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## trace-source-accessor.h (module 'core'): bool ns3::TraceSourceAccessor::ConnectWithoutContext(ns3::ObjectBase * obj, ns3::CallbackBase const & cb) const [member function]
-    cls.add_method('ConnectWithoutContext', 
-                   'bool', 
-                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('ns3::CallbackBase const &', 'cb')], 
+    cls.add_method('ConnectWithoutContext',
+                   'bool',
+                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('ns3::CallbackBase const &', 'cb')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## trace-source-accessor.h (module 'core'): bool ns3::TraceSourceAccessor::Disconnect(ns3::ObjectBase * obj, std::string context, ns3::CallbackBase const & cb) const [member function]
-    cls.add_method('Disconnect', 
-                   'bool', 
-                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('std::string', 'context'), param('ns3::CallbackBase const &', 'cb')], 
+    cls.add_method('Disconnect',
+                   'bool',
+                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('std::string', 'context'), param('ns3::CallbackBase const &', 'cb')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## trace-source-accessor.h (module 'core'): bool ns3::TraceSourceAccessor::DisconnectWithoutContext(ns3::ObjectBase * obj, ns3::CallbackBase const & cb) const [member function]
-    cls.add_method('DisconnectWithoutContext', 
-                   'bool', 
-                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('ns3::CallbackBase const &', 'cb')], 
+    cls.add_method('DisconnectWithoutContext',
+                   'bool',
+                   [param('ns3::ObjectBase *', 'obj', transfer_ownership=False), param('ns3::CallbackBase const &', 'cb')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     return
 
@@ -980,14 +971,14 @@ def register_Ns3AntennaModel_methods(root_module, cls):
     ## antenna-model.h (module 'antenna'): ns3::AntennaModel::AntennaModel() [constructor]
     cls.add_constructor([])
     ## antenna-model.h (module 'antenna'): double ns3::AntennaModel::GetGainDb(ns3::Angles a) [member function]
-    cls.add_method('GetGainDb', 
-                   'double', 
-                   [param('ns3::Angles', 'a')], 
+    cls.add_method('GetGainDb',
+                   'double',
+                   [param('ns3::Angles', 'a')],
                    is_pure_virtual=True, is_virtual=True)
     ## antenna-model.h (module 'antenna'): static ns3::TypeId ns3::AntennaModel::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
     return
 
@@ -997,24 +988,24 @@ def register_Ns3AttributeAccessor_methods(root_module, cls):
     ## attribute.h (module 'core'): ns3::AttributeAccessor::AttributeAccessor() [constructor]
     cls.add_constructor([])
     ## attribute.h (module 'core'): bool ns3::AttributeAccessor::Get(ns3::ObjectBase const * object, ns3::AttributeValue & attribute) const [member function]
-    cls.add_method('Get', 
-                   'bool', 
-                   [param('ns3::ObjectBase const *', 'object'), param('ns3::AttributeValue &', 'attribute')], 
+    cls.add_method('Get',
+                   'bool',
+                   [param('ns3::ObjectBase const *', 'object'), param('ns3::AttributeValue &', 'attribute')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::AttributeAccessor::HasGetter() const [member function]
-    cls.add_method('HasGetter', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasGetter',
+                   'bool',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::AttributeAccessor::HasSetter() const [member function]
-    cls.add_method('HasSetter', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasSetter',
+                   'bool',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::AttributeAccessor::Set(ns3::ObjectBase * object, ns3::AttributeValue const & value) const [member function]
-    cls.add_method('Set', 
-                   'bool', 
-                   [param('ns3::ObjectBase *', 'object', transfer_ownership=False), param('ns3::AttributeValue const &', 'value')], 
+    cls.add_method('Set',
+                   'bool',
+                   [param('ns3::ObjectBase *', 'object', transfer_ownership=False), param('ns3::AttributeValue const &', 'value')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     return
 
@@ -1024,39 +1015,39 @@ def register_Ns3AttributeChecker_methods(root_module, cls):
     ## attribute.h (module 'core'): ns3::AttributeChecker::AttributeChecker() [constructor]
     cls.add_constructor([])
     ## attribute.h (module 'core'): bool ns3::AttributeChecker::Check(ns3::AttributeValue const & value) const [member function]
-    cls.add_method('Check', 
-                   'bool', 
-                   [param('ns3::AttributeValue const &', 'value')], 
+    cls.add_method('Check',
+                   'bool',
+                   [param('ns3::AttributeValue const &', 'value')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::AttributeChecker::Copy(ns3::AttributeValue const & source, ns3::AttributeValue & destination) const [member function]
-    cls.add_method('Copy', 
-                   'bool', 
-                   [param('ns3::AttributeValue const &', 'source'), param('ns3::AttributeValue &', 'destination')], 
+    cls.add_method('Copy',
+                   'bool',
+                   [param('ns3::AttributeValue const &', 'source'), param('ns3::AttributeValue &', 'destination')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::AttributeChecker::Create() const [member function]
-    cls.add_method('Create', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Create',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::AttributeChecker::CreateValidValue(ns3::AttributeValue const & value) const [member function]
-    cls.add_method('CreateValidValue', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [param('ns3::AttributeValue const &', 'value')], 
+    cls.add_method('CreateValidValue',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [param('ns3::AttributeValue const &', 'value')],
                    is_const=True)
     ## attribute.h (module 'core'): std::string ns3::AttributeChecker::GetUnderlyingTypeInformation() const [member function]
-    cls.add_method('GetUnderlyingTypeInformation', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetUnderlyingTypeInformation',
+                   'std::string',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): std::string ns3::AttributeChecker::GetValueTypeName() const [member function]
-    cls.add_method('GetValueTypeName', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetValueTypeName',
+                   'std::string',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::AttributeChecker::HasUnderlyingTypeInformation() const [member function]
-    cls.add_method('HasUnderlyingTypeInformation', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasUnderlyingTypeInformation',
+                   'bool',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     return
 
@@ -1066,19 +1057,19 @@ def register_Ns3AttributeValue_methods(root_module, cls):
     ## attribute.h (module 'core'): ns3::AttributeValue::AttributeValue() [constructor]
     cls.add_constructor([])
     ## attribute.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::AttributeValue::Copy() const [member function]
-    cls.add_method('Copy', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Copy',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::AttributeValue::DeserializeFromString(std::string value, ns3::Ptr<const ns3::AttributeChecker> checker) [member function]
-    cls.add_method('DeserializeFromString', 
-                   'bool', 
-                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('DeserializeFromString',
+                   'bool',
+                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_pure_virtual=True, is_virtual=True)
     ## attribute.h (module 'core'): std::string ns3::AttributeValue::SerializeToString(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('SerializeToString', 
-                   'std::string', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('SerializeToString',
+                   'std::string',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     return
 
@@ -1095,24 +1086,24 @@ def register_Ns3CallbackImplBase_methods(root_module, cls):
     ## callback.h (module 'core'): ns3::CallbackImplBase::CallbackImplBase(ns3::CallbackImplBase const & arg0) [constructor]
     cls.add_constructor([param('ns3::CallbackImplBase const &', 'arg0')])
     ## callback.h (module 'core'): std::string ns3::CallbackImplBase::GetTypeid() const [member function]
-    cls.add_method('GetTypeid', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetTypeid',
+                   'std::string',
+                   [],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## callback.h (module 'core'): bool ns3::CallbackImplBase::IsEqual(ns3::Ptr<const ns3::CallbackImplBase> other) const [member function]
-    cls.add_method('IsEqual', 
-                   'bool', 
-                   [param('ns3::Ptr< ns3::CallbackImplBase const >', 'other')], 
+    cls.add_method('IsEqual',
+                   'bool',
+                   [param('ns3::Ptr< ns3::CallbackImplBase const >', 'other')],
                    is_const=True, is_pure_virtual=True, is_virtual=True)
     ## callback.h (module 'core'): static std::string ns3::CallbackImplBase::Demangle(std::string const & mangled) [member function]
-    cls.add_method('Demangle', 
-                   'std::string', 
-                   [param('std::string const &', 'mangled')], 
+    cls.add_method('Demangle',
+                   'std::string',
+                   [param('std::string const &', 'mangled')],
                    is_static=True, visibility='protected')
     ## callback.h (module 'core'): static std::string ns3::CallbackImplBase::GetCppTypeid() [member function]
-    cls.add_method('GetCppTypeid', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetCppTypeid',
+                   'std::string',
+                   [],
                    template_parameters=['ns3::ObjectBase*'], is_static=True, visibility='protected')
     return
 
@@ -1124,23 +1115,23 @@ def register_Ns3CallbackValue_methods(root_module, cls):
     ## callback.h (module 'core'): ns3::CallbackValue::CallbackValue(ns3::CallbackBase const & base) [constructor]
     cls.add_constructor([param('ns3::CallbackBase const &', 'base')])
     ## callback.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::CallbackValue::Copy() const [member function]
-    cls.add_method('Copy', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Copy',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_virtual=True)
     ## callback.h (module 'core'): bool ns3::CallbackValue::DeserializeFromString(std::string value, ns3::Ptr<const ns3::AttributeChecker> checker) [member function]
-    cls.add_method('DeserializeFromString', 
-                   'bool', 
-                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('DeserializeFromString',
+                   'bool',
+                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_virtual=True)
     ## callback.h (module 'core'): std::string ns3::CallbackValue::SerializeToString(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('SerializeToString', 
-                   'std::string', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('SerializeToString',
+                   'std::string',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True, is_virtual=True)
     ## callback.h (module 'core'): void ns3::CallbackValue::Set(ns3::CallbackBase base) [member function]
-    cls.add_method('Set', 
-                   'void', 
+    cls.add_method('Set',
+                   'void',
                    [param('ns3::CallbackBase', 'base')])
     return
 
@@ -1150,32 +1141,32 @@ def register_Ns3CosineAntennaModel_methods(root_module, cls):
     ## cosine-antenna-model.h (module 'antenna'): ns3::CosineAntennaModel::CosineAntennaModel(ns3::CosineAntennaModel const & arg0) [constructor]
     cls.add_constructor([param('ns3::CosineAntennaModel const &', 'arg0')])
     ## cosine-antenna-model.h (module 'antenna'): double ns3::CosineAntennaModel::GetBeamwidth() const [member function]
-    cls.add_method('GetBeamwidth', 
-                   'double', 
-                   [], 
+    cls.add_method('GetBeamwidth',
+                   'double',
+                   [],
                    is_const=True)
     ## cosine-antenna-model.h (module 'antenna'): double ns3::CosineAntennaModel::GetGainDb(ns3::Angles a) [member function]
-    cls.add_method('GetGainDb', 
-                   'double', 
-                   [param('ns3::Angles', 'a')], 
+    cls.add_method('GetGainDb',
+                   'double',
+                   [param('ns3::Angles', 'a')],
                    is_virtual=True)
     ## cosine-antenna-model.h (module 'antenna'): double ns3::CosineAntennaModel::GetOrientation() const [member function]
-    cls.add_method('GetOrientation', 
-                   'double', 
-                   [], 
+    cls.add_method('GetOrientation',
+                   'double',
+                   [],
                    is_const=True)
     ## cosine-antenna-model.h (module 'antenna'): static ns3::TypeId ns3::CosineAntennaModel::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
     ## cosine-antenna-model.h (module 'antenna'): void ns3::CosineAntennaModel::SetBeamwidth(double beamwidthDegrees) [member function]
-    cls.add_method('SetBeamwidth', 
-                   'void', 
+    cls.add_method('SetBeamwidth',
+                   'void',
                    [param('double', 'beamwidthDegrees')])
     ## cosine-antenna-model.h (module 'antenna'): void ns3::CosineAntennaModel::SetOrientation(double orientationDegrees) [member function]
-    cls.add_method('SetOrientation', 
-                   'void', 
+    cls.add_method('SetOrientation',
+                   'void',
                    [param('double', 'orientationDegrees')])
     return
 
@@ -1185,24 +1176,24 @@ def register_Ns3EmptyAttributeAccessor_methods(root_module, cls):
     ## attribute.h (module 'core'): ns3::EmptyAttributeAccessor::EmptyAttributeAccessor() [constructor]
     cls.add_constructor([])
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeAccessor::Get(ns3::ObjectBase const * object, ns3::AttributeValue & attribute) const [member function]
-    cls.add_method('Get', 
-                   'bool', 
-                   [param('ns3::ObjectBase const *', 'object'), param('ns3::AttributeValue &', 'attribute')], 
+    cls.add_method('Get',
+                   'bool',
+                   [param('ns3::ObjectBase const *', 'object'), param('ns3::AttributeValue &', 'attribute')],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeAccessor::HasGetter() const [member function]
-    cls.add_method('HasGetter', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasGetter',
+                   'bool',
+                   [],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeAccessor::HasSetter() const [member function]
-    cls.add_method('HasSetter', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasSetter',
+                   'bool',
+                   [],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeAccessor::Set(ns3::ObjectBase * object, ns3::AttributeValue const & value) const [member function]
-    cls.add_method('Set', 
-                   'bool', 
-                   [param('ns3::ObjectBase *', 'object'), param('ns3::AttributeValue const &', 'value')], 
+    cls.add_method('Set',
+                   'bool',
+                   [param('ns3::ObjectBase *', 'object'), param('ns3::AttributeValue const &', 'value')],
                    is_const=True, is_virtual=True)
     return
 
@@ -1212,34 +1203,34 @@ def register_Ns3EmptyAttributeChecker_methods(root_module, cls):
     ## attribute.h (module 'core'): ns3::EmptyAttributeChecker::EmptyAttributeChecker() [constructor]
     cls.add_constructor([])
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeChecker::Check(ns3::AttributeValue const & value) const [member function]
-    cls.add_method('Check', 
-                   'bool', 
-                   [param('ns3::AttributeValue const &', 'value')], 
+    cls.add_method('Check',
+                   'bool',
+                   [param('ns3::AttributeValue const &', 'value')],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeChecker::Copy(ns3::AttributeValue const & source, ns3::AttributeValue & destination) const [member function]
-    cls.add_method('Copy', 
-                   'bool', 
-                   [param('ns3::AttributeValue const &', 'source'), param('ns3::AttributeValue &', 'destination')], 
+    cls.add_method('Copy',
+                   'bool',
+                   [param('ns3::AttributeValue const &', 'source'), param('ns3::AttributeValue &', 'destination')],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::EmptyAttributeChecker::Create() const [member function]
-    cls.add_method('Create', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Create',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): std::string ns3::EmptyAttributeChecker::GetUnderlyingTypeInformation() const [member function]
-    cls.add_method('GetUnderlyingTypeInformation', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetUnderlyingTypeInformation',
+                   'std::string',
+                   [],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): std::string ns3::EmptyAttributeChecker::GetValueTypeName() const [member function]
-    cls.add_method('GetValueTypeName', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetValueTypeName',
+                   'std::string',
+                   [],
                    is_const=True, is_virtual=True)
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeChecker::HasUnderlyingTypeInformation() const [member function]
-    cls.add_method('HasUnderlyingTypeInformation', 
-                   'bool', 
-                   [], 
+    cls.add_method('HasUnderlyingTypeInformation',
+                   'bool',
+                   [],
                    is_const=True, is_virtual=True)
     return
 
@@ -1249,19 +1240,19 @@ def register_Ns3EmptyAttributeValue_methods(root_module, cls):
     ## attribute.h (module 'core'): ns3::EmptyAttributeValue::EmptyAttributeValue() [constructor]
     cls.add_constructor([])
     ## attribute.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::EmptyAttributeValue::Copy() const [member function]
-    cls.add_method('Copy', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Copy',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_virtual=True, visibility='private')
     ## attribute.h (module 'core'): bool ns3::EmptyAttributeValue::DeserializeFromString(std::string value, ns3::Ptr<const ns3::AttributeChecker> checker) [member function]
-    cls.add_method('DeserializeFromString', 
-                   'bool', 
-                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('DeserializeFromString',
+                   'bool',
+                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_virtual=True, visibility='private')
     ## attribute.h (module 'core'): std::string ns3::EmptyAttributeValue::SerializeToString(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('SerializeToString', 
-                   'std::string', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('SerializeToString',
+                   'std::string',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True, is_virtual=True, visibility='private')
     return
 
@@ -1271,14 +1262,14 @@ def register_Ns3IsotropicAntennaModel_methods(root_module, cls):
     ## isotropic-antenna-model.h (module 'antenna'): ns3::IsotropicAntennaModel::IsotropicAntennaModel() [constructor]
     cls.add_constructor([])
     ## isotropic-antenna-model.h (module 'antenna'): double ns3::IsotropicAntennaModel::GetGainDb(ns3::Angles a) [member function]
-    cls.add_method('GetGainDb', 
-                   'double', 
-                   [param('ns3::Angles', 'a')], 
+    cls.add_method('GetGainDb',
+                   'double',
+                   [param('ns3::Angles', 'a')],
                    is_virtual=True)
     ## isotropic-antenna-model.h (module 'antenna'): static ns3::TypeId ns3::IsotropicAntennaModel::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
     return
 
@@ -1288,32 +1279,32 @@ def register_Ns3ParabolicAntennaModel_methods(root_module, cls):
     ## parabolic-antenna-model.h (module 'antenna'): ns3::ParabolicAntennaModel::ParabolicAntennaModel(ns3::ParabolicAntennaModel const & arg0) [constructor]
     cls.add_constructor([param('ns3::ParabolicAntennaModel const &', 'arg0')])
     ## parabolic-antenna-model.h (module 'antenna'): double ns3::ParabolicAntennaModel::GetBeamwidth() const [member function]
-    cls.add_method('GetBeamwidth', 
-                   'double', 
-                   [], 
+    cls.add_method('GetBeamwidth',
+                   'double',
+                   [],
                    is_const=True)
     ## parabolic-antenna-model.h (module 'antenna'): double ns3::ParabolicAntennaModel::GetGainDb(ns3::Angles a) [member function]
-    cls.add_method('GetGainDb', 
-                   'double', 
-                   [param('ns3::Angles', 'a')], 
+    cls.add_method('GetGainDb',
+                   'double',
+                   [param('ns3::Angles', 'a')],
                    is_virtual=True)
     ## parabolic-antenna-model.h (module 'antenna'): double ns3::ParabolicAntennaModel::GetOrientation() const [member function]
-    cls.add_method('GetOrientation', 
-                   'double', 
-                   [], 
+    cls.add_method('GetOrientation',
+                   'double',
+                   [],
                    is_const=True)
     ## parabolic-antenna-model.h (module 'antenna'): static ns3::TypeId ns3::ParabolicAntennaModel::GetTypeId() [member function]
-    cls.add_method('GetTypeId', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('GetTypeId',
+                   'ns3::TypeId',
+                   [],
                    is_static=True)
     ## parabolic-antenna-model.h (module 'antenna'): void ns3::ParabolicAntennaModel::SetBeamwidth(double beamwidthDegrees) [member function]
-    cls.add_method('SetBeamwidth', 
-                   'void', 
+    cls.add_method('SetBeamwidth',
+                   'void',
                    [param('double', 'beamwidthDegrees')])
     ## parabolic-antenna-model.h (module 'antenna'): void ns3::ParabolicAntennaModel::SetOrientation(double orientationDegrees) [member function]
-    cls.add_method('SetOrientation', 
-                   'void', 
+    cls.add_method('SetOrientation',
+                   'void',
                    [param('double', 'orientationDegrees')])
     return
 
@@ -1332,28 +1323,28 @@ def register_Ns3TypeIdValue_methods(root_module, cls):
     ## type-id.h (module 'core'): ns3::TypeIdValue::TypeIdValue(ns3::TypeIdValue const & arg0) [constructor]
     cls.add_constructor([param('ns3::TypeIdValue const &', 'arg0')])
     ## type-id.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::TypeIdValue::Copy() const [member function]
-    cls.add_method('Copy', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Copy',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_virtual=True)
     ## type-id.h (module 'core'): bool ns3::TypeIdValue::DeserializeFromString(std::string value, ns3::Ptr<const ns3::AttributeChecker> checker) [member function]
-    cls.add_method('DeserializeFromString', 
-                   'bool', 
-                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('DeserializeFromString',
+                   'bool',
+                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_virtual=True)
     ## type-id.h (module 'core'): ns3::TypeId ns3::TypeIdValue::Get() const [member function]
-    cls.add_method('Get', 
-                   'ns3::TypeId', 
-                   [], 
+    cls.add_method('Get',
+                   'ns3::TypeId',
+                   [],
                    is_const=True)
     ## type-id.h (module 'core'): std::string ns3::TypeIdValue::SerializeToString(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('SerializeToString', 
-                   'std::string', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('SerializeToString',
+                   'std::string',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True, is_virtual=True)
     ## type-id.h (module 'core'): void ns3::TypeIdValue::Set(ns3::TypeId const & value) [member function]
-    cls.add_method('Set', 
-                   'void', 
+    cls.add_method('Set',
+                   'void',
                    [param('ns3::TypeId const &', 'value')])
     return
 
@@ -1372,28 +1363,28 @@ def register_Ns3Vector2DValue_methods(root_module, cls):
     ## vector.h (module 'core'): ns3::Vector2DValue::Vector2DValue(ns3::Vector2DValue const & arg0) [constructor]
     cls.add_constructor([param('ns3::Vector2DValue const &', 'arg0')])
     ## vector.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::Vector2DValue::Copy() const [member function]
-    cls.add_method('Copy', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Copy',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_virtual=True)
     ## vector.h (module 'core'): bool ns3::Vector2DValue::DeserializeFromString(std::string value, ns3::Ptr<const ns3::AttributeChecker> checker) [member function]
-    cls.add_method('DeserializeFromString', 
-                   'bool', 
-                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('DeserializeFromString',
+                   'bool',
+                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_virtual=True)
     ## vector.h (module 'core'): ns3::Vector2D ns3::Vector2DValue::Get() const [member function]
-    cls.add_method('Get', 
-                   'ns3::Vector2D', 
-                   [], 
+    cls.add_method('Get',
+                   'ns3::Vector2D',
+                   [],
                    is_const=True)
     ## vector.h (module 'core'): std::string ns3::Vector2DValue::SerializeToString(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('SerializeToString', 
-                   'std::string', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('SerializeToString',
+                   'std::string',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True, is_virtual=True)
     ## vector.h (module 'core'): void ns3::Vector2DValue::Set(ns3::Vector2D const & value) [member function]
-    cls.add_method('Set', 
-                   'void', 
+    cls.add_method('Set',
+                   'void',
                    [param('ns3::Vector2D const &', 'value')])
     return
 
@@ -1412,28 +1403,28 @@ def register_Ns3Vector3DValue_methods(root_module, cls):
     ## vector.h (module 'core'): ns3::Vector3DValue::Vector3DValue(ns3::Vector3DValue const & arg0) [constructor]
     cls.add_constructor([param('ns3::Vector3DValue const &', 'arg0')])
     ## vector.h (module 'core'): ns3::Ptr<ns3::AttributeValue> ns3::Vector3DValue::Copy() const [member function]
-    cls.add_method('Copy', 
-                   'ns3::Ptr< ns3::AttributeValue >', 
-                   [], 
+    cls.add_method('Copy',
+                   'ns3::Ptr< ns3::AttributeValue >',
+                   [],
                    is_const=True, is_virtual=True)
     ## vector.h (module 'core'): bool ns3::Vector3DValue::DeserializeFromString(std::string value, ns3::Ptr<const ns3::AttributeChecker> checker) [member function]
-    cls.add_method('DeserializeFromString', 
-                   'bool', 
-                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('DeserializeFromString',
+                   'bool',
+                   [param('std::string', 'value'), param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_virtual=True)
     ## vector.h (module 'core'): ns3::Vector3D ns3::Vector3DValue::Get() const [member function]
-    cls.add_method('Get', 
-                   'ns3::Vector3D', 
-                   [], 
+    cls.add_method('Get',
+                   'ns3::Vector3D',
+                   [],
                    is_const=True)
     ## vector.h (module 'core'): std::string ns3::Vector3DValue::SerializeToString(ns3::Ptr<const ns3::AttributeChecker> checker) const [member function]
-    cls.add_method('SerializeToString', 
-                   'std::string', 
-                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')], 
+    cls.add_method('SerializeToString',
+                   'std::string',
+                   [param('ns3::Ptr< ns3::AttributeChecker const >', 'checker')],
                    is_const=True, is_virtual=True)
     ## vector.h (module 'core'): void ns3::Vector3DValue::Set(ns3::Vector3D const & value) [member function]
-    cls.add_method('Set', 
-                   'void', 
+    cls.add_method('Set',
+                   'void',
                    [param('ns3::Vector3D const &', 'value')])
     return
 
@@ -1443,19 +1434,19 @@ def register_Ns3CallbackImpl__Ns3ObjectBase___star___Ns3Empty_Ns3Empty_Ns3Empty_
     ## callback.h (module 'core'): ns3::CallbackImpl<ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty>::CallbackImpl(ns3::CallbackImpl<ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty> const & arg0) [constructor]
     cls.add_constructor([param('ns3::CallbackImpl< ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty > const &', 'arg0')])
     ## callback.h (module 'core'): static std::string ns3::CallbackImpl<ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty>::DoGetTypeid() [member function]
-    cls.add_method('DoGetTypeid', 
-                   'std::string', 
-                   [], 
+    cls.add_method('DoGetTypeid',
+                   'std::string',
+                   [],
                    is_static=True)
     ## callback.h (module 'core'): std::string ns3::CallbackImpl<ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty>::GetTypeid() const [member function]
-    cls.add_method('GetTypeid', 
-                   'std::string', 
-                   [], 
+    cls.add_method('GetTypeid',
+                   'std::string',
+                   [],
                    is_const=True, is_virtual=True)
     ## callback.h (module 'core'): ns3::ObjectBase * ns3::CallbackImpl<ns3::ObjectBase *, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty, ns3::empty>::operator()() [member operator]
-    cls.add_method('operator()', 
-                   'ns3::ObjectBase *', 
-                   [], 
+    cls.add_method('operator()',
+                   'ns3::ObjectBase *',
+                   [],
                    is_pure_virtual=True, is_virtual=True, custom_name='__call__')
     return
 
@@ -1465,19 +1456,19 @@ def register_Ns3HashImplementation_methods(root_module, cls):
     ## hash-function.h (module 'core'): ns3::Hash::Implementation::Implementation() [constructor]
     cls.add_constructor([])
     ## hash-function.h (module 'core'): uint32_t ns3::Hash::Implementation::GetHash32(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash32',
+                   'uint32_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_pure_virtual=True, is_virtual=True)
     ## hash-function.h (module 'core'): uint64_t ns3::Hash::Implementation::GetHash64(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash64', 
-                   'uint64_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash64',
+                   'uint64_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_virtual=True)
     ## hash-function.h (module 'core'): void ns3::Hash::Implementation::clear() [member function]
-    cls.add_method('clear', 
-                   'void', 
-                   [], 
+    cls.add_method('clear',
+                   'void',
+                   [],
                    is_pure_virtual=True, is_virtual=True)
     return
 
@@ -1487,19 +1478,19 @@ def register_Ns3HashFunctionFnv1a_methods(root_module, cls):
     ## hash-fnv.h (module 'core'): ns3::Hash::Function::Fnv1a::Fnv1a() [constructor]
     cls.add_constructor([])
     ## hash-fnv.h (module 'core'): uint32_t ns3::Hash::Function::Fnv1a::GetHash32(char const * buffer, size_t const size) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
-                   [param('char const *', 'buffer'), param('size_t const', 'size')], 
+    cls.add_method('GetHash32',
+                   'uint32_t',
+                   [param('char const *', 'buffer'), param('size_t const', 'size')],
                    is_virtual=True)
     ## hash-fnv.h (module 'core'): uint64_t ns3::Hash::Function::Fnv1a::GetHash64(char const * buffer, size_t const size) [member function]
-    cls.add_method('GetHash64', 
-                   'uint64_t', 
-                   [param('char const *', 'buffer'), param('size_t const', 'size')], 
+    cls.add_method('GetHash64',
+                   'uint64_t',
+                   [param('char const *', 'buffer'), param('size_t const', 'size')],
                    is_virtual=True)
     ## hash-fnv.h (module 'core'): void ns3::Hash::Function::Fnv1a::clear() [member function]
-    cls.add_method('clear', 
-                   'void', 
-                   [], 
+    cls.add_method('clear',
+                   'void',
+                   [],
                    is_virtual=True)
     return
 
@@ -1509,14 +1500,14 @@ def register_Ns3HashFunctionHash32_methods(root_module, cls):
     ## hash-function.h (module 'core'): ns3::Hash::Function::Hash32::Hash32(ns3::Hash::Hash32Function_ptr hp) [constructor]
     cls.add_constructor([param('ns3::Hash::Hash32Function_ptr', 'hp')])
     ## hash-function.h (module 'core'): uint32_t ns3::Hash::Function::Hash32::GetHash32(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash32',
+                   'uint32_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_virtual=True)
     ## hash-function.h (module 'core'): void ns3::Hash::Function::Hash32::clear() [member function]
-    cls.add_method('clear', 
-                   'void', 
-                   [], 
+    cls.add_method('clear',
+                   'void',
+                   [],
                    is_virtual=True)
     return
 
@@ -1526,19 +1517,19 @@ def register_Ns3HashFunctionHash64_methods(root_module, cls):
     ## hash-function.h (module 'core'): ns3::Hash::Function::Hash64::Hash64(ns3::Hash::Hash64Function_ptr hp) [constructor]
     cls.add_constructor([param('ns3::Hash::Hash64Function_ptr', 'hp')])
     ## hash-function.h (module 'core'): uint32_t ns3::Hash::Function::Hash64::GetHash32(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash32',
+                   'uint32_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_virtual=True)
     ## hash-function.h (module 'core'): uint64_t ns3::Hash::Function::Hash64::GetHash64(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash64', 
-                   'uint64_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash64',
+                   'uint64_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_virtual=True)
     ## hash-function.h (module 'core'): void ns3::Hash::Function::Hash64::clear() [member function]
-    cls.add_method('clear', 
-                   'void', 
-                   [], 
+    cls.add_method('clear',
+                   'void',
+                   [],
                    is_virtual=True)
     return
 
@@ -1548,31 +1539,31 @@ def register_Ns3HashFunctionMurmur3_methods(root_module, cls):
     ## hash-murmur3.h (module 'core'): ns3::Hash::Function::Murmur3::Murmur3() [constructor]
     cls.add_constructor([])
     ## hash-murmur3.h (module 'core'): uint32_t ns3::Hash::Function::Murmur3::GetHash32(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash32', 
-                   'uint32_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash32',
+                   'uint32_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_virtual=True)
     ## hash-murmur3.h (module 'core'): uint64_t ns3::Hash::Function::Murmur3::GetHash64(char const * buffer, std::size_t const size) [member function]
-    cls.add_method('GetHash64', 
-                   'uint64_t', 
-                   [param('char const *', 'buffer'), param('std::size_t const', 'size')], 
+    cls.add_method('GetHash64',
+                   'uint64_t',
+                   [param('char const *', 'buffer'), param('std::size_t const', 'size')],
                    is_virtual=True)
     ## hash-murmur3.h (module 'core'): void ns3::Hash::Function::Murmur3::clear() [member function]
-    cls.add_method('clear', 
-                   'void', 
-                   [], 
+    cls.add_method('clear',
+                   'void',
+                   [],
                    is_virtual=True)
     return
 
 def register_functions(root_module):
     module = root_module
     ## angles.h (module 'antenna'): double ns3::DegreesToRadians(double degrees) [free function]
-    module.add_function('DegreesToRadians', 
-                        'double', 
+    module.add_function('DegreesToRadians',
+                        'double',
                         [param('double', 'degrees')])
     ## angles.h (module 'antenna'): double ns3::RadiansToDegrees(double radians) [free function]
-    module.add_function('RadiansToDegrees', 
-                        'double', 
+    module.add_function('RadiansToDegrees',
+                        'double',
                         [param('double', 'radians')])
     register_functions_ns3_FatalImpl(module.add_cpp_namespace('FatalImpl'), root_module)
     register_functions_ns3_Hash(module.add_cpp_namespace('Hash'), root_module)
@@ -1598,4 +1589,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
