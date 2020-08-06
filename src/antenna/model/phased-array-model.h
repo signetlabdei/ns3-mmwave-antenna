@@ -75,7 +75,7 @@ public:
    * Sets the beamforming vector to point towards the specified position
    * \param beamformingVector the beamforming vector
    */
-  void SetBeamformingVector (const Angles& a);
+  void SetBeamformingVector (Angles a);
 
 
   /**
@@ -90,7 +90,7 @@ public:
    * \param a the beamforming angle
    * \return the beamforming vector
    */
-  ComplexVector GetBeamformingVector (const Angles& a) const;
+  ComplexVector GetBeamformingVector (Angles a) const;
   
   
   /**
@@ -98,7 +98,7 @@ public:
    * \param a the steering angle
    * \return the steering vector
    */
-  ComplexVector GetSteeringVector (const Angles& a) const;
+  ComplexVector GetSteeringVector (Angles a) const;
 
 
   /**
