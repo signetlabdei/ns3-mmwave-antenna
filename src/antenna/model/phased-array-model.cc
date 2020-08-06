@@ -82,7 +82,7 @@ PhasedArrayModel::ComputeNorm(const ComplexVector &vector) const
 PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetBeamformingVector(Angles a) const
 {
-  NS_LOG_FUNCTION (this);
+  NS_LOG_FUNCTION (this << a);
   
   ComplexVector beamformingVector = GetSteeringVector(a);
   double norm = ComputeNorm(beamformingVector);
