@@ -106,9 +106,10 @@ PhasedArrayModel::GetSteeringVector(Angles a) const
   for (uint64_t i = 0; i < this->GetNumberOfElements (); i++)
     {
       Vector loc = this->GetElementLocation (i);
-      steeringVector[i] = -2 * M_PI * (sin (a.theta) * cos (a.phi) * loc.x +
-                                       sin (a.theta) * sin (a.phi) * loc.y +
-                                       cos (a.theta) * loc.z);
+      double phase = -2 * M_PI * (sin (a.theta) * cos (a.phi) * loc.x +
+                                  sin (a.theta) * sin (a.phi) * loc.y +
+                                  cos (a.theta) * loc.z);
+      steeringVector[i] = std::polar<double> (1.0, phase);
     }
   return steeringVector;
 }
