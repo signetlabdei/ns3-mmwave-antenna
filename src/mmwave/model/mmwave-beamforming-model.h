@@ -26,7 +26,7 @@
 namespace ns3 {
 
 class MobilityModel;
-class ThreeGppAntennaArrayModel;
+class PhasedArrayModel;
 class NetDevice;
 class ChannelConditionModel;
 
@@ -72,13 +72,13 @@ public:
    * Get the antenna on which beamforming is applied
    * \return the antenna
    */
-  Ptr<ThreeGppAntennaArrayModel> GetAntenna (void) const;
+  Ptr<PhasedArrayModel> GetAntenna (void) const;
 
   /**
    * Set the antenna on which beamforming is applied
    * \param antenna
    */
-  void SetAntenna (Ptr<ThreeGppAntennaArrayModel> antenna);
+  void SetAntenna (Ptr<PhasedArrayModel> antenna);
 
   /**
    * Computes the beamforming vector to communicate with the target device and antenna
@@ -86,13 +86,13 @@ public:
    * \param otherDevice the target device
    * \param otherAntenna the target antenna of otherDevice
    */
-  virtual void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna) = 0;
+  virtual void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) = 0;
 
 protected:
   virtual void DoDispose (void) override;
 
   Ptr<NetDevice> m_device; //!< pointer to the NetDevice
-  Ptr<ThreeGppAntennaArrayModel> m_antenna; //!< The antenna of the device on which the beamforming is applied
+  Ptr<PhasedArrayModel> m_antenna; //!< The antenna of the device on which the beamforming is applied
 };
 
 
@@ -125,7 +125,7 @@ public:
    * \param otherDevice the target device
    * \param otherAntenna the target antenna of otherDevice
    */
-  void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna) override;
+  void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) override;
 };
 
 
@@ -161,7 +161,7 @@ public:
    * \param the target device
    * \param the target antenna of otherDevice
    */
-  void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna) override;
+  void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) override;
 
 private:
   void DoDispose (void) override;
@@ -170,7 +170,7 @@ private:
    * \param params the channel matrix
    * \return a pair with the beamforming vectors
    */
-  std::pair<ThreeGppAntennaArrayModel::ComplexVector, ThreeGppAntennaArrayModel::ComplexVector> ComputeBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> params) const;
+  std::pair<PhasedArrayModel::ComplexVector, PhasedArrayModel::ComplexVector> ComputeBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> params) const;
 
   /**
    * Compute eigenvector related to highest eigenvalue
@@ -179,13 +179,13 @@ private:
    * \param threshold if norm of two consecutive vectors is below this threshold, stop computation before nIter iterations
    * \return eigenvector
    */
-  ThreeGppAntennaArrayModel::ComplexVector GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVector A) const;
+  PhasedArrayModel::ComplexVector GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVector A) const;
 
 
   Ptr<MatrixBasedChannelModel> m_channel; //!< pointer to the MatrixChannel, to retrieve the matrix on which the SVD should be computed
 
   std::map<Ptr<NetDevice>, Ptr<const MatrixBasedChannelModel::ChannelMatrix> > m_cacheChannelMap; //!< map that stores the channel previously computed
-  std::map<Ptr<NetDevice>, std::pair<ThreeGppAntennaArrayModel::ComplexVector, ThreeGppAntennaArrayModel::ComplexVector> > m_cacheBfVectors; //!< map that stores the previous bf vectors
+  std::map<Ptr<NetDevice>, std::pair<PhasedArrayModel::ComplexVector, PhasedArrayModel::ComplexVector> > m_cacheBfVectors; //!< map that stores the previous bf vectors
   uint32_t m_maxIterations; //!< Maximum number of iterations to numerically approximate the SVD decomposition
   double m_tolerance; //!< Tolerance to numerically approximate the SVD decomposition
   bool m_useCache; //!< Cache the channel matrix whenever possible. NOTE: the SVD decomposition can be extremely computationally expensive, caching is suggested.

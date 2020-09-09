@@ -703,7 +703,7 @@ void
 MmWaveUePhy::SendDataChannels (Ptr<PacketBurst> pb, std::list<Ptr<MmWaveControlMessage> > ctrlMsg, Time duration, uint8_t slotInd)
 {
 
-  //Ptr<ThreeGppAntennaArrayModel> antennaArray = DynamicCast<ThreeGppAntennaArrayModel> (GetDlSpectrumPhy ()->GetRxAntenna());
+  //Ptr<PhasedArrayModel> antennaArray = DynamicCast<PhasedArrayModel> (GetDlSpectrumPhy ()->GetRxAntenna());
   /* set beamforming vector;
    * for UE, you can choose 16 antenna with 0-7 sectors, or 4 antenna with 0-3 sectors
    * input is (sector, antenna number)

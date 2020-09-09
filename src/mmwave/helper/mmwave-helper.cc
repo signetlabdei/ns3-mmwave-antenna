@@ -822,7 +822,7 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       dlPhy->SetMobility (mm);
       ulPhy->SetMobility (mm);
 
-      Ptr<ThreeGppAntennaArrayModel> antenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model
@@ -1427,7 +1427,7 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       dlPhy->SetMobility (mm);
       ulPhy->SetMobility (mm);
 
-      Ptr<ThreeGppAntennaArrayModel> antenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model
@@ -1636,7 +1636,7 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
 
       NS_LOG_DEBUG ("Create antenna");
       // TODO how to support other kinds of antennas?
-      Ptr<ThreeGppAntennaArrayModel> antenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model

@@ -104,7 +104,7 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveHelper::PathlossModel",StringValue ("ns3::ThreeGppUmaPropagationLossModel"));
 
   // set to false to use the 3GPP radiation pattern (proper configuration of the bearing and downtilt angles is needed) 
-  Config::SetDefault ("ns3::ThreeGppAntennaArrayModel::IsotropicElements", BooleanValue (true)); 
+  Config::SetDefault ("ns3::PhasedArrayModel::IsotropicElements", BooleanValue (true)); 
 
   Ptr<MmWaveHelper> helper = CreateObject<MmWaveHelper> ();
   helper->SetCcPhyParams (ccMap);

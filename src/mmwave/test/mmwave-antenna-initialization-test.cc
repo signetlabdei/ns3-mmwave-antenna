@@ -19,7 +19,7 @@
 #include "ns3/node-container.h"
 #include "ns3/mobility-helper.h"
 #include "ns3/test.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/phased-array-model.h"
 
 NS_LOG_COMPONENT_DEFINE ("MmWaveAntennaInitializationTestSuite");
 
@@ -127,8 +127,8 @@ MmwaveThreeGppAntennaInitializationTestCase::DoRun (void)
     // retrieve the MmWaveBeamformingModel
     Ptr<MmWaveBeamformingModel> mmwaveBfModel = mmWaveSpectrumPhy->GetBeamformingModel ();
 
-    // retrieve the ThreeGppAntennaArrayModel
-    Ptr<ThreeGppAntennaArrayModel> antenna = mmwaveBfModel->GetAntenna ();
+    // retrieve the PhasedArrayModel
+    Ptr<PhasedArrayModel> antenna = mmwaveBfModel->GetAntenna ();
 
     // check if the number of antenna elements has been configured
     NS_TEST_ASSERT_MSG_EQ (antenna->GetNumberOfElements (), mmWaveEnbDev->GetAntennaNum (),"The number of antenna elements was not properly configured");
@@ -165,8 +165,8 @@ MmwaveThreeGppAntennaInitializationTestCase::DoRun (void)
     // retrieve the MmWaveBeamformingModel
     Ptr<MmWaveBeamformingModel> mmwaveBfModel = mmWaveSpectrumPhy->GetBeamformingModel ();
 
-    // retrieve the ThreeGppAntennaArrayModel
-    Ptr<ThreeGppAntennaArrayModel> antenna = mmwaveBfModel->GetAntenna ();
+    // retrieve the PhasedArrayModel
+    Ptr<PhasedArrayModel> antenna = mmwaveBfModel->GetAntenna ();
 
     // check if the number of antenna elements has been configured
     NS_TEST_ASSERT_MSG_EQ (antenna->GetNumberOfElements (), mmWaveUeDev->GetAntennaNum (),"The number of antenna elements was not properly configured");

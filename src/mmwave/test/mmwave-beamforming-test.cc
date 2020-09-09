@@ -24,7 +24,7 @@
 #include "ns3/uinteger.h"
 #include "ns3/boolean.h"
 #include "ns3/double.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/phased-array-model.h"
 #include "ns3/object-factory.h"
 #include "ns3/node.h"
 #include "simple-matrix-based-channel-model.h"
@@ -91,7 +91,7 @@ MmWaveDftBeamformingTestCase::DoRun (void)
   thisNode->AddDevice (thisDevice);
 
   // create the antenna
-  Ptr<ThreeGppAntennaArrayModel> thisAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (4), "NumColumns", UintegerValue (4));
+  Ptr<PhasedArrayModel> thisAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (4), "NumColumns", UintegerValue (4));
 
   // create a node for the other device
   Ptr<Node> otherNode = CreateObject<Node> ();
@@ -105,13 +105,13 @@ MmWaveDftBeamformingTestCase::DoRun (void)
   otherNode->AddDevice (otherDevice);
 
   // create the antenna
-  Ptr<ThreeGppAntennaArrayModel> otherAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (4), "NumColumns", UintegerValue (4));
+  Ptr<PhasedArrayModel> otherAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (4), "NumColumns", UintegerValue (4));
 
   // create the beamforming module
   Ptr<MmWaveDftBeamforming> bfModule = CreateObjectWithAttributes<MmWaveDftBeamforming> ("Device", PointerValue (thisDevice), "Antenna", PointerValue (thisAntenna));
 
   bfModule->SetBeamformingVectorForDevice (otherDevice, otherAntenna);
-  ThreeGppAntennaArrayModel::ComplexVector bfVector = thisAntenna->GetBeamformingVector ();
+  PhasedArrayModel::ComplexVector bfVector = thisAntenna->GetBeamformingVector ();
 
   double maxGain = 0; // used to store the max |AF|
   Angles maxAngle; // used to store the direction where max |AF| is achieved
@@ -126,7 +126,7 @@ MmWaveDftBeamformingTestCase::DoRun (void)
           double vAngle = vIndex * angleStep / 2; // elevation [0, PI]
 
           // compute the steering vector
-          ThreeGppAntennaArrayModel::ComplexVector steeringVector (thisAntenna->GetNumberOfElements ());
+          PhasedArrayModel::ComplexVector steeringVector (thisAntenna->GetNumberOfElements ());
           for (uint64_t eIndex = 0; eIndex < thisAntenna->GetNumberOfElements (); eIndex++)
             {
               Vector loc = thisAntenna->GetElementLocation (eIndex);
@@ -191,12 +191,12 @@ MmWaveSvdBeamformingTestCase::~MmWaveSvdBeamformingTestCase ()
 {
 }
 
-ThreeGppAntennaArrayModel::ComplexVector
-GetManualBfVector (Ptr<ThreeGppAntennaArrayModel> antenna, Angles angle)
+PhasedArrayModel::ComplexVector
+GetManualBfVector (Ptr<PhasedArrayModel> antenna, Angles angle)
 {
   uint32_t numElements = antenna->GetNumberOfElements ();
 
-  ThreeGppAntennaArrayModel::ComplexVector bfVector;
+  PhasedArrayModel::ComplexVector bfVector;
   bfVector.resize (numElements);
 
   for (uint32_t i = 0; i < numElements; ++i)
@@ -236,7 +236,7 @@ MmWaveSvdBeamformingTestCase::DoRun (void)
   txNode->AddDevice (txDevice);
 
   // Create the antenna
-  Ptr<ThreeGppAntennaArrayModel> txAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (4),
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (4),
                                                                                                     "NumColumns", UintegerValue (4),
                                                                                                     "IsotropicElements", BooleanValue (true));
 
@@ -252,7 +252,7 @@ MmWaveSvdBeamformingTestCase::DoRun (void)
   rxNode->AddDevice (rxDevice);
 
   // Create the antenna
-  Ptr<ThreeGppAntennaArrayModel> rxAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumRows", UintegerValue (2),
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (2),
                                                                                                     "NumColumns", UintegerValue (2),
                                                                                                     "IsotropicElements", BooleanValue (true));
 
@@ -283,13 +283,13 @@ MmWaveSvdBeamformingTestCase::DoRun (void)
 
   // Setup beamforming
   bfModule->SetBeamformingVectorForDevice (rxDevice, rxAntenna);
-  ThreeGppAntennaArrayModel::ComplexVector txBfVector = txAntenna->GetBeamformingVector ();
-  ThreeGppAntennaArrayModel::ComplexVector rxBfVector = rxAntenna->GetBeamformingVector ();
+  PhasedArrayModel::ComplexVector txBfVector = txAntenna->GetBeamformingVector ();
+  PhasedArrayModel::ComplexVector rxBfVector = rxAntenna->GetBeamformingVector ();
 
   // Compute reference beamforming
-  ThreeGppAntennaArrayModel::ComplexVector manualTxBfVector = GetManualBfVector (txAntenna,
+  PhasedArrayModel::ComplexVector manualTxBfVector = GetManualBfVector (txAntenna,
                                                                                  Angles (DegreesToRadians (aodAz[0]), DegreesToRadians (aodEl[0])));
-  ThreeGppAntennaArrayModel::ComplexVector manualRxBfVector = GetManualBfVector (rxAntenna,
+  PhasedArrayModel::ComplexVector manualRxBfVector = GetManualBfVector (rxAntenna,
                                                                                  Angles (DegreesToRadians (aoaAz[0]), DegreesToRadians (aoaEl[0])));
 
   // Check if the beamforming vectors are as expected (minus a constant phase difference)

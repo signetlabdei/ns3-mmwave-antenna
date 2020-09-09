@@ -20,7 +20,7 @@
 
 #include "simple-matrix-based-channel-model.h"
 #include "ns3/log.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/phased-array-model.h"
 #include "ns3/double.h"
 #include "ns3/pointer.h"
 #include "ns3/node.h"
@@ -199,8 +199,8 @@ SimpleMatrixBasedChannelModel::GetDelay (void) const
 Ptr<const MatrixBasedChannelModel::ChannelMatrix>
 SimpleMatrixBasedChannelModel::GetChannel (Ptr<const MobilityModel> aMob,
                                            Ptr<const MobilityModel> bMob,
-                                           Ptr<const ThreeGppAntennaArrayModel> aAntenna,
-                                           Ptr<const ThreeGppAntennaArrayModel> bAntenna)
+                                           Ptr<const PhasedArrayModel> aAntenna,
+                                           Ptr<const PhasedArrayModel> bAntenna)
 {
   NS_LOG_FUNCTION (this << aMob << bMob << aAntenna << bAntenna);
 

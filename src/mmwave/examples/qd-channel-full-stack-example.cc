@@ -113,7 +113,7 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveUePhy::NoiseFigure", DoubleValue (noiseFigure));
 
   // Setup antenna configuration
-  Config::SetDefault ("ns3::ThreeGppAntennaArrayModel::IsotropicElements", BooleanValue (true));
+  Config::SetDefault ("ns3::PhasedArrayModel::IsotropicElements", BooleanValue (true));
 
   // Create the MmWave helper
   Ptr<MmWaveHelper> mmwaveHelper = CreateObject<MmWaveHelper> ();

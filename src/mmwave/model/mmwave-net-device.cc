@@ -311,7 +311,7 @@ MmWaveNetDevice::SetCcMap (std::map<uint8_t, Ptr<MmWaveComponentCarrier> > ccm)
   m_ccMap = ccm;
 }
 
-Ptr<ThreeGppAntennaArrayModel>
+Ptr<PhasedArrayModel>
 MmWaveNetDevice::GetAntenna (uint8_t ccId) const
 {
   NS_LOG_FUNCTION (this << +ccId);

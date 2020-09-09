@@ -17,7 +17,7 @@
 */
 
 #include "ns3/mmwave-beamforming-model.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/phased-array-model.h"
 #include "ns3/mobility-model.h"
 #include "ns3/matrix-based-channel-model.h"
 #include "ns3/channel-condition-model.h"
@@ -57,7 +57,7 @@ MmWaveBeamformingModel::GetTypeId ()
                    PointerValue (0),
                    MakePointerAccessor (&MmWaveBeamformingModel::SetAntenna,
                                          &MmWaveBeamformingModel::GetAntenna),
-                   MakePointerChecker<ThreeGppAntennaArrayModel> ())
+                   MakePointerChecker<PhasedArrayModel> ())
   ;
   return tid;
 }
@@ -93,7 +93,7 @@ MmWaveBeamformingModel::SetDevice (Ptr<NetDevice> device)
   m_device = device;
 }
 
-Ptr<ThreeGppAntennaArrayModel>
+Ptr<PhasedArrayModel>
 MmWaveBeamformingModel::GetAntenna (void) const
 {
   NS_LOG_FUNCTION (this);
@@ -101,7 +101,7 @@ MmWaveBeamformingModel::GetAntenna (void) const
 }
 
 void
-MmWaveBeamformingModel::SetAntenna (Ptr<ThreeGppAntennaArrayModel> antenna)
+MmWaveBeamformingModel::SetAntenna (Ptr<PhasedArrayModel> antenna)
 {
   NS_LOG_FUNCTION (this << antenna);
   m_antenna = antenna;
@@ -134,11 +134,11 @@ MmWaveDftBeamforming::~MmWaveDftBeamforming ()
 
 
 void
-MmWaveDftBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna)
+MmWaveDftBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna)
 {
   NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
 
-  ThreeGppAntennaArrayModel::ComplexVector antennaWeights;
+  PhasedArrayModel::ComplexVector antennaWeights;
 
   // retrieve the position of the two devices
   Ptr<MobilityModel> mobility = m_device->GetNode ()->GetObject<MobilityModel> ();
@@ -233,7 +233,7 @@ MmWaveSvdBeamforming::DoDispose (void)
 }
 
 void
-MmWaveSvdBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<ThreeGppAntennaArrayModel> otherAntenna)
+MmWaveSvdBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna)
 {
   NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
 
@@ -245,7 +245,7 @@ MmWaveSvdBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice,
   // this will trigger a new computation (if needed)
   auto channelMatrix = m_channel->GetChannel (thisMob, otherMob, m_antenna, otherAntenna);
 
-  std::pair<ThreeGppAntennaArrayModel::ComplexVector, ThreeGppAntennaArrayModel::ComplexVector> bfVectors;
+  std::pair<PhasedArrayModel::ComplexVector, PhasedArrayModel::ComplexVector> bfVectors;
 
   bool toCache {false};
 
@@ -272,9 +272,9 @@ MmWaveSvdBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice,
 
           uint64_t thisAntennaNumElements = m_antenna->GetNumberOfElements ();
           uint64_t otherAntennaNumElements = otherAntenna->GetNumberOfElements ();
-          ThreeGppAntennaArrayModel::ComplexVector thisBf;
+          PhasedArrayModel::ComplexVector thisBf;
           thisBf.resize (thisAntennaNumElements);
-          ThreeGppAntennaArrayModel::ComplexVector otherBf;
+          PhasedArrayModel::ComplexVector otherBf;
           otherBf.resize (otherAntennaNumElements);
 
           bfVectors = std::make_pair (thisBf, otherBf);
@@ -324,7 +324,7 @@ MmWaveSvdBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice,
     }
 }
 
-std::pair<ThreeGppAntennaArrayModel::ComplexVector, ThreeGppAntennaArrayModel::ComplexVector>
+std::pair<PhasedArrayModel::ComplexVector, PhasedArrayModel::ComplexVector>
 MmWaveSvdBeamforming::ComputeBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> params) const
 {
   //generate transmitter side spatial correlation matrix
@@ -377,7 +377,7 @@ MmWaveSvdBeamforming::ComputeBeamformingVectors (Ptr<const MatrixBasedChannelMod
     }
 
   //calculate beamforming vector from spatial correlation matrix
-  ThreeGppAntennaArrayModel::ComplexVector bW = GetFirstEigenvector (bQ);
+  PhasedArrayModel::ComplexVector bW = GetFirstEigenvector (bQ);
 
   //compute the receiver side spatial correlation matrix aQ = HH*, where H is the sum of H_n over n clusters.
   MatrixBasedChannelModel::Complex2DVector aQ;
@@ -402,7 +402,7 @@ MmWaveSvdBeamforming::ComputeBeamformingVectors (Ptr<const MatrixBasedChannelMod
     }
 
   //calculate beamforming vector from spatial correlation matrix.
-  ThreeGppAntennaArrayModel::ComplexVector aW = GetFirstEigenvector (aQ);
+  PhasedArrayModel::ComplexVector aW = GetFirstEigenvector (aQ);
 
   for (size_t i = 0; i < aW.size (); ++i)
     {
@@ -412,10 +412,10 @@ MmWaveSvdBeamforming::ComputeBeamformingVectors (Ptr<const MatrixBasedChannelMod
   return std::make_pair (bW, aW);
 }
 
-ThreeGppAntennaArrayModel::ComplexVector
+PhasedArrayModel::ComplexVector
 MmWaveSvdBeamforming::GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVector A) const
 {
-  ThreeGppAntennaArrayModel::ComplexVector antennaWeights;
+  PhasedArrayModel::ComplexVector antennaWeights;
   uint16_t arraySize = A.size ();
   for (uint16_t eIndex = 0; eIndex < arraySize; eIndex++)
     {
@@ -427,7 +427,7 @@ MmWaveSvdBeamforming::GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVec
   double diff = 1;
   while (iter < m_maxIterations && diff > m_tolerance)
     {
-      ThreeGppAntennaArrayModel::ComplexVector antennaWeightsNew;
+      PhasedArrayModel::ComplexVector antennaWeightsNew;
 
       for (uint16_t row = 0; row < arraySize; row++)
         {
