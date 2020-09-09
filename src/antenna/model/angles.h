@@ -115,6 +115,11 @@ struct Angles
    * 
    */
   double theta;
+  
+  /** 
+  * Normalize the phi angle
+  */
+  void NormalizeAngles (void);
 };
 
 

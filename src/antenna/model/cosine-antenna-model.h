@@ -52,20 +52,28 @@ public:
 
 
   // attribute getters/setters
-  void SetBeamwidth (double beamwidthDegrees);
-  double GetBeamwidth () const;
+  void SetVerticalBeamwidth (double verticalBeamwidthDegrees);
+  void SetHorizontalBeamwidth (double horizontalBeamwidthDegrees);
+  double GetVerticalBeamwidth (void) const;
+  double GetHorizontalBeamwidth (void) const;
   void SetOrientation (double orientationDegrees);
-  double GetOrientation () const;
+  double GetOrientation (void) const;
 
 private:
 
-  /**
+  double GetExponentFromBeamwidth(double beamwidthRadians) const;
+    
+   /**
    * this is the variable "n" in the paper by Chunjian
    * 
    */
-  double m_exponent; 
+  double m_verticalexponent; 
 
-  double m_beamwidthRadians;
+  double m_horizontalexponent; 
+  
+  double m_verticalBeamwidthRadians;
+  
+  double m_horizontalBeamwidthRadians;
 
   double m_orientationRadians;
 
