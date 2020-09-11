@@ -1,5 +1,6 @@
 
 #include "phased-array-model.h"
+#include "ns3/isotropic-antenna-model.h"
 #include "ns3/log.h"
 #include "ns3/double.h"
 #include "ns3/uinteger.h"
@@ -31,10 +32,10 @@ PhasedArrayModel::GetTypeId ()
     .SetParent<Object> ()
     .SetGroupName("Antenna")
     .AddAttribute ("AntennaElement",
-               "A pointer to the antenna element used by the phased array",
-               PointerValue (),
-               MakePointerAccessor (&PhasedArrayModel::m_antennaElement),
-               MakePointerChecker<AntennaModel> ())
+                   "A pointer to the antenna element used by the phased array",
+                   PointerValue (CreateObject<IsotropicAntennaModel> ()),
+                   MakePointerAccessor (&PhasedArrayModel::m_antennaElement),
+                   MakePointerChecker<AntennaModel> ())
   ;
   return tid;
 }

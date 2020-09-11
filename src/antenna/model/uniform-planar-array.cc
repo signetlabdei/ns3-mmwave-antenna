@@ -27,7 +27,7 @@ TypeId
 UniformPlanarArray::GetTypeId (void)
 {
   static TypeId tid = TypeId ("ns3::UniformPlanarArray")
-    .SetParent<Object> ()
+    .SetParent<PhasedArrayModel> ()
     .AddConstructor<UniformPlanarArray> ()
     .SetGroupName("Antenna")
     .AddAttribute ("AntennaHorizontalSpacing",

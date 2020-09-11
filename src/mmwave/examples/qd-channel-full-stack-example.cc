@@ -39,6 +39,7 @@
 #include "ns3/point-to-point-helper.h"
 #include "ns3/config-store.h"
 #include "ns3/mmwave-point-to-point-epc-helper.h"
+#include "ns3/isotropic-antenna-model.h"
 
 NS_LOG_COMPONENT_DEFINE ("QdChannelModelExample");
 
@@ -113,7 +114,7 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveUePhy::NoiseFigure", DoubleValue (noiseFigure));
 
   // Setup antenna configuration
-  Config::SetDefault ("ns3::PhasedArrayModel::IsotropicElements", BooleanValue (true));
+  Config::SetDefault ("ns3::PhasedArrayModel::AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ()));
 
   // Create the MmWave helper
   Ptr<MmWaveHelper> mmwaveHelper = CreateObject<MmWaveHelper> ();

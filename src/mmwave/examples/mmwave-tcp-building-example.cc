@@ -43,6 +43,7 @@
 #include <ns3/packet.h>
 #include <ns3/tag.h>
 #include <ns3/queue-size.h>
+#include "ns3/isotropic-antenna-model.h"
 
 using namespace ns3;
 using namespace mmwave;
@@ -292,7 +293,7 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::LteRlcAm::MaxTxBufferSize", UintegerValue (20 * 1024 * 1024));
 
   // set to false to use the 3GPP radiation pattern (proper configuration of the bearing and downtilt angles is needed) 
-  Config::SetDefault ("ns3::PhasedArrayModel::IsotropicElements", BooleanValue (true)); 
+  Config::SetDefault ("ns3::PhasedArrayModel::AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ())); 
 
   Ptr<MmWaveHelper> mmwaveHelper = CreateObject<MmWaveHelper> ();
 

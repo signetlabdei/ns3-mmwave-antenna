@@ -64,6 +64,7 @@
 #include <ns3/channel-condition-model.h>
 #include <ns3/three-gpp-propagation-loss-model.h>
 #include <ns3/mmwave-beamforming-model.h>
+#include <ns3/uniform-planar-array.h>
 
 
 namespace ns3 {
@@ -822,7 +823,8 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       dlPhy->SetMobility (mm);
       ulPhy->SetMobility (mm);
 
-      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())),
+                                                                                      "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model
@@ -1427,7 +1429,8 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       dlPhy->SetMobility (mm);
       ulPhy->SetMobility (mm);
 
-      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())),
+                                                                                      "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model
@@ -1636,7 +1639,8 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
 
       NS_LOG_DEBUG ("Create antenna");
       // TODO how to support other kinds of antennas?
-      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())), "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())),
+                                                                                      "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model

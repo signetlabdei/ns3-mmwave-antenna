@@ -158,7 +158,7 @@ LteEnbAntennaTestCase::DoRun (void)
   lteHelper->SetSchedulerAttribute ("UlCqiFilter", EnumValue (FfMacScheduler::PUSCH_UL_CQI));
   lteHelper->SetEnbAntennaModelType ("ns3::CosineAntennaModel");
   lteHelper->SetEnbAntennaModelAttribute ("Orientation", DoubleValue (m_orientationDegrees));
-  lteHelper->SetEnbAntennaModelAttribute ("Beamwidth",   DoubleValue (m_beamwidthDegrees));
+  lteHelper->SetEnbAntennaModelAttribute ("HorizontalBeamwidth",   DoubleValue (m_beamwidthDegrees));
   lteHelper->SetEnbAntennaModelAttribute ("MaxGain",     DoubleValue (0.0));
 
   // set DL and UL bandwidth. 

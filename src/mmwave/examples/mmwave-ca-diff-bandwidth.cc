@@ -14,6 +14,7 @@
 #include "ns3/mmwave-point-to-point-epc-helper.h"
 #include "ns3/point-to-point-helper.h"
 #include <map>
+#include "ns3/isotropic-antenna-model.h"
 
 using namespace ns3;
 using namespace mmwave;
@@ -142,7 +143,7 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::ThreeGppChannelModel::Blockage", BooleanValue (blockage)); // Enable/disable the blockage model
 
   // set to false to use the 3GPP radiation pattern (proper configuration of the bearing and downtilt angles is needed) 
-  Config::SetDefault ("ns3::PhasedArrayModel::IsotropicElements", BooleanValue (true)); 
+  Config::SetDefault ("ns3::PhasedArrayModel::AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ())); 
 
   Ptr<MmWaveHelper> helper = CreateObject<MmWaveHelper> ();
   helper->SetCcPhyParams (ccMap);

@@ -24,7 +24,8 @@
 #include "ns3/uinteger.h"
 #include "ns3/boolean.h"
 #include "ns3/double.h"
-#include "ns3/phased-array-model.h"
+#include "ns3/uniform-planar-array.h"
+#include "ns3/isotropic-antenna-model.h"
 #include "ns3/object-factory.h"
 #include "ns3/node.h"
 #include "simple-matrix-based-channel-model.h"
@@ -91,7 +92,8 @@ MmWaveDftBeamformingTestCase::DoRun (void)
   thisNode->AddDevice (thisDevice);
 
   // create the antenna
-  Ptr<PhasedArrayModel> thisAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (4), "NumColumns", UintegerValue (4));
+  Ptr<PhasedArrayModel> thisAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (4),
+                                                                                      "NumColumns", UintegerValue (4));
 
   // create a node for the other device
   Ptr<Node> otherNode = CreateObject<Node> ();
@@ -105,10 +107,12 @@ MmWaveDftBeamformingTestCase::DoRun (void)
   otherNode->AddDevice (otherDevice);
 
   // create the antenna
-  Ptr<PhasedArrayModel> otherAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (4), "NumColumns", UintegerValue (4));
+  Ptr<PhasedArrayModel> otherAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (4),
+                                                                                       "NumColumns", UintegerValue (4));
 
   // create the beamforming module
-  Ptr<MmWaveDftBeamforming> bfModule = CreateObjectWithAttributes<MmWaveDftBeamforming> ("Device", PointerValue (thisDevice), "Antenna", PointerValue (thisAntenna));
+  Ptr<MmWaveDftBeamforming> bfModule = CreateObjectWithAttributes<MmWaveDftBeamforming> ("Device", PointerValue (thisDevice),
+                                                                                         "Antenna", PointerValue (thisAntenna));
 
   bfModule->SetBeamformingVectorForDevice (otherDevice, otherAntenna);
   PhasedArrayModel::ComplexVector bfVector = thisAntenna->GetBeamformingVector ();
@@ -236,9 +240,9 @@ MmWaveSvdBeamformingTestCase::DoRun (void)
   txNode->AddDevice (txDevice);
 
   // Create the antenna
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (4),
-                                                                                                    "NumColumns", UintegerValue (4),
-                                                                                                    "IsotropicElements", BooleanValue (true));
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (4),
+                                                                                    "NumColumns", UintegerValue (4),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
 
   // Create a node for the rx device
   Ptr<Node> rxNode = CreateObject<Node> ();
@@ -252,9 +256,9 @@ MmWaveSvdBeamformingTestCase::DoRun (void)
   rxNode->AddDevice (rxDevice);
 
   // Create the antenna
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<PhasedArrayModel> ("NumRows", UintegerValue (2),
-                                                                                                    "NumColumns", UintegerValue (2),
-                                                                                                    "IsotropicElements", BooleanValue (true));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (2),
+                                                                                    "NumColumns", UintegerValue (2),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
 
   // Create the channel model
   MatrixBasedChannelModel::DoubleVector aodAz {10};

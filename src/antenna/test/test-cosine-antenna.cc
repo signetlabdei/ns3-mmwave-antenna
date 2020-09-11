@@ -84,7 +84,7 @@ CosineAntennaModelTestCase::DoRun ()
   NS_LOG_FUNCTION (this << BuildNameString (m_a, m_b, m_o, m_g));
 
   Ptr<CosineAntennaModel> a = CreateObject<CosineAntennaModel> ();
-  a->SetAttribute ("Beamwidth", DoubleValue (m_b));
+  a->SetAttribute ("HorizontalBeamwidth", DoubleValue (m_b));
   a->SetAttribute ("Orientation", DoubleValue (m_o));
   a->SetAttribute ("MaxGain", DoubleValue (m_g));
   double actualGain = a->GetGainDb (m_a);

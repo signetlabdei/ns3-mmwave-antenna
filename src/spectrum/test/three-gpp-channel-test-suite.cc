@@ -155,8 +155,12 @@ ThreeGppChannelMatrixComputationTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]),
+                                                                                    "NumRows", UintegerValue (txAntennaElements [1]),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]),
+                                                                                    "NumRows", UintegerValue (rxAntennaElements [1]),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
 
   // generate the channel matrix
   Ptr<const ThreeGppChannelModel::ChannelMatrix> channelMatrix = channelModel->GetChannel (txMob, rxMob, txAntenna, rxAntenna);
@@ -314,22 +318,29 @@ ThreeGppChannelMatrixUpdateTest::DoRun (void)
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]),
+                                                                                    "NumRows", UintegerValue (txAntennaElements [1]),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]),
+                                                                                    "NumRows", UintegerValue (rxAntennaElements [1]),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
   
   // check if the channel matrix is correctly updated
 
   // compute the channel matrix for the first time
   uint32_t firstTimeMs = 1; // time instant at which the channel matrix is generated for the first time
-  Simulator::Schedule (MilliSeconds (firstTimeMs), &ThreeGppChannelMatrixUpdateTest::DoGetChannel, this, channelModel, txMob, rxMob, txAntenna, rxAntenna, true);
+  Simulator::Schedule (MilliSeconds (firstTimeMs), &ThreeGppChannelMatrixUpdateTest::DoGetChannel,
+                       this, channelModel, txMob, rxMob, txAntenna, rxAntenna, true);
 
   // call GetChannel before the update period is exceeded, the channel matrix
   // should not be updated
-  Simulator::Schedule (MilliSeconds (firstTimeMs + updatePeriodMs / 2), &ThreeGppChannelMatrixUpdateTest::DoGetChannel, this, channelModel, txMob, rxMob, txAntenna, rxAntenna, false);
+  Simulator::Schedule (MilliSeconds (firstTimeMs + updatePeriodMs / 2), &ThreeGppChannelMatrixUpdateTest::DoGetChannel,
+                       this, channelModel, txMob, rxMob, txAntenna, rxAntenna, false);
 
   // call GetChannel when the update period is exceeded, the channel matrix
   // should be recomputed
-  Simulator::Schedule (MilliSeconds (firstTimeMs + updatePeriodMs + 1), &ThreeGppChannelMatrixUpdateTest::DoGetChannel, this, channelModel, txMob, rxMob, txAntenna, rxAntenna, true);
+  Simulator::Schedule (MilliSeconds (firstTimeMs + updatePeriodMs + 1), &ThreeGppChannelMatrixUpdateTest::DoGetChannel,
+                       this, channelModel, txMob, rxMob, txAntenna, rxAntenna, true);
 
   Simulator::Run ();
   Simulator::Destroy ();
@@ -498,8 +509,12 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   nodes.Get (1)->AggregateObject (rxMob);
 
   // create the tx and rx antennas and set the their dimensions
-  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]), "NumRows", UintegerValue (txAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
-  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]), "NumRows", UintegerValue (rxAntennaElements [1]), "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (txAntennaElements [0]),
+                                                                                    "NumRows", UintegerValue (txAntennaElements [1]),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
+  Ptr<PhasedArrayModel> rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (rxAntennaElements [0]),
+                                                                                    "NumRows", UintegerValue (rxAntennaElements [1]),
+                                                                                    "AntennaElement", PointerValue(CreateObject<IsotropicAntennaModel> ()));
   
   // initialize ThreeGppSpectrumPropagationLossModel
   lossModel->AddDevice (txDev, txAntenna);
@@ -536,7 +551,8 @@ ThreeGppSpectrumPropagationLossModelTest::DoRun ()
   rxPsdOld = rxPsdNew;
 
   // 3) check if the long term is updated when the channel matrix is recomputed
-  Simulator::Schedule (MilliSeconds (101), &ThreeGppSpectrumPropagationLossModelTest::CheckLongTermUpdate, this, lossModel, txPsd, txMob, rxMob, rxPsdOld);
+  Simulator::Schedule (MilliSeconds (101), &ThreeGppSpectrumPropagationLossModelTest::CheckLongTermUpdate,
+                       this, lossModel, txPsd, txMob, rxMob, rxPsdOld);
 
   Simulator::Run ();
   Simulator::Destroy ();
