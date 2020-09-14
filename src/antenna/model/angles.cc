@@ -41,7 +41,7 @@ double RadiansToDegrees (double radians)
 
 std::ostream& operator<< (std::ostream& os, const Angles& a)
 {
-  os << "(" << a.phi << ", " << a.theta << ")";
+  os << "(" << RadiansToDegrees (a.phi) << ", " << RadiansToDegrees (a.theta) << ")";
   return os;
 }
 
