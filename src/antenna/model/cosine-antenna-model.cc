@@ -150,16 +150,16 @@ double
 CosineAntennaModel::GetGainDb (Angles a)
 {
   NS_LOG_FUNCTION (this << a);
-  // azimuth angle w.r.t. the reference system of the antenna
-  double phi = a.phi - m_orientationRadians;
 
   // make sure phi is in (-pi, pi]
+  a.phi -= m_orientationRadians;
   a.NormalizeAngles();
 
-  NS_LOG_LOGIC ("phi = " << phi << " + theta = " << a.theta );
+  NS_LOG_LOGIC (a);
 
   // element factor: amplitude gain of a single antenna element in linear units
-  double ef = (std::pow (std::cos (phi / 2.0), m_horizontalexponent))*(std::pow (std::cos ( a.theta/ 2.0), m_verticalexponent));
+  double ef = (std::pow (std::cos (a.phi / 2.0), m_horizontalexponent)) *
+              (std::pow (std::cos ((a.theta - M_PI/2) / 2.0), m_verticalexponent));
 
   // the array factor is not considered. Note that if we did consider
   // the array factor, the actual beamwidth would change, and in

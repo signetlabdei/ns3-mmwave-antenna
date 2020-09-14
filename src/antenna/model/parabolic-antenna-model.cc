@@ -73,7 +73,7 @@ ParabolicAntennaModel::GetTypeId ()
                    MakeDoubleChecker<double> ())
     .AddAttribute ("MaxDirectionalGain",
                    "The maximum gain (dB) of the antenna radiation pattern.",
-                   DoubleValue (8.0),
+                   DoubleValue (0.0),
                    MakeDoubleAccessor (&ParabolicAntennaModel::m_gEmax),
                    MakeDoubleChecker<double> ())
   ;
@@ -167,6 +167,7 @@ ParabolicAntennaModel::GetGainDb (Angles a)
   NS_LOG_FUNCTION (this << a);
  
   // make sure phi is in (-pi, pi]
+  a.phi -= m_orientationRadians;
   a.NormalizeAngles();
 
   NS_LOG_LOGIC ("phi = " << a.phi << " + theta = " << a.theta);
