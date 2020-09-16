@@ -46,17 +46,14 @@ public:
   double GetHorizontalBeamwidth () const;
   double GetSlaV () const;
   double GetMaxAttenuation () const;
-
-  void SetOrientation (double orientationDegrees);
-  double GetOrientation () const;
+  double GetAntennaElementGain () const;
 
 private:
   double m_verticalBeamwidthDegrees;
   double m_horizontalBeamwidthDegrees;
-  double m_orientationRadians;
-  double m_maxAttenuation;
-  double m_SlaV;
-  double m_gEmax;
+  double m_aMax;
+  double m_slaV;
+  double m_geMax;
 };
 
 

@@ -40,35 +40,29 @@ ThreeGppAntennaModel::GetTypeId ()
     .SetGroupName ("Antenna")
     .AddConstructor<ThreeGppAntennaModel> ()
     .AddAttribute ("VerticalBeamwidth",
-                   "The 3dB vertical beamwidth (degrees)",
+                   "The 3 dB vertical beamwidth (degrees)",
                    DoubleValue (65),
                    MakeDoubleAccessor (&ThreeGppAntennaModel::m_verticalBeamwidthDegrees),
                    MakeDoubleChecker<double> (0.0))
     .AddAttribute ("HorizontalBeamwidth",
-                   "The 3dB horizontal beamwidth (degrees)",
+                   "The 3 dB horizontal beamwidth (degrees)",
                    DoubleValue (65),
                    MakeDoubleAccessor (&ThreeGppAntennaModel::m_horizontalBeamwidthDegrees),
                    MakeDoubleChecker<double> (0.0))
-    .AddAttribute ("Orientation",
-                   "The angle (degrees) that expresses the orientation of the antenna on the x-y plane relative to the x axis",
-                   DoubleValue (0.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::SetOrientation,
-                                       &ThreeGppAntennaModel::GetOrientation),
-                   MakeDoubleChecker<double> (-360, 360))
     .AddAttribute ("MaxAttenuation",
                    "The maximum attenuation (dB) of the antenna radiation pattern.",
                    DoubleValue (30.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_maxAttenuation),
+                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_aMax),
                    MakeDoubleChecker<double> (0.0))
     .AddAttribute ("VerticalSideLobeAttenuation",
                    "The attenuation (dB) of the side lobe in the vertical direction",
                    DoubleValue (30.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_SlaV),
+                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_slaV),
                    MakeDoubleChecker<double> (0.0))
     .AddAttribute ("MaxDirectionalGain",
                    "The maximum gain (dB) of the antenna radiation pattern.",
-                   DoubleValue (0.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_gEmax),
+                   DoubleValue (8.0),
+                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_geMax),
                    MakeDoubleChecker<double> (0.0))
   ;
   return tid;
@@ -89,32 +83,24 @@ ThreeGppAntennaModel::GetHorizontalBeamwidth () const
 }
 
 
-void
-ThreeGppAntennaModel::SetOrientation (double orientationDegrees)
-{
-  NS_LOG_FUNCTION (this << orientationDegrees);
-  m_orientationRadians = DegreesToRadians (orientationDegrees);
-}
-
-
-double
-ThreeGppAntennaModel::GetOrientation () const
-{
-  return RadiansToDegrees (m_orientationRadians);
-}
-
-
 double
 ThreeGppAntennaModel::GetSlaV () const
 {
-  return m_SlaV;
+  return m_slaV;
 }
 
 
 double
 ThreeGppAntennaModel::GetMaxAttenuation () const
 {
-  return m_maxAttenuation;
+  return m_aMax;
+}
+
+
+double
+ThreeGppAntennaModel::GetAntennaElementGain () const
+{
+  return m_geMax;
 }
 
 
@@ -124,22 +110,19 @@ ThreeGppAntennaModel::GetGainDb (Angles a)
   NS_LOG_FUNCTION (this << a);
 
   // make sure phi is in (-pi, pi]
-  a.phi -= m_orientationRadians;
   a.NormalizeAngles ();
-
-  NS_LOG_LOGIC ("phi = " << a.phi << " + theta = " << a.theta);
 
   double phiDeg = RadiansToDegrees (a.phi);
   double thetaDeg = RadiansToDegrees (a.theta);
 
   // compute the radiation power pattern using equations in table 7.3-1 in
   // 3GPP TR 38.901
-  double A_v = -1 * std::min (m_SlaV,12 * pow ((thetaDeg - 90) / m_verticalBeamwidthDegrees, 2)); // vertical cut of the radiation power pattern (dB)
-  double A_h = -1 * std::min (m_maxAttenuation,12 * pow (phiDeg / m_horizontalBeamwidthDegrees, 2)); // horizontal cut of the radiation power pattern (dB)
+  double vertGain = -std::min (m_slaV, 12 * pow ((thetaDeg - 90) / m_verticalBeamwidthDegrees, 2)); // vertical cut of the radiation power pattern (dB)
+  double horizGain = -std::min (m_aMax, 12 * pow (phiDeg / m_horizontalBeamwidthDegrees, 2)); // horizontal cut of the radiation power pattern (dB)
 
-  double gainDb = m_gEmax - 1 * std::min (m_maxAttenuation,-A_v - A_h);  // 3D radiation power pattern (dB)
+  double gainDb = m_geMax - std::min (m_aMax, -(vertGain + horizGain));  // 3D radiation power pattern (dB)
 
-  NS_LOG_LOGIC ("gain = " << gainDb);
+  NS_LOG_DEBUG ("gain=" << gainDb << " dB");
   return gainDb;
 
 }
