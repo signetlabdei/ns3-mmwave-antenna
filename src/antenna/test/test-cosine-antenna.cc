@@ -193,6 +193,15 @@ CosineAntennaModelTestSuite::CosineAntennaModelTestSuite ()
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (-100),  DegreesToRadians (140)),       100,        -150,        0,            -6,     EQUAL), TestCase::QUICK);
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (-200),  DegreesToRadians (140)),       100,        -150,        0,            -6,     EQUAL), TestCase::QUICK);
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians  (-30),  DegreesToRadians (140)),       100,        -150,        0,           -20,  LESSTHAN), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians    (0),   DegreesToRadians (60)),        60,           0,       10,             7,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians   (30),   DegreesToRadians (60)),        60,           0,       22,            16,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians  (-30),   DegreesToRadians (60)),        60,           0,       -4,           -10,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians  (-90),   DegreesToRadians (60)),        60,           0,       10,           -13,  LESSTHAN), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians   (90),   DegreesToRadians (60)),        60,           0,      -20,           -43,  LESSTHAN), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians  (100),   DegreesToRadians (60)),        60,           0,       40,            17,  LESSTHAN), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (-150),   DegreesToRadians (40)),       100,        -150,        2,            -1,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (-100),   DegreesToRadians (40)),       100,        -150,        4,            -2,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (-200),   DegreesToRadians (40)),       100,        -150,       -1,            -7,     EQUAL), TestCase::QUICK);
 
 };
 
