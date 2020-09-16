@@ -34,16 +34,16 @@ NS_LOG_COMPONENT_DEFINE ("CosineAntennaModel");
 NS_OBJECT_ENSURE_REGISTERED (CosineAntennaModel);
 
 
-TypeId 
+TypeId
 CosineAntennaModel::GetTypeId ()
 {
   static TypeId tid = TypeId ("ns3::CosineAntennaModel")
     .SetParent<AntennaModel> ()
-    .SetGroupName("Antenna")
+    .SetGroupName ("Antenna")
     .AddConstructor<CosineAntennaModel> ()
     .AddAttribute ("VerticalBeamwidth",
                    "The 3dB vertical beamwidth (degrees)",
-                   DoubleValue (std::numeric_limits<double>::infinity()),
+                   DoubleValue (std::numeric_limits<double>::infinity ()),
                    MakeDoubleAccessor (&CosineAntennaModel::SetVerticalBeamwidth,
                                        &CosineAntennaModel::GetVerticalBeamwidth),
                    MakeDoubleChecker<double> ())
@@ -73,49 +73,49 @@ double
 CosineAntennaModel::GetExponentFromBeamwidth (double beamwidthRadians)
 {
   double exponent = 0;
-  if (!(std::isinf(beamwidthRadians)))
-  {
-    exponent = -3.0 / (20 * std::log10 (std::cos (beamwidthRadians / 4.0)));
-  }
+  if (!(std::isinf (beamwidthRadians)))
+    {
+      exponent = -3.0 / (20 * std::log10 (std::cos (beamwidthRadians / 4.0)));
+    }
   return exponent;
 }
 
 
-void 
+void
 CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 {
   NS_LOG_FUNCTION (this << verticalBeamwidthDegrees);
-  NS_ASSERT_MSG (verticalBeamwidthDegrees > 0, "Beamwidth must be positive");  
-  
-  if (std::isinf(verticalBeamwidthDegrees))
-  {
-    m_verticalBeamwidthRadians = std::numeric_limits<double>::infinity();
-  }
+  NS_ASSERT_MSG (verticalBeamwidthDegrees > 0, "Beamwidth must be positive");
+
+  if (std::isinf (verticalBeamwidthDegrees))
+    {
+      m_verticalBeamwidthRadians = std::numeric_limits<double>::infinity ();
+    }
   else
-  {
-    m_verticalBeamwidthRadians = DegreesToRadians (verticalBeamwidthDegrees);
-  }
-  
-  m_verticalexponent = GetExponentFromBeamwidth(m_verticalBeamwidthRadians);
+    {
+      m_verticalBeamwidthRadians = DegreesToRadians (verticalBeamwidthDegrees);
+    }
+
+  m_verticalexponent = GetExponentFromBeamwidth (m_verticalBeamwidthRadians);
 }
 
 
-void 
+void
 CosineAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
 {
   NS_LOG_FUNCTION (this << horizontalBeamwidthDegrees);
   NS_ASSERT_MSG (horizontalBeamwidthDegrees > 0, "Beamwidth must be positive");
-    
-  if (std::isinf(horizontalBeamwidthDegrees))
-  {
-    m_horizontalBeamwidthRadians = std::numeric_limits<double>::infinity();
-  }
+
+  if (std::isinf (horizontalBeamwidthDegrees))
+    {
+      m_horizontalBeamwidthRadians = std::numeric_limits<double>::infinity ();
+    }
   else
-  {
-    m_horizontalBeamwidthRadians = DegreesToRadians (horizontalBeamwidthDegrees);
-  }
-  
-  m_horizontalexponent = GetExponentFromBeamwidth(m_horizontalBeamwidthRadians);
+    {
+      m_horizontalBeamwidthRadians = DegreesToRadians (horizontalBeamwidthDegrees);
+    }
+
+  m_horizontalexponent = GetExponentFromBeamwidth (m_horizontalBeamwidthRadians);
 }
 
 
@@ -129,11 +129,11 @@ CosineAntennaModel::GetVerticalBeamwidth () const
 double
 CosineAntennaModel::GetHorizontalBeamwidth () const
 {
-  return RadiansToDegrees (m_horizontalBeamwidthRadians);    
+  return RadiansToDegrees (m_horizontalBeamwidthRadians);
 }
 
 
-void 
+void
 CosineAntennaModel::SetOrientation (double orientationDegrees)
 {
   NS_LOG_FUNCTION (this << orientationDegrees);
@@ -148,20 +148,20 @@ CosineAntennaModel::GetOrientation () const
 }
 
 
-double 
+double
 CosineAntennaModel::GetGainDb (Angles a)
 {
   NS_LOG_FUNCTION (this << a);
 
   // make sure phi is in (-pi, pi]
   a.phi -= m_orientationRadians;
-  a.NormalizeAngles();
+  a.NormalizeAngles ();
 
   NS_LOG_LOGIC (a);
 
   // element factor: amplitude gain of a single antenna element in linear units
   double ef = (std::pow (std::cos (a.phi / 2.0), m_horizontalexponent)) *
-              (std::pow (std::cos ((a.theta - M_PI/2) / 2.0), m_verticalexponent));
+    (std::pow (std::cos ((a.theta - M_PI / 2) / 2.0), m_verticalexponent));
 
   // the array factor is not considered. Note that if we did consider
   // the array factor, the actual beamwidth would change, and in

@@ -26,7 +26,7 @@
 namespace ns3 {
 
 /**
- * 
+ *
  * \brief  Antenna model based on a parabolic approximation of the main lobe radiation pattern.
  *
  * This class implements the parabolic model as described in 3GPP TR 38.901 v15.0.0
@@ -35,7 +35,6 @@ namespace ns3 {
 class ThreeGppAntennaModel : public AntennaModel
 {
 public:
-
   // inherited from Object
   static TypeId GetTypeId ();
 
@@ -50,10 +49,9 @@ public:
 
   void SetOrientation (double orientationDegrees);
   double GetOrientation () const;
-  
-private:
 
-  double m_verticalBeamwidthDegrees; 
+private:
+  double m_verticalBeamwidthDegrees;
   double m_horizontalBeamwidthDegrees;
   double m_orientationRadians;
   double m_maxAttenuation;

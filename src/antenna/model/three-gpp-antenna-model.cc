@@ -32,12 +32,12 @@ NS_LOG_COMPONENT_DEFINE ("ThreeGppAntennaModel");
 NS_OBJECT_ENSURE_REGISTERED (ThreeGppAntennaModel);
 
 
-TypeId 
+TypeId
 ThreeGppAntennaModel::GetTypeId ()
 {
   static TypeId tid = TypeId ("ns3::ThreeGppAntennaModel")
     .SetParent<AntennaModel> ()
-    .SetGroupName("Antenna")
+    .SetGroupName ("Antenna")
     .AddConstructor<ThreeGppAntennaModel> ()
     .AddAttribute ("VerticalBeamwidth",
                    "The 3dB vertical beamwidth (degrees)",
@@ -89,7 +89,7 @@ ThreeGppAntennaModel::GetHorizontalBeamwidth () const
 }
 
 
-void 
+void
 ThreeGppAntennaModel::SetOrientation (double orientationDegrees)
 {
   NS_LOG_FUNCTION (this << orientationDegrees);
@@ -114,34 +114,34 @@ ThreeGppAntennaModel::GetSlaV () const
 double
 ThreeGppAntennaModel::GetMaxAttenuation () const
 {
-  return m_maxAttenuation;    
+  return m_maxAttenuation;
 }
 
 
-double 
+double
 ThreeGppAntennaModel::GetGainDb (Angles a)
 {
   NS_LOG_FUNCTION (this << a);
- 
+
   // make sure phi is in (-pi, pi]
   a.phi -= m_orientationRadians;
-  a.NormalizeAngles();
+  a.NormalizeAngles ();
 
   NS_LOG_LOGIC ("phi = " << a.phi << " + theta = " << a.theta);
-  
-  double phiDeg = RadiansToDegrees(a.phi);
-  double thetaDeg = RadiansToDegrees(a.theta);
+
+  double phiDeg = RadiansToDegrees (a.phi);
+  double thetaDeg = RadiansToDegrees (a.theta);
 
   // compute the radiation power pattern using equations in table 7.3-1 in
   // 3GPP TR 38.901
   double A_v = -1 * std::min (m_SlaV,12 * pow ((thetaDeg - 90) / m_verticalBeamwidthDegrees, 2)); // vertical cut of the radiation power pattern (dB)
   double A_h = -1 * std::min (m_maxAttenuation,12 * pow (phiDeg / m_horizontalBeamwidthDegrees, 2)); // horizontal cut of the radiation power pattern (dB)
 
-  double gainDb = m_gEmax - 1 * std::min (m_maxAttenuation,- A_v - A_h); // 3D radiation power pattern (dB)
-  
+  double gainDb = m_gEmax - 1 * std::min (m_maxAttenuation,-A_v - A_h);  // 3D radiation power pattern (dB)
+
   NS_LOG_LOGIC ("gain = " << gainDb);
   return gainDb;
- 
+
 }
 
 

@@ -14,14 +14,14 @@ NS_LOG_COMPONENT_DEFINE ("PhasedArrayModel");
 NS_OBJECT_ENSURE_REGISTERED (PhasedArrayModel);
 
 
-PhasedArrayModel::PhasedArrayModel()
+PhasedArrayModel::PhasedArrayModel ()
 {
 }
 
 
-PhasedArrayModel::~PhasedArrayModel()
+PhasedArrayModel::~PhasedArrayModel ()
 {
-    
+
 }
 
 
@@ -30,7 +30,7 @@ PhasedArrayModel::GetTypeId ()
 {
   static TypeId tid = TypeId ("ns3::PhasedArrayModel")
     .SetParent<Object> ()
-    .SetGroupName("Antenna")
+    .SetGroupName ("Antenna")
     .AddAttribute ("AntennaElement",
                    "A pointer to the antenna element used by the phased array",
                    PointerValue (CreateObject<IsotropicAntennaModel> ()),
@@ -58,7 +58,7 @@ PhasedArrayModel::SetBeamformingVector (Angles a)
 
 
 PhasedArrayModel::ComplexVector
-PhasedArrayModel::GetBeamformingVector() const
+PhasedArrayModel::GetBeamformingVector () const
 {
   NS_LOG_FUNCTION (this);
   return m_beamformingVector;
@@ -66,32 +66,32 @@ PhasedArrayModel::GetBeamformingVector() const
 
 
 double
-PhasedArrayModel::ComputeNorm(const ComplexVector &vector)
+PhasedArrayModel::ComputeNorm (const ComplexVector &vector)
 {
   double norm = 0;
-    
+
   for (uint64_t i = 0; i < vector.size (); i++)
-  {
-    norm += std::norm(vector[i]);
-  }
-  
-  return std::sqrt(norm);
-    
+    {
+      norm += std::norm (vector[i]);
+    }
+
+  return std::sqrt (norm);
+
 }
 
 
 PhasedArrayModel::ComplexVector
-PhasedArrayModel::GetBeamformingVector(Angles a) const
+PhasedArrayModel::GetBeamformingVector (Angles a) const
 {
   NS_LOG_FUNCTION (this << a);
-  
-  ComplexVector beamformingVector = GetSteeringVector(a);
-  double norm = ComputeNorm(beamformingVector);
-  
+
+  ComplexVector beamformingVector = GetSteeringVector (a);
+  double norm = ComputeNorm (beamformingVector);
+
   for (uint64_t i = 0; i < beamformingVector.size (); i++)
-  {
-    beamformingVector[i] = std::conj (beamformingVector[i]) / norm;
-  }
+    {
+      beamformingVector[i] = std::conj (beamformingVector[i]) / norm;
+    }
 
   return beamformingVector;
 }
@@ -99,7 +99,7 @@ PhasedArrayModel::GetBeamformingVector(Angles a) const
 
 
 PhasedArrayModel::ComplexVector
-PhasedArrayModel::GetSteeringVector(Angles a) const
+PhasedArrayModel::GetSteeringVector (Angles a) const
 {
   NS_LOG_FUNCTION (this << a);
   ComplexVector steeringVector;
@@ -125,7 +125,7 @@ PhasedArrayModel::SetAntennaElement (Ptr<AntennaModel> antennaElement)
 
 
 Ptr<const AntennaModel>
-PhasedArrayModel::GetAntennaElement() const
+PhasedArrayModel::GetAntennaElement () const
 {
   NS_LOG_FUNCTION (this);
   return m_antennaElement;
@@ -133,4 +133,4 @@ PhasedArrayModel::GetAntennaElement() const
 
 
 } /* namespace ns3 */
- 
+

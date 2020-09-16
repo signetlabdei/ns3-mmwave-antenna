@@ -17,7 +17,6 @@ namespace ns3 {
 class PhasedArrayModel : public Object
 {
 public:
-
   /**
    * Constructor
    */
@@ -84,15 +83,15 @@ public:
    */
   ComplexVector GetBeamformingVector (void) const;
 
-  
+
   /**
    * Returns the beamforming vector that points towards the specified position
    * \param a the beamforming angle
    * \return the beamforming vector
    */
   ComplexVector GetBeamformingVector (Angles a) const;
-  
-  
+
+
   /**
    * Returns the steering vector that points toward the specified position
    * \param a the steering angle
@@ -115,9 +114,8 @@ public:
   Ptr<const AntennaModel> GetAntennaElement (void) const;
 
 protected:
-  
-  static double ComputeNorm(const ComplexVector &vector);
-  
+  static double ComputeNorm (const ComplexVector &vector);
+
   ComplexVector m_beamformingVector; //!< the beamforming vector in use
   Ptr<AntennaModel> m_antennaElement; //!< the model of the antenna element in use
 

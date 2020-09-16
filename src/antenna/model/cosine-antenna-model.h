@@ -28,8 +28,8 @@
 namespace ns3 {
 
 /**
- * 
- * \brief Cosine Antenna Model 
+ *
+ * \brief Cosine Antenna Model
  *
  * This class implements the cosine model as described in:
  *
@@ -41,7 +41,6 @@ namespace ns3 {
 class CosineAntennaModel : public AntennaModel
 {
 public:
-
   // inherited from Object
   static TypeId GetTypeId ();
 
@@ -58,15 +57,14 @@ public:
   double GetOrientation (void) const;
 
 private:
+  static double GetExponentFromBeamwidth (double beamwidthRadians);
 
-  static double GetExponentFromBeamwidth(double beamwidthRadians);
-  
-  double m_verticalexponent; 
+  double m_verticalexponent;
 
-  double m_horizontalexponent; 
-  
+  double m_horizontalexponent;
+
   double m_verticalBeamwidthRadians;
-  
+
   double m_horizontalBeamwidthRadians;
 
   double m_orientationRadians;
