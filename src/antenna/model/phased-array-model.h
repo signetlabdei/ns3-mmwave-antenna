@@ -71,13 +71,6 @@ public:
 
 
   /**
-   * Sets the beamforming vector to point towards the specified position
-   * \param beamformingVector the beamforming vector
-   */
-  void SetBeamformingVector (Angles a);
-
-
-  /**
    * Returns the beamforming vector that is currently being used
    * \return the current beamforming vector
    */

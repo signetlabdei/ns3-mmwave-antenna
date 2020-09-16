@@ -138,8 +138,6 @@ MmWaveDftBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice,
 {
   NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
 
-  PhasedArrayModel::ComplexVector antennaWeights;
-
   // retrieve the position of the two devices
   Ptr<MobilityModel> mobility = m_device->GetNode ()->GetObject<MobilityModel> ();
   Vector aPos = mobility->GetPosition ();
@@ -151,30 +149,8 @@ MmWaveDftBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice,
   // compute the azimuth and the elevation angles
   Angles completeAngle (bPos,aPos);
 
-  double hAngleRadian = fmod (completeAngle.phi, 2.0 * M_PI); // the azimuth angle
-  if (hAngleRadian < 0)
-  {
-    hAngleRadian += 2.0 * M_PI;     
-  } 
-  double vAngleRadian = completeAngle.theta; // the elevation angle
-
-  // retrieve the number of antenna elements
-  uint32_t totNoArrayElements = m_antenna->GetNumberOfElements ();
-
-  // the total power is divided equally among the antenna elements
-  double power = 1 / sqrt (totNoArrayElements);
-
-  // compute the antenna weights
-  for (uint32_t ind = 0; ind < totNoArrayElements; ind++)
-    {
-      Vector loc = m_antenna->GetElementLocation (ind);
-      double phase = -2 * M_PI * (sin (vAngleRadian) * cos (hAngleRadian) * loc.x
-                                  + sin (vAngleRadian) * sin (hAngleRadian) * loc.y
-                                  + cos (vAngleRadian) * loc.z);
-      antennaWeights.push_back (exp (std::complex<double> (0, phase)) * power);
-    }
-
   // configure the antenna to use the new beamforming vector
+  PhasedArrayModel::ComplexVector antennaWeights = m_antenna->GetBeamformingVector (completeAngle);
   m_antenna->SetBeamformingVector (antennaWeights);
 }
 

@@ -415,30 +415,13 @@ ThreeGppSpectrumPropagationLossModelTest::~ThreeGppSpectrumPropagationLossModelT
 void
 ThreeGppSpectrumPropagationLossModelTest::DoBeamforming (Ptr<NetDevice> thisDevice, Ptr<PhasedArrayModel> thisAntenna, Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna)
 {
-  PhasedArrayModel::ComplexVector antennaWeights;
-
   Vector aPos = thisDevice->GetNode ()->GetObject<MobilityModel> ()->GetPosition ();
   Vector bPos = otherDevice->GetNode ()->GetObject<MobilityModel> ()->GetPosition ();
 
   // compute the azimuth and the elevation angles
   Angles completeAngle (bPos,aPos);
 
-  completeAngle.NormalizeAngles();
-  double hAngleRadian = completeAngle.phi;
-  double vAngleRadian = completeAngle.theta; // the elevation angle
-
-  int totNoArrayElements = thisAntenna->GetNumberOfElements ();
-  double power = 1 / sqrt (totNoArrayElements);
-
-  for (int ind = 0; ind < totNoArrayElements; ind++)
-    {
-      Vector loc = thisAntenna->GetElementLocation (ind);
-      double phase = -2 * M_PI * (sin (vAngleRadian) * cos (hAngleRadian) * loc.x
-                                  + sin (vAngleRadian) * sin (hAngleRadian) * loc.y
-                                  + cos (vAngleRadian) * loc.z);
-      antennaWeights.push_back (exp (std::complex<double> (0, phase)) * power);
-    }
-
+  PhasedArrayModel::ComplexVector antennaWeights = thisAntenna->GetBeamformingVector (completeAngle);
   thisAntenna->SetBeamformingVector (antennaWeights);
 }
 

@@ -49,14 +49,6 @@ PhasedArrayModel::SetBeamformingVector (const ComplexVector &beamformingVector)
 }
 
 
-void
-PhasedArrayModel::SetBeamformingVector (Angles a)
-{
-  NS_LOG_FUNCTION (this << a);
-  m_beamformingVector = GetSteeringVector (a);
-}
-
-
 PhasedArrayModel::ComplexVector
 PhasedArrayModel::GetBeamformingVector () const
 {
