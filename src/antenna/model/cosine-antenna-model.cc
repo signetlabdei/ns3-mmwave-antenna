@@ -70,7 +70,7 @@ CosineAntennaModel::GetTypeId ()
 
 
 double
-CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians) const
+CosineAntennaModel::GetExponentFromBeamwidth (double beamwidthRadians)
 {
   double exponent = 0;
   if (!(std::isinf(beamwidthRadians)))
@@ -84,6 +84,7 @@ CosineAntennaModel::GetExponentFromBeamwidth(double beamwidthRadians) const
 void 
 CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 {
+  NS_LOG_FUNCTION (this << verticalBeamwidthDegrees);
   NS_ASSERT_MSG (verticalBeamwidthDegrees > 0, "Beamwidth must be positive");  
   
   if (std::isinf(verticalBeamwidthDegrees))
@@ -102,6 +103,7 @@ CosineAntennaModel::SetVerticalBeamwidth (double verticalBeamwidthDegrees)
 void 
 CosineAntennaModel::SetHorizontalBeamwidth (double horizontalBeamwidthDegrees)
 {
+  NS_LOG_FUNCTION (this << horizontalBeamwidthDegrees);
   NS_ASSERT_MSG (horizontalBeamwidthDegrees > 0, "Beamwidth must be positive");
     
   if (std::isinf(horizontalBeamwidthDegrees))

@@ -10,6 +10,7 @@ def build(bld):
         'model/isotropic-antenna-model.cc',
         'model/cosine-antenna-model.cc',
         'model/parabolic-antenna-model.cc',
+        'model/three-gpp-antenna-model.cc',
         'model/phased-array-model.cc',
         'model/uniform-planar-array.cc',
         ]
@@ -37,6 +38,7 @@ def build(bld):
         'model/isotropic-antenna-model.h',
         'model/cosine-antenna-model.h',
         'model/parabolic-antenna-model.h',
+        'model/three-gpp-antenna-model.h',
         'model/phased-array-model.h',
         'model/uniform-planar-array.h',
         ]

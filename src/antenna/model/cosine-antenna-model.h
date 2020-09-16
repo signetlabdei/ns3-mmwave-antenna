@@ -33,12 +33,10 @@ namespace ns3 {
  *
  * This class implements the cosine model as described in:
  *
- * Li Chunjian, "Efficient Antenna Patterns for Three-Sector WCDMA Systems"
+ * Cosine Antenna Element, Mathworks, Phased Array System Toolbox (Sep. 2020)
+ * Available online: https://www.mathworks.com/help/phased/ug/cosine-antenna-element.html
  *
- * Note that only the element factor of the above model is
- * considered. Also, an additional constant gain is added to model the
- * radiation pattern on the vertical plane (to account for the fact
- * that the elevation angle is not included in the model).
+ * Note: an extra settable gain is added to the original model, to improve its generality.
  */
 class CosineAntennaModel : public AntennaModel
 {
@@ -61,12 +59,8 @@ public:
 
 private:
 
-  double GetExponentFromBeamwidth(double beamwidthRadians) const;
-    
-   /**
-   * this is the variable "n" in the paper by Chunjian
-   * 
-   */
+  static double GetExponentFromBeamwidth(double beamwidthRadians);
+  
   double m_verticalexponent; 
 
   double m_horizontalexponent; 
