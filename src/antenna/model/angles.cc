@@ -41,7 +41,7 @@ double RadiansToDegrees (double radians)
 
 std::ostream& operator<< (std::ostream& os, const Angles& a)
 {
-  os << "(" << RadiansToDegrees (a.phi) << ", " << RadiansToDegrees (a.theta) << ")";
+  os << "(" << a.phi << ", " << a.theta << ")";
   return os;
 }
 
@@ -56,27 +56,30 @@ std::istream &operator >> (std::istream &is, Angles &a)
   return is;
 }
 
+
 Angles::Angles ()
   : phi (0),
-  theta (0)
+    theta (0)
 {
 }
+
 
 Angles::Angles (double p, double t)
   : phi (p),
-  theta (t)
+    theta (t)
 {
 }
 
+
 Angles::Angles (Vector v)
   : phi (std::atan2 (v.y, v.x)),
-  theta (std::acos (v.z / v.GetLength ()))
+    theta (std::acos (v.z / v.GetLength ()))
 {
 }
 
 Angles::Angles (Vector v, Vector o)
   : phi (std::atan2 (v.y - o.y, v.x - o.x)),
-  theta (std::acos ((v.z - o.z) / CalculateDistance (v, o)))
+    theta (std::acos ((v.z - o.z) / CalculateDistance (v, o)))
 {
 }
 

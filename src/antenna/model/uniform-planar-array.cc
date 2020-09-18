@@ -70,7 +70,6 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
 {
   NS_LOG_FUNCTION (this << a);
 
-
   // normalize phi (if needed)
   a.NormalizeAngles ();
 
@@ -88,7 +87,6 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   // eq. 7.3-4 in 3GPP TR 38.901
   // NOTE we assume vertical polarization, hence the field pattern in the
   // horizontal polarization is 0
-
   double aPrimeDb = m_antennaElement->GetGainDb (aPrime);
   double fieldThetaPrime = pow (10, aPrimeDb / 20); // convert to linear magnitude
 
@@ -96,7 +94,6 @@ UniformPlanarArray::GetElementFieldPattern (Angles a) const
   // angle (gamma) is 0
   double psi = std::arg (std::complex<double> (cos (m_beta) * sin (a.theta) - sin (m_beta) * cos (a.theta) * cos (a.phi - m_alpha), sin (m_beta) * sin (a.phi - m_alpha)));
   NS_LOG_DEBUG ("psi " << psi);
-
 
   // convert the antenna element field pattern to GCS using eq. 7.1-11
   // in 3GPP TR 38.901

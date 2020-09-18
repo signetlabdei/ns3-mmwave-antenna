@@ -46,13 +46,13 @@ CosineAntennaModel::GetTypeId ()
                    DoubleValue (std::numeric_limits<double>::infinity ()),
                    MakeDoubleAccessor (&CosineAntennaModel::SetVerticalBeamwidth,
                                        &CosineAntennaModel::GetVerticalBeamwidth),
-                   MakeDoubleChecker<double> ())
+                   MakeDoubleChecker<double> (0.0))
     .AddAttribute ("HorizontalBeamwidth",
                    "The 3dB horizontal beamwidth (degrees)",
                    DoubleValue (60),
                    MakeDoubleAccessor (&CosineAntennaModel::SetHorizontalBeamwidth,
                                        &CosineAntennaModel::GetHorizontalBeamwidth),
-                   MakeDoubleChecker<double> ())
+                   MakeDoubleChecker<double> (0.0))
     .AddAttribute ("Orientation",
                    "The angle (degrees) that expresses the orientation of the antenna on the x-y plane relative to the x axis",
                    DoubleValue (0.0),
@@ -63,7 +63,7 @@ CosineAntennaModel::GetTypeId ()
                    "The gain (dB) at the antenna boresight (the direction of maximum gain)",
                    DoubleValue (0.0),
                    MakeDoubleAccessor (&CosineAntennaModel::m_maxGain),
-                   MakeDoubleChecker<double> ())
+                   MakeDoubleChecker<double> (0.0))
   ;
   return tid;
 }
