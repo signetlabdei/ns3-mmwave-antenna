@@ -27,7 +27,7 @@ namespace mmwave {
 
 
 /**
- *
+ * 
  */
 class FileBeamformingCodebook : public BeamformingCodebook
 {
@@ -56,16 +56,11 @@ private:
    *
    */
   virtual void DoInitialize (void) override;
-
+  
   /**
    *
    */
   void ImportCodebookFromFile (void);
-
-  /**
-   *
-   */
-  void ValidateAntenna (std::ifstream &cbFile) const;
 
   /**
    *

@@ -18,7 +18,6 @@
 
 #include "ns3/beamforming-codebook.h"
 #include <ns3/log.h>
-#include <ns3/pointer.h>
 
 namespace ns3 {
 
@@ -35,11 +34,6 @@ BeamformingCodebook::GetTypeId ()
     tid =
     TypeId ("ns3::BeamformingCodebook")
     .SetParent<Object> ()
-    .AddAttribute ("Array",
-                   "The PhasedArrayModel for which the codebook is created",
-                   PointerValue (),
-                   MakePointerAccessor (&BeamformingCodebook::m_array),
-                   MakePointerChecker<PhasedArrayModel> ())
   ;
   return tid;
 }
