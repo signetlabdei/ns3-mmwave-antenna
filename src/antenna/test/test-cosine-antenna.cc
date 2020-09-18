@@ -166,7 +166,13 @@ CosineAntennaModelTestSuite::CosineAntennaModelTestSuite ()
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (54.677), DegreesToRadians (90)),       150,        -150,        0,           -20,     EQUAL), TestCase::QUICK);
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians   (30),   DegreesToRadians (90)),       150,        -150,        0,           -20,  LESSTHAN), TestCase::QUICK);
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians   (20),   DegreesToRadians (90)),       150,        -150,        0,           -20,  LESSTHAN), TestCase::QUICK);
-
+  // test flat beam, with beamwidth=360 deg
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians    (0),   DegreesToRadians (90)),       360,           0,        0,             0,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians  (180),   DegreesToRadians (90)),       360,           0,        0,             0,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians (-180),   DegreesToRadians (90)),       360,           0,        0,             0,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians    (0),   DegreesToRadians  (0)),       360,           0,        0,             0,     EQUAL), TestCase::QUICK);
+  AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians    (0),   DegreesToRadians(180)),       360,           0,        0,             0,     EQUAL), TestCase::QUICK);
+  
   // test maxGain
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians    (0),   DegreesToRadians (90)),        60,           0,       10,            10,     EQUAL), TestCase::QUICK);
   AddTestCase (new CosineAntennaModelTestCase (Angles (DegreesToRadians   (30),   DegreesToRadians (90)),        60,           0,       22,            19,     EQUAL), TestCase::QUICK);

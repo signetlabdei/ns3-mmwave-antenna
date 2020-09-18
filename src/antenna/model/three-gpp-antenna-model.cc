@@ -39,33 +39,22 @@ ThreeGppAntennaModel::GetTypeId ()
     .SetParent<AntennaModel> ()
     .SetGroupName ("Antenna")
     .AddConstructor<ThreeGppAntennaModel> ()
-    .AddAttribute ("VerticalBeamwidth",
-                   "The 3 dB vertical beamwidth (degrees)",
-                   DoubleValue (65),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_verticalBeamwidthDegrees),
-                   MakeDoubleChecker<double> (0.0))
-    .AddAttribute ("HorizontalBeamwidth",
-                   "The 3 dB horizontal beamwidth (degrees)",
-                   DoubleValue (65),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_horizontalBeamwidthDegrees),
-                   MakeDoubleChecker<double> (0.0))
-    .AddAttribute ("MaxAttenuation",
-                   "The maximum attenuation (dB) of the antenna radiation pattern.",
-                   DoubleValue (30.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_aMax),
-                   MakeDoubleChecker<double> (0.0))
-    .AddAttribute ("VerticalSideLobeAttenuation",
-                   "The attenuation (dB) of the side lobe in the vertical direction",
-                   DoubleValue (30.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_slaV),
-                   MakeDoubleChecker<double> (0.0))
-    .AddAttribute ("MaxDirectionalGain",
-                   "The maximum gain (dB) of the antenna radiation pattern.",
-                   DoubleValue (8.0),
-                   MakeDoubleAccessor (&ThreeGppAntennaModel::m_geMax),
-                   MakeDoubleChecker<double> (0.0))
   ;
   return tid;
+}
+
+ThreeGppAntennaModel::ThreeGppAntennaModel (void)
+  : m_verticalBeamwidthDegrees {65},
+  m_horizontalBeamwidthDegrees {65},
+  m_aMax {30},
+  m_slaV {30},
+  m_geMax {8.0}
+{
+}
+
+
+ThreeGppAntennaModel::~ThreeGppAntennaModel (void)
+{
 }
 
 

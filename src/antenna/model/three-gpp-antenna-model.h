@@ -35,25 +35,51 @@ namespace ns3 {
 class ThreeGppAntennaModel : public AntennaModel
 {
 public:
+  ThreeGppAntennaModel (void);
+  virtual ~ThreeGppAntennaModel (void) override;
+
   // inherited from Object
   static TypeId GetTypeId ();
 
   // inherited from AntennaModel
   virtual double GetGainDb (Angles a);
 
-  // attribute getters/setters
+  /**
+   * Get the vertical beamwidth of the antenna element.
+   * \return the vertical beamwidth in degrees
+   */
   double GetVerticalBeamwidth () const;
+
+  /**
+   * Get the horizontal beamwidth of the antenna element.
+   * \return the horizontal beamwidth in degrees
+   */
   double GetHorizontalBeamwidth () const;
+
+  /**
+   * Get the side-lobe attenuation in the vertical direction of the antenna element.
+   * \return side-lobe attenuation in the vertical direction in dB
+   */
   double GetSlaV () const;
+
+  /**
+   * Get the naximum attenuation of the antenna element.
+   * \return the naximum attenuation in dB
+   */
   double GetMaxAttenuation () const;
+
+  /**
+   * Get the maximum directional gain of the antenna element.
+   * \return the maximum directional gain in dBi
+   */
   double GetAntennaElementGain () const;
 
 private:
-  double m_verticalBeamwidthDegrees;
-  double m_horizontalBeamwidthDegrees;
-  double m_aMax;
-  double m_slaV;
-  double m_geMax;
+  double m_verticalBeamwidthDegrees;    //!< beamwidth in the vertical direction (\theta_{3dB})
+  double m_horizontalBeamwidthDegrees;  //!< beamwidth in the horizontal direction (\phi_{3dB})
+  double m_aMax;                        //!< maximum attenuation (A_{max})
+  double m_slaV;                        //!< side-lobe attenuation in the vertical direction (SLA_V)
+  double m_geMax;                       //!< maximum directional gain of the antenna element (G_{E,max})
 };
 
 
