@@ -22,10 +22,6 @@
 #include "ns3/object.h"
 #include "ns3/matrix-based-channel-model.h"
 #include "ns3/beamforming-codebook.h"
-#include "ns3/spectrum-propagation-loss-model.h"
-#include "ns3/spectrum-value.h"
-#include "ns3/object-factory.h"
-#include "ns3/simulator.h"
 #include <map>
 
 namespace ns3 {
@@ -222,14 +218,9 @@ public:
   static TypeId GetTypeId (void);
 
   /**
-   *
+   * 
    */
-  void SetBeamformingCodebookFactory (ObjectFactory factory);
-
-  /**
-   *
-   */
-  void SetMmWavePhyMacCommon (Ptr<MmWavePhyMacCommon> mwpmc);
+  void SetConfigurationFilePath (std::string configFilePath);
 
   /**
    * Initialize() implementation.
@@ -253,25 +244,19 @@ public:
   void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) override;
 
 private:
-  using Matrix2D = std::vector<std::vector<double> >;
+  using Matrix2D = std::vector<std::vector<double>>;
   /**
-   *
+   * 
    */
-  Matrix2D ComputeBeamformingCodebookMatrix (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) const;
+  Matrix2D ComputeBeamformingCodebookMatrix (Ptr<PhasedArrayModel> otherAntenna) const;
 
-  ObjectFactory m_beamformingCodebookFactory;
-  Ptr<SpectrumPropagationLossModel> m_splm; //!<
-  Ptr<SpectrumValue> m_txPsd;
-  
-  /* struct used to store the selected beam pairs */
-  struct Entry
-  {
-    uint32_t thisCbIdx; //!< index of the codeword for this antenna  
-    uint32_t otherCbIdx; //!< index of the codeword for the other antenna
-    Time lastUpdate; //!< time stamp
-  };
-  std::map<Ptr<PhasedArrayModel>, Entry> m_codebookIdsCache; //!< stores the selected beam pairs 
-  Time m_updatePeriod; //!< defines the refresh period for updating the beam pairs
+  /**
+   * 
+   */
+  static void ReadConfigurationFile (void);
+
+  static std::string m_configurationFilePath;
+  static std::map<std::string, std::string> m_antennaIdToPath; //!< 
 };
 
 
