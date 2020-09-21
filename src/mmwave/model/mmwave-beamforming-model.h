@@ -21,6 +21,7 @@
 
 #include "ns3/object.h"
 #include "ns3/matrix-based-channel-model.h"
+#include "ns3/beamforming-codebook.h"
 #include <map>
 
 namespace ns3 {
@@ -189,6 +190,72 @@ private:
   uint32_t m_maxIterations; //!< Maximum number of iterations to numerically approximate the SVD decomposition
   double m_tolerance; //!< Tolerance to numerically approximate the SVD decomposition
   bool m_useCache; //!< Cache the channel matrix whenever possible. NOTE: the SVD decomposition can be extremely computationally expensive, caching is suggested.
+};
+
+
+/**
+ * This class extends the MmWaveBeamformingModel interface.
+ * It implements a codebook-based beamforming algorithm.
+ */
+class MmWaveCodebookBeamforming : public MmWaveBeamformingModel
+{
+public:
+  /**
+   * Constructor
+   */
+  MmWaveCodebookBeamforming ();
+
+  /**
+   * Destructor
+   */
+  virtual ~MmWaveCodebookBeamforming () override;
+
+  /**
+   * Returns the object type id
+   * \return the type id
+   */
+  static TypeId GetTypeId (void);
+
+  /**
+   * 
+   */
+  void SetConfigurationFilePath (std::string configFilePath);
+
+  /**
+   * Initialize() implementation.
+   *
+   * This method is called only once by Initialize(). If the user
+   * calls Initialize() multiple times, DoInitialize() is called only the
+   * first time.
+   *
+   * Subclasses are expected to override this method and chain up
+   * to their parent's implementation once they are done. It is
+   * safe to call GetObject() and AggregateObject() from within this method.
+   */
+  void DoInitialize (void) override;
+
+  /**
+   * Computes the beamforming vector to communicate with the target device and antenna
+   * and configures the antenna
+   * \param otherDevice the target device
+   * \param otherAntenna the target antenna of otherDevice
+   */
+  void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) override;
+
+private:
+  using Matrix2D = std::vector<std::vector<double>>;
+  /**
+   * 
+   */
+  Matrix2D ComputeBeamformingCodebookMatrix (Ptr<PhasedArrayModel> otherAntenna) const;
+
+  /**
+   * 
+   */
+  static void ReadConfigurationFile (void);
+
+  static std::string m_configurationFilePath;
+  static std::map<std::string, std::string> m_antennaIdToPath; //!< 
 };
 
 

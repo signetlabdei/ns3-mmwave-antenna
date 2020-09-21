@@ -21,13 +21,19 @@
 #include "ns3/mobility-model.h"
 #include "ns3/matrix-based-channel-model.h"
 #include "ns3/channel-condition-model.h"
+#include "ns3/file-beamforming-codebook.h"
+#include "ns3/object-factory.h"
 #include "ns3/pointer.h"
 #include "ns3/uinteger.h"
 #include "ns3/double.h"
 #include "ns3/boolean.h"
+#include "ns3/string.h"
 #include "ns3/net-device.h"
 #include "ns3/node.h"
 #include "ns3/log.h"
+#include <fstream>
+#include <algorithm>
+
 
 namespace ns3 {
 
@@ -437,6 +443,171 @@ MmWaveSvdBeamforming::GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVec
 
   return antennaWeights;
 }
+
+/*----------------------------------------------------------------------------*/
+
+NS_OBJECT_ENSURE_REGISTERED (MmWaveCodebookBeamforming);
+
+// define static members
+std::string MmWaveCodebookBeamforming::m_configurationFilePath;
+std::map<std::string, std::string> MmWaveCodebookBeamforming::m_antennaIdToPath;
+
+TypeId
+MmWaveCodebookBeamforming::GetTypeId ()
+{
+  static TypeId
+    tid =
+    TypeId ("ns3::MmWaveCodebookBeamforming")
+    .SetParent<MmWaveBeamformingModel> ()
+    .AddConstructor<MmWaveCodebookBeamforming> ()
+    .AddAttribute ("ConfigurationFile",
+                   "The path to the codebook configuration file.",
+                   StringValue (""),
+                   MakeStringAccessor (&MmWaveCodebookBeamforming::SetConfigurationFilePath),
+                   MakeStringChecker ())
+  ;
+  return tid;
+}
+
+
+MmWaveCodebookBeamforming::MmWaveCodebookBeamforming ()
+{
+  NS_LOG_FUNCTION (this);
+}
+
+
+MmWaveCodebookBeamforming::~MmWaveCodebookBeamforming ()
+{
+}
+
+
+void
+MmWaveCodebookBeamforming::SetConfigurationFilePath (std::string configFilePath)
+{
+  MmWaveCodebookBeamforming::m_configurationFilePath = configFilePath;
+}
+
+
+void
+MmWaveCodebookBeamforming::DoInitialize (void)
+{
+  NS_LOG_FUNCTION (this);
+
+  // setup static variables
+  if (MmWaveCodebookBeamforming::m_antennaIdToPath.empty ())
+  {
+    ReadConfigurationFile ();
+  }
+
+  // configure the beamforming codebook for the given antenna
+  std::string antennaId {"TODO"}; // TODO find a way to define and get the antennaId
+
+  auto it = MmWaveCodebookBeamforming::m_antennaIdToPath.find (antennaId);
+  NS_ABORT_MSG_IF (it == MmWaveCodebookBeamforming::m_antennaIdToPath.end (), "Configuration not found for antennaId=" + antennaId);
+
+  Ptr<BeamformingCodebook> cb = CreateObjectWithAttributes<FileBeamformingCodebook> ("CodebookFilename", StringValue (it->second));
+  cb->Initialize ();
+  m_antenna->AggregateObject (cb);
+
+  // TODO what if SetAntenna is used?
+}
+
+
+void
+MmWaveCodebookBeamforming::ReadConfigurationFile (void)
+{
+  NS_LOG_FUNCTION_NOARGS ();
+  NS_ABORT_MSG_IF (MmWaveCodebookBeamforming::m_configurationFilePath.size () == 0,
+                   "The ConfigurationFile was not set");
+  
+  std::ifstream configFile {MmWaveCodebookBeamforming::m_configurationFilePath.c_str ()};
+  NS_ABORT_MSG_IF (!configFile.good (), MmWaveCodebookBeamforming::m_configurationFilePath + " not found");
+
+  std::string line {};
+  std::string token {};
+  while (std::getline (configFile, line))
+    {
+      // lines with CSV for each config ID
+      std::vector<std::string> tokens;
+      std::stringstream ss(line);
+      while (std::getline (ss, token, ',') &&
+             tokens.size() <= 2)
+        {
+          tokens.push_back (token);
+        }
+
+      NS_ABORT_MSG_IF (tokens.size () != 2, "Invalid configuration file: " <<
+                       "each line should contain a configuration ID and a file path separated by a comma");
+
+      MmWaveCodebookBeamforming::m_antennaIdToPath.insert (std::pair<std::string, std::string> (tokens[0], tokens[1]));
+    }
+
+  NS_ABORT_MSG_IF (MmWaveCodebookBeamforming::m_antennaIdToPath.size () == 0, "Configuration file is empty or invalid");
+  NS_LOG_LOGIC ("Configuration file correctly imported with " << MmWaveCodebookBeamforming::m_antennaIdToPath.size () << " element(s)");
+}
+
+
+void
+MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna)
+{
+  NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
+
+  MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherAntenna);
+
+  // find best beam couple
+  std::vector<double> maxPowers;
+  maxPowers.reserve (powerMatrix.size ());
+  std::vector<uint32_t> argMaxPowers;
+  argMaxPowers.reserve (powerMatrix.size ());
+
+  for (uint32_t i = 0; i < powerMatrix.size (); i++)
+    {
+      auto argMaxIt = std::max_element (powerMatrix[i].begin (), powerMatrix[i].end ());
+      argMaxPowers[i] = std::distance (powerMatrix[i].begin (), argMaxIt);
+      maxPowers[i] = *argMaxIt;
+    }
+
+  auto argMaxIt = std::max_element (maxPowers.begin (), maxPowers.end ());
+  uint32_t thisCbIdx = std::distance (maxPowers.begin (), argMaxIt);
+  uint32_t otherCbIdx = argMaxPowers[thisCbIdx];
+
+  // set best BF codewords for both devices
+  // TODO the whole process is done twice, it should be cached (?)
+  Ptr<BeamformingCodebook> thisCodebook = m_antenna->GetObject<BeamformingCodebook> ();
+  Ptr<BeamformingCodebook> otherCodebook = otherAntenna->GetObject<BeamformingCodebook> ();
+
+  PhasedArrayModel::ComplexVector thisAntennaWeights = thisCodebook->GetCodeword (thisCbIdx);
+  PhasedArrayModel::ComplexVector otherAntennaWeights = otherCodebook->GetCodeword (otherCbIdx);
+
+  m_antenna->SetBeamformingVector (thisAntennaWeights);
+  otherAntenna->SetBeamformingVector (otherAntennaWeights);
+}
+
+
+MmWaveCodebookBeamforming::Matrix2D
+MmWaveCodebookBeamforming::ComputeBeamformingCodebookMatrix (Ptr<PhasedArrayModel> otherAntenna) const
+{
+  NS_LOG_FUNCTION (this << otherAntenna);
+
+  Ptr<BeamformingCodebook> thisCodebook = m_antenna->GetObject<BeamformingCodebook> ();
+  Ptr<BeamformingCodebook> otherCodebook = otherAntenna->GetObject<BeamformingCodebook> ();
+
+  // obtain pointer to MmWaveSpectrumPhy
+
+  // init matrix
+  MmWaveCodebookBeamforming::Matrix2D matrix {};
+  matrix.resize (thisCodebook->GetCodebookSize ());
+  for (uint64_t i = 0; i < thisCodebook->GetCodebookSize (); i++)
+    {
+      matrix[i].reserve (otherCodebook->GetCodebookSize ());
+    }
+  NS_LOG_DEBUG ("Initialized matrix of size " << matrix.size () << "x" << matrix[0].size ());
+
+  // fill matrix
+
+  return matrix;
+}
+
 
 } // namespace mmwave
 } // namespace ns3
