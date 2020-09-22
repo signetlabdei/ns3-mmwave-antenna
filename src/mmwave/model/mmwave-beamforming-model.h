@@ -23,6 +23,7 @@
 #include "ns3/matrix-based-channel-model.h"
 #include "ns3/beamforming-codebook.h"
 #include "ns3/spectrum-propagation-loss-model.h"
+#include "ns3/spectrum-value.h"
 #include <map>
 
 namespace ns3 {
@@ -224,6 +225,11 @@ public:
   void SetConfigurationFilePath (std::string configFilePath);
 
   /**
+   * 
+   */
+  void SetMmWavePhyMacCommon (Ptr<MmWavePhyMacCommon> mwpmc);
+
+  /**
    * Initialize() implementation.
    *
    * This method is called only once by Initialize(). If the user
@@ -259,6 +265,7 @@ private:
   static std::string m_configurationFilePath;
   static std::map<std::string, std::string> m_antennaIdToPath; //!< 
   Ptr<SpectrumPropagationLossModel> m_splm; //!< 
+  Ptr<SpectrumValue> m_txPsd;
 };
 
 
