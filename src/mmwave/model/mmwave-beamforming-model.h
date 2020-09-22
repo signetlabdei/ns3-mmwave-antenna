@@ -22,6 +22,7 @@
 #include "ns3/object.h"
 #include "ns3/matrix-based-channel-model.h"
 #include "ns3/beamforming-codebook.h"
+#include "ns3/spectrum-propagation-loss-model.h"
 #include <map>
 
 namespace ns3 {
@@ -248,7 +249,7 @@ private:
   /**
    * 
    */
-  Matrix2D ComputeBeamformingCodebookMatrix (Ptr<PhasedArrayModel> otherAntenna) const;
+  Matrix2D ComputeBeamformingCodebookMatrix (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) const;
 
   /**
    * 
@@ -257,6 +258,7 @@ private:
 
   static std::string m_configurationFilePath;
   static std::map<std::string, std::string> m_antennaIdToPath; //!< 
+  Ptr<SpectrumPropagationLossModel> m_splm; //!< 
 };
 
 
