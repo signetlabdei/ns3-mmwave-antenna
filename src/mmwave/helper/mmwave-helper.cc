@@ -1481,6 +1481,7 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
       bfModel->SetAttributeFailSafe ("SpectrumPropagationLossModel", PointerValue (splm));
       bfModel->SetAttributeFailSafe ("ConfigurationFile", StringValue ("codebookConfigurationFile.csv")); // TODO make it configurable
+      bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
       bfModel->Initialize ();
       dlPhy->SetBeamformingModel (bfModel);
 
@@ -1693,6 +1694,7 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
       bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
       bfModel->SetAttributeFailSafe ("SpectrumPropagationLossModel", PointerValue (splm));
       bfModel->SetAttributeFailSafe ("ConfigurationFile", StringValue ("codebookConfigurationFile.csv")); // TODO make it configurable
+      bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
       bfModel->Initialize ();
       dlPhy->SetBeamformingModel (bfModel);
 
