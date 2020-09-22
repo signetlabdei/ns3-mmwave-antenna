@@ -465,6 +465,11 @@ MmWaveCodebookBeamforming::GetTypeId ()
                    StringValue (""),
                    MakeStringAccessor (&MmWaveCodebookBeamforming::SetConfigurationFilePath),
                    MakeStringChecker ())
+    .AddAttribute ("SpectrumPropagationLossModel",
+                   "Pointer to SpectrumPropagationLossModel",
+                   PointerValue (),
+                   MakePointerAccessor (&MmWaveCodebookBeamforming::m_splm),
+                   MakePointerChecker<SpectrumPropagationLossModel> ())
   ;
   return tid;
 }
@@ -485,6 +490,7 @@ void
 MmWaveCodebookBeamforming::SetConfigurationFilePath (std::string configFilePath)
 {
   MmWaveCodebookBeamforming::m_configurationFilePath = configFilePath;
+  ReadConfigurationFile ();
 }
 
 
@@ -493,11 +499,8 @@ MmWaveCodebookBeamforming::DoInitialize (void)
 {
   NS_LOG_FUNCTION (this);
 
-  // setup static variables
-  if (MmWaveCodebookBeamforming::m_antennaIdToPath.empty ())
-  {
-    ReadConfigurationFile ();
-  }
+  NS_ASSERT_MSG (MmWaveCodebookBeamforming::m_configurationFilePath.size () > 0,
+                 "The configuration file was not set properly");
 
   // configure the beamforming codebook for the given antenna
   std::string antennaId {"TODO"}; // TODO find a way to define and get the antennaId
@@ -517,8 +520,10 @@ void
 MmWaveCodebookBeamforming::ReadConfigurationFile (void)
 {
   NS_LOG_FUNCTION_NOARGS ();
-  NS_ABORT_MSG_IF (MmWaveCodebookBeamforming::m_configurationFilePath.size () == 0,
-                   "The ConfigurationFile was not set");
+  if (MmWaveCodebookBeamforming::m_configurationFilePath.size () == 0)
+  {
+    return;
+  }
   
   std::ifstream configFile {MmWaveCodebookBeamforming::m_configurationFilePath.c_str ()};
   NS_ABORT_MSG_IF (!configFile.good (), MmWaveCodebookBeamforming::m_configurationFilePath + " not found");
@@ -552,7 +557,7 @@ MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDe
 {
   NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
 
-  MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherAntenna);
+  MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherDevice, otherAntenna);
 
   // find best beam couple
   std::vector<double> maxPowers;
@@ -563,8 +568,8 @@ MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDe
   for (uint32_t i = 0; i < powerMatrix.size (); i++)
     {
       auto argMaxIt = std::max_element (powerMatrix[i].begin (), powerMatrix[i].end ());
-      argMaxPowers[i] = std::distance (powerMatrix[i].begin (), argMaxIt);
-      maxPowers[i] = *argMaxIt;
+      argMaxPowers.push_back (std::distance (powerMatrix[i].begin (), argMaxIt));
+      maxPowers.push_back (*argMaxIt);
     }
 
   auto argMaxIt = std::max_element (maxPowers.begin (), maxPowers.end ());
@@ -585,14 +590,15 @@ MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDe
 
 
 MmWaveCodebookBeamforming::Matrix2D
-MmWaveCodebookBeamforming::ComputeBeamformingCodebookMatrix (Ptr<PhasedArrayModel> otherAntenna) const
+MmWaveCodebookBeamforming::ComputeBeamformingCodebookMatrix (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) const
 {
-  NS_LOG_FUNCTION (this << otherAntenna);
+  NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
 
   Ptr<BeamformingCodebook> thisCodebook = m_antenna->GetObject<BeamformingCodebook> ();
   Ptr<BeamformingCodebook> otherCodebook = otherAntenna->GetObject<BeamformingCodebook> ();
 
-  // obtain pointer to MmWaveSpectrumPhy
+  Ptr<MobilityModel> thisMob = m_device->GetNode ()->GetObject<MobilityModel> ();
+  Ptr<MobilityModel> otherMob = otherDevice->GetNode ()->GetObject<MobilityModel> ();
 
   // init matrix
   MmWaveCodebookBeamforming::Matrix2D matrix {};
@@ -603,7 +609,29 @@ MmWaveCodebookBeamforming::ComputeBeamformingCodebookMatrix (Ptr<PhasedArrayMode
     }
   NS_LOG_DEBUG ("Initialized matrix of size " << matrix.size () << "x" << matrix[0].size ());
 
+  // save pre-existing bf vectors
+  auto thisOldBfVector = m_antenna->GetBeamformingVector ();
+  auto otherOldBfVector = otherAntenna->GetBeamformingVector ();
+
   // fill matrix
+  Ptr<SpectrumValue> txPsd {}; // TODO
+
+  for (uint32_t thisIdx = 0; thisIdx < thisCodebook->GetCodebookSize (); thisIdx++)
+  {
+    m_antenna->SetBeamformingVector (thisCodebook->GetCodeword (thisIdx));
+
+    for (uint32_t otherIdx = 0; otherIdx < otherCodebook->GetCodebookSize (); otherIdx++) 
+    {
+      otherAntenna->SetBeamformingVector (otherCodebook->GetCodeword (otherIdx));
+
+      // Ptr<SpectrumValue> rxPsd = m_splm->CalcRxPowerSpectralDensity (txPsd, thisMob, otherMob);
+      // matrix[thisIdx][otherIdx] = Sum (*rxPsd) / (rxPsd->GetSpectrumModel ()->GetNumBands ());
+    }
+  }
+
+  // reset to pre-existing bf vectors
+  m_antenna->SetBeamformingVector (thisOldBfVector);
+  otherAntenna->SetBeamformingVector (otherOldBfVector);
 
   return matrix;
 }
