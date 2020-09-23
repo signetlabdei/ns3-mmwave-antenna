@@ -1518,9 +1518,13 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       bfModel->SetAttributeFailSafe ("Antenna", PointerValue (antenna));
       bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
       bfModel->SetAttributeFailSafe ("SpectrumPropagationLossModel", PointerValue (splm));
-      bfModel->SetAttributeFailSafe ("ConfigurationFile", StringValue ("codebookConfigurationFile.csv")); // TODO make it configurable
       bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
+      if (m_bfModelFactory.GetTypeId () == MmWaveCodebookBeamforming::GetTypeId ())
+        {
+          DynamicCast<MmWaveCodebookBeamforming> (bfModel)->SetBeamformingCodebookFactory (m_ueBeamformingCodebookFactory);
+        }
       bfModel->Initialize ();
+
       dlPhy->SetBeamformingModel (bfModel);
 
       DynamicCast<MmWaveComponentCarrierUe> (it->second)->SetPhy (phy);
@@ -1732,9 +1736,13 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
       bfModel->SetAttributeFailSafe ("Antenna", PointerValue (antenna));
       bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
       bfModel->SetAttributeFailSafe ("SpectrumPropagationLossModel", PointerValue (splm));
-      bfModel->SetAttributeFailSafe ("ConfigurationFile", StringValue ("codebookConfigurationFile.csv")); // TODO make it configurable
       bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
+      if (m_bfModelFactory.GetTypeId () == MmWaveCodebookBeamforming::GetTypeId ())
+        {
+          DynamicCast<MmWaveCodebookBeamforming> (bfModel)->SetBeamformingCodebookFactory (m_ueBeamformingCodebookFactory);
+        }
       bfModel->Initialize ();
+
       dlPhy->SetBeamformingModel (bfModel);
 
       NS_LOG_DEBUG ("Create the mac");

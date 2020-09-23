@@ -450,9 +450,6 @@ MmWaveSvdBeamforming::GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVec
 
 NS_OBJECT_ENSURE_REGISTERED (MmWaveCodebookBeamforming);
 
-// define static members
-std::string MmWaveCodebookBeamforming::m_configurationFilePath;
-std::map<std::string, std::string> MmWaveCodebookBeamforming::m_antennaIdToPath;
 
 TypeId
 MmWaveCodebookBeamforming::GetTypeId ()
@@ -462,11 +459,6 @@ MmWaveCodebookBeamforming::GetTypeId ()
     TypeId ("ns3::MmWaveCodebookBeamforming")
     .SetParent<MmWaveBeamformingModel> ()
     .AddConstructor<MmWaveCodebookBeamforming> ()
-    .AddAttribute ("ConfigurationFile",
-                   "The path to the codebook configuration file.",
-                   StringValue (""),
-                   MakeStringAccessor (&MmWaveCodebookBeamforming::SetConfigurationFilePath),
-                   MakeStringChecker ())
     .AddAttribute ("SpectrumPropagationLossModel",
                    "Pointer to SpectrumPropagationLossModel",
                    PointerValue (),
@@ -494,11 +486,12 @@ MmWaveCodebookBeamforming::~MmWaveCodebookBeamforming ()
 
 
 void
-MmWaveCodebookBeamforming::SetConfigurationFilePath (std::string configFilePath)
+MmWaveCodebookBeamforming::SetBeamformingCodebookFactory (ObjectFactory factory)
 {
-  NS_LOG_FUNCTION (this << configFilePath);
-  MmWaveCodebookBeamforming::m_configurationFilePath = configFilePath;
-  ReadConfigurationFile ();
+  NS_LOG_FUNCTION (this << factory);
+  NS_ABORT_MSG_IF (!factory.GetTypeId ().IsChildOf (BeamformingCodebook::GetTypeId ()),
+                   "The given factory does not create BeamformingCodebook objects");
+  m_beamformingCodebookFactory = factory;
 }
 
 
@@ -521,56 +514,19 @@ MmWaveCodebookBeamforming::DoInitialize (void)
 {
   NS_LOG_FUNCTION (this);
 
-  NS_ASSERT_MSG (MmWaveCodebookBeamforming::m_configurationFilePath.size () > 0,
-                 "The configuration file was not set properly");
+  NS_ASSERT_MSG (m_beamformingCodebookFactory.IsTypeIdSet (),
+                 "The BeamformingCodebook factory is not initialized");
 
-  // configure the beamforming codebook for the given antenna
-  std::string antennaId {"TODO"}; // TODO find a way to define and get the antennaId
-
-  auto it = MmWaveCodebookBeamforming::m_antennaIdToPath.find (antennaId);
-  NS_ABORT_MSG_IF (it == MmWaveCodebookBeamforming::m_antennaIdToPath.end (), "Configuration not found for antennaId=" + antennaId);
-
-  Ptr<BeamformingCodebook> cb = CreateObjectWithAttributes<FileBeamformingCodebook> ("CodebookFilename", StringValue (it->second));
+  Ptr<BeamformingCodebook> cb = m_beamformingCodebookFactory.Create<BeamformingCodebook> ();
+  cb->SetAttribute ("Array", PointerValue (m_antenna));
   cb->Initialize ();
+
+  NS_ASSERT_MSG (cb->GetCodebookSize () > 0, "Empty codebook");
+  NS_ASSERT_MSG (cb->GetCodeword (0).size () == m_antenna->GetNumberOfElements (),
+                 "Inappropriate codebook for the given PhasedArrayModel");
   m_antenna->AggregateObject (cb);
 
   // TODO what if SetAntenna is used?
-}
-
-
-void
-MmWaveCodebookBeamforming::ReadConfigurationFile (void)
-{
-  NS_LOG_FUNCTION_NOARGS ();
-  if (MmWaveCodebookBeamforming::m_configurationFilePath.size () == 0)
-  {
-    return;
-  }
-  
-  std::ifstream configFile {MmWaveCodebookBeamforming::m_configurationFilePath.c_str ()};
-  NS_ABORT_MSG_IF (!configFile.good (), MmWaveCodebookBeamforming::m_configurationFilePath + " not found");
-
-  std::string line {};
-  std::string token {};
-  while (std::getline (configFile, line))
-    {
-      // lines with CSV for each config ID
-      std::vector<std::string> tokens;
-      std::stringstream ss(line);
-      while (std::getline (ss, token, ',') &&
-             tokens.size() <= 2)
-        {
-          tokens.push_back (token);
-        }
-
-      NS_ABORT_MSG_IF (tokens.size () != 2, "Invalid configuration file: " <<
-                       "each line should contain a configuration ID and a file path separated by a comma");
-
-      MmWaveCodebookBeamforming::m_antennaIdToPath.insert (std::pair<std::string, std::string> (tokens[0], tokens[1]));
-    }
-
-  NS_ABORT_MSG_IF (MmWaveCodebookBeamforming::m_antennaIdToPath.size () == 0, "Configuration file is empty or invalid");
-  NS_LOG_LOGIC ("Configuration file correctly imported with " << MmWaveCodebookBeamforming::m_antennaIdToPath.size () << " element(s)");
 }
 
 
@@ -582,13 +538,13 @@ MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDe
   MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherDevice, otherAntenna);
 
   for (uint32_t thisIdx = 0; thisIdx < powerMatrix.size (); thisIdx++)
-  {
-    for (uint32_t otherIdx = 0; otherIdx < powerMatrix[0].size (); otherIdx++) 
     {
-      std::cout << 10 * std::log10 (powerMatrix[thisIdx][otherIdx]) + 30 << ",";
+      for (uint32_t otherIdx = 0; otherIdx < powerMatrix[0].size (); otherIdx++)
+        {
+          std::cout << 10 * std::log10 (powerMatrix[thisIdx][otherIdx]) + 30 << ",";
+        }
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
-  }
 
   // find best beam couple
   std::vector<double> maxPowers;
@@ -648,18 +604,18 @@ MmWaveCodebookBeamforming::ComputeBeamformingCodebookMatrix (Ptr<NetDevice> othe
 
   // fill matrix
   for (uint32_t thisIdx = 0; thisIdx < thisCodebook->GetCodebookSize (); thisIdx++)
-  {
-    m_antenna->SetBeamformingVector (thisCodebook->GetCodeword (thisIdx));
-
-    for (uint32_t otherIdx = 0; otherIdx < otherCodebook->GetCodebookSize (); otherIdx++) 
     {
-      otherAntenna->SetBeamformingVector (otherCodebook->GetCodeword (otherIdx));
+      m_antenna->SetBeamformingVector (thisCodebook->GetCodeword (thisIdx));
 
-      Ptr<SpectrumValue> rxPsd = m_splm->CalcRxPowerSpectralDensity (m_txPsd, thisMob, otherMob);
-      double avgRxPsd = Sum (*rxPsd) / (rxPsd->GetSpectrumModel ()->GetNumBands ());
-      matrix[thisIdx].push_back (avgRxPsd);
+      for (uint32_t otherIdx = 0; otherIdx < otherCodebook->GetCodebookSize (); otherIdx++)
+        {
+          otherAntenna->SetBeamformingVector (otherCodebook->GetCodeword (otherIdx));
+
+          Ptr<SpectrumValue> rxPsd = m_splm->CalcRxPowerSpectralDensity (m_txPsd, thisMob, otherMob);
+          double avgRxPsd = Sum (*rxPsd) / (rxPsd->GetSpectrumModel ()->GetNumBands ());
+          matrix[thisIdx].push_back (avgRxPsd);
+        }
     }
-  }
   NS_LOG_DEBUG ("Matrix of size " << matrix.size () << "x" << matrix[0].size ());
 
   // reset to pre-existing bf vectors

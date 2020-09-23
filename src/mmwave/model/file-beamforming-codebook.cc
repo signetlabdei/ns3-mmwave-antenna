@@ -17,8 +17,12 @@
 */
 
 #include "ns3/file-beamforming-codebook.h"
+#include "ns3/uniform-planar-array.h"
 #include <ns3/log.h>
 #include <ns3/string.h>
+#include <ns3/double.h>
+#include <ns3/uinteger.h>
+#include <ns3/pointer.h>
 #include <stdlib.h>
 #include <fstream>
 #include <sstream>
@@ -92,6 +96,8 @@ FileBeamformingCodebook::ImportCodebookFromFile (void)
   std::ifstream cbFile {m_codebookFilename.c_str ()};
   NS_ABORT_MSG_IF (!cbFile.good (), m_codebookFilename + " not found");
 
+  ValidateAntenna (cbFile);
+
   std::string line{};
 
   // read codebook size
@@ -120,6 +126,74 @@ FileBeamformingCodebook::ImportCodebookFromFile (void)
   NS_ABORT_MSG_IF (m_codewords.size () != cbSize,
                    "Codebook of unexpected size: m_codewords.size ()=" << m_codewords.size () << ", cbSize=" << cbSize);
   NS_LOG_LOGIC ("Codebook successfully imported from " << m_codebookFilename);
+}
+
+
+void
+FileBeamformingCodebook::ValidateAntenna (std::ifstream &cbFile) const
+{
+  std::string arrayId;
+
+  // read PhasedArrayModel TypeId
+  std::getline (cbFile, arrayId);
+  // TODO find a way to do this check
+  NS_ABORT_MSG_IF (arrayId != m_array->GetInstanceTypeId ().GetName (),
+                   arrayId << " != " << m_array->GetInstanceTypeId ().GetName ());
+
+  std::string line {};
+  std::string attribute {};
+  std::string value {};
+
+  if (arrayId == UniformPlanarArray::GetTypeId ().GetName ())
+    {
+      for (uint8_t i = 0; i < 5; i++)
+        {
+          // split CSV line
+          std::getline (cbFile, line);
+          std::stringstream ss (line);
+          std::getline (ss, attribute, ',');
+          std::getline (ss, value, ',');
+
+          if (attribute == "AntennaHorizontalSpacing"
+              || attribute == "AntennaVerticalSpacing")
+            {
+              DoubleValue attrVal;
+              m_array->GetAttribute (attribute, attrVal);
+              double val {std::atof (value.c_str ())};
+
+              NS_ABORT_MSG_IF (val != attrVal.Get (),
+                               val << " != " << attrVal.Get ());
+            }
+          else if (attribute == "NumRows"
+                   || attribute == "NumColumns")
+            {
+              UintegerValue attrVal;
+              m_array->GetAttribute (attribute, attrVal);
+              uint64_t val {std::stoul (value)};
+
+              NS_ABORT_MSG_IF (val != attrVal.Get (),
+                               val << " != " << attrVal.Get ());
+            }
+          else if (attribute == "AntennaElement")
+            {
+              PointerValue attrVal;
+              m_array->GetAttribute (attribute, attrVal);
+              std::string val {value};
+
+              NS_ABORT_MSG_IF (val != attrVal.GetObject ()->GetInstanceTypeId ().GetName (),
+                               val << " != " << attrVal.GetObject ()->GetInstanceTypeId ().GetName ());
+            }
+          else
+            {
+              NS_FATAL_ERROR ("Attribute '" << attribute << "' not recognized");
+            }
+        }
+    }
+  else
+    {
+      NS_FATAL_ERROR ("arrayId '" << arrayId << "' not recognized");
+    }
+
 }
 
 
