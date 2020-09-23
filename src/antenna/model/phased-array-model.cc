@@ -45,6 +45,8 @@ void
 PhasedArrayModel::SetBeamformingVector (const ComplexVector &beamformingVector)
 {
   NS_LOG_FUNCTION (this);
+  NS_ASSERT_MSG (beamformingVector.size () != GetNumberOfElements (),
+                 beamformingVector.size () << " != " << GetNumberOfElements ());
   m_beamformingVector = beamformingVector;
 }
 
