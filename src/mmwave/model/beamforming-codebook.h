@@ -27,7 +27,7 @@ namespace mmwave {
 
 
 /**
- * 
+ *
  */
 class BeamformingCodebook : public Object
 {
@@ -52,6 +52,8 @@ public:
 
 protected:
   virtual void DoInitialize (void);
+
+  Ptr<PhasedArrayModel> m_array;
 };
 
 

@@ -24,6 +24,7 @@
 #include "ns3/beamforming-codebook.h"
 #include "ns3/spectrum-propagation-loss-model.h"
 #include "ns3/spectrum-value.h"
+#include "ns3/object-factory.h"
 #include <map>
 
 namespace ns3 {
@@ -220,12 +221,12 @@ public:
   static TypeId GetTypeId (void);
 
   /**
-   * 
+   *
    */
-  void SetConfigurationFilePath (std::string configFilePath);
+  void SetBeamformingCodebookFactory (ObjectFactory factory);
 
   /**
-   * 
+   *
    */
   void SetMmWavePhyMacCommon (Ptr<MmWavePhyMacCommon> mwpmc);
 
@@ -251,20 +252,14 @@ public:
   void SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) override;
 
 private:
-  using Matrix2D = std::vector<std::vector<double>>;
+  using Matrix2D = std::vector<std::vector<double> >;
   /**
-   * 
+   *
    */
   Matrix2D ComputeBeamformingCodebookMatrix (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna) const;
 
-  /**
-   * 
-   */
-  static void ReadConfigurationFile (void);
-
-  static std::string m_configurationFilePath;
-  static std::map<std::string, std::string> m_antennaIdToPath; //!< 
-  Ptr<SpectrumPropagationLossModel> m_splm; //!< 
+  ObjectFactory m_beamformingCodebookFactory;
+  Ptr<SpectrumPropagationLossModel> m_splm; //!<
   Ptr<SpectrumValue> m_txPsd;
 };
 
