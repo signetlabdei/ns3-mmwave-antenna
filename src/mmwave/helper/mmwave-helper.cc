@@ -65,6 +65,7 @@
 #include <ns3/three-gpp-propagation-loss-model.h>
 #include <ns3/mmwave-beamforming-model.h>
 #include <ns3/uniform-planar-array.h>
+#include <ns3/file-beamforming-codebook.h>
 
 
 namespace ns3 {
@@ -102,6 +103,9 @@ MmWaveHelper::MmWaveHelper (void)
   m_enbPhasedArrayModelFactory.SetTypeId (UniformPlanarArray::GetTypeId ());
   m_enbPhasedArrayModelFactory.Set ("NumColumns", UintegerValue (8));
   m_enbPhasedArrayModelFactory.Set ("NumRows", UintegerValue (8));
+
+  m_ueBeamformingCodebookFactory.SetTypeId (FileBeamformingCodebook::GetTypeId ());
+  m_enbBeamformingCodebookFactory.SetTypeId (FileBeamformingCodebook::GetTypeId ());
   
   m_bfModelFactory.SetTypeId (MmWaveSvdBeamforming::GetTypeId ());
 }
@@ -472,6 +476,26 @@ MmWaveHelper::SetLtePathlossModelType (std::string type)
 }
 
 void
+MmWaveHelper::SetUeBeamformingCodebookType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  if (!type.empty ())
+    {
+      m_ueBeamformingCodebookFactory = ObjectFactory (type);
+    }
+}
+
+void
+MmWaveHelper::SetEnbBeamformingCodebookType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  if (!type.empty ())
+    {
+      m_enbBeamformingCodebookFactory = ObjectFactory (type);
+    }
+}
+
+void
 MmWaveHelper::SetBeamformingModelType (std::string type)
 {
   NS_LOG_FUNCTION (this << type);
@@ -548,6 +572,20 @@ MmWaveHelper::SetMcUeNetDeviceAttribute (std::string name, const AttributeValue 
 {
   NS_LOG_FUNCTION (this);
   m_mcUeNetDeviceFactory.Set (name, value);
+}
+
+void
+MmWaveHelper::SetUeBeamformingCodebookAttribute (std::string name, const AttributeValue &value)
+{
+  NS_LOG_FUNCTION (this);
+  m_ueBeamformingCodebookFactory.Set (name, value);
+}
+
+void
+MmWaveHelper::SetEnbBeamformingCodebookAttribute (std::string name, const AttributeValue &value)
+{
+  NS_LOG_FUNCTION (this);
+  m_enbBeamformingCodebookFactory.Set (name, value);
 }
 
 void
@@ -1473,16 +1511,20 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       {
         threeGppSplm->AddDevice (device, antenna);
       }
+      auto channelModel = threeGppSplm->GetChannelModel ();
 
-      auto channelModel = threeGppSplm->GetChannelModel();
       Ptr<MmWaveBeamformingModel> bfModel = m_bfModelFactory.Create<MmWaveBeamformingModel> ();
       bfModel->SetAttributeFailSafe ("Device", PointerValue (device));
       bfModel->SetAttributeFailSafe ("Antenna", PointerValue (antenna));
       bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
       bfModel->SetAttributeFailSafe ("SpectrumPropagationLossModel", PointerValue (splm));
-      bfModel->SetAttributeFailSafe ("ConfigurationFile", StringValue ("codebookConfigurationFile.csv")); // TODO make it configurable
       bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
+      if (m_bfModelFactory.GetTypeId () == MmWaveCodebookBeamforming::GetTypeId ())
+        {
+          DynamicCast<MmWaveCodebookBeamforming> (bfModel)->SetBeamformingCodebookFactory (m_ueBeamformingCodebookFactory);
+        }
       bfModel->Initialize ();
+
       dlPhy->SetBeamformingModel (bfModel);
 
       DynamicCast<MmWaveComponentCarrierUe> (it->second)->SetPhy (phy);
@@ -1687,15 +1729,20 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
         threeGppSplm->AddDevice (device, antenna);
       }
       
-      auto channelModel = threeGppSplm->GetChannelModel();
+      auto channelModel = threeGppSplm->GetChannelModel ();
+
       Ptr<MmWaveBeamformingModel> bfModel = m_bfModelFactory.Create<MmWaveBeamformingModel> ();
       bfModel->SetAttributeFailSafe ("Device", PointerValue (device));
       bfModel->SetAttributeFailSafe ("Antenna", PointerValue (antenna));
       bfModel->SetAttributeFailSafe ("ChannelModel", PointerValue (channelModel));
       bfModel->SetAttributeFailSafe ("SpectrumPropagationLossModel", PointerValue (splm));
-      bfModel->SetAttributeFailSafe ("ConfigurationFile", StringValue ("codebookConfigurationFile.csv")); // TODO make it configurable
       bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
+      if (m_bfModelFactory.GetTypeId () == MmWaveCodebookBeamforming::GetTypeId ())
+        {
+          DynamicCast<MmWaveCodebookBeamforming> (bfModel)->SetBeamformingCodebookFactory (m_ueBeamformingCodebookFactory);
+        }
       bfModel->Initialize ();
+
       dlPhy->SetBeamformingModel (bfModel);
 
       NS_LOG_DEBUG ("Create the mac");
