@@ -1739,7 +1739,7 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
       bfModel->SetAttributeFailSafe ("MmWavePhyMacCommon", PointerValue (it->second->GetConfigurationParameters ()));
       if (m_bfModelFactory.GetTypeId () == MmWaveCodebookBeamforming::GetTypeId ())
         {
-          DynamicCast<MmWaveCodebookBeamforming> (bfModel)->SetBeamformingCodebookFactory (m_ueBeamformingCodebookFactory);
+          DynamicCast<MmWaveCodebookBeamforming> (bfModel)->SetBeamformingCodebookFactory (m_enbBeamformingCodebookFactory);
         }
       bfModel->Initialize ();
 
