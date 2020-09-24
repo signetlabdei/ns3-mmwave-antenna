@@ -27,7 +27,7 @@
 #include <fstream>
 #include "ns3/core-module.h"
 #include "ns3/qd-channel-model.h"
-#include "ns3/three-gpp-antenna-array-model.h"
+#include "ns3/uniform-planar-array.h"
 #include "ns3/three-gpp-spectrum-propagation-loss-model.h"
 #include "ns3/simple-net-device.h"
 #include "ns3/node-container.h"
@@ -49,13 +49,13 @@ uint32_t timeRes = 5; // Time resolution in milliseconds
 Ptr<QdChannelModel> qdChannel;
 Ptr<MobilityModel> txMob;
 Ptr<MobilityModel> rxMob;
-Ptr<ThreeGppAntennaArrayModel> txAntenna;
-Ptr<ThreeGppAntennaArrayModel> rxAntenna;
+Ptr<UniformPlanarArray> txAntenna;
+Ptr<UniformPlanarArray> rxAntenna;
 
-ThreeGppAntennaArrayModel::ComplexVector
+PhasedArrayModel::ComplexVector
 GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVector A, uint32_t nIter, double threshold)
 {
-  ThreeGppAntennaArrayModel::ComplexVector antennaWeights;
+  PhasedArrayModel::ComplexVector antennaWeights;
   uint16_t arraySize = A.size ();
   for (uint16_t eIndex = 0; eIndex < arraySize; eIndex++)
     {
@@ -67,7 +67,7 @@ GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVector A, uint32_t nIter,
   double diff = 1;
   while (iter < nIter && diff > threshold)
     {
-      ThreeGppAntennaArrayModel::ComplexVector antennaWeightsNew;
+      PhasedArrayModel::ComplexVector antennaWeightsNew;
 
       for (uint16_t row = 0; row < arraySize; row++)
         {
@@ -102,7 +102,7 @@ GetFirstEigenvector (MatrixBasedChannelModel::Complex2DVector A, uint32_t nIter,
   return antennaWeights;
 }
 
-std::pair<ThreeGppAntennaArrayModel::ComplexVector, ThreeGppAntennaArrayModel::ComplexVector>
+std::pair<PhasedArrayModel::ComplexVector, PhasedArrayModel::ComplexVector>
 ComputeSvdBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> params)
 {
   // params
@@ -159,7 +159,7 @@ ComputeSvdBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> 
     }
 
   //calculate beamforming vector from spatial correlation matrix
-  ThreeGppAntennaArrayModel::ComplexVector bW = GetFirstEigenvector (bQ, svdIter, svdThresh);
+  PhasedArrayModel::ComplexVector bW = GetFirstEigenvector (bQ, svdIter, svdThresh);
 
   //compute the receiver side spatial correlation matrix aQ = HH*, where H is the sum of H_n over n clusters.
   MatrixBasedChannelModel::Complex2DVector aQ;
@@ -184,7 +184,7 @@ ComputeSvdBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> 
     }
 
   //calculate beamforming vector from spatial correlation matrix.
-  ThreeGppAntennaArrayModel::ComplexVector aW = GetFirstEigenvector (aQ, svdIter, svdThresh);
+  PhasedArrayModel::ComplexVector aW = GetFirstEigenvector (aQ, svdIter, svdThresh);
 
   for (size_t i = 0; i < aW.size (); ++i)
     {
@@ -201,7 +201,7 @@ ComputeSvdBeamformingVectors (Ptr<const MatrixBasedChannelModel::ChannelMatrix> 
  * \param rxDevice the device towards which point the beam
  */
 static void
-DoBeamforming (Ptr<NetDevice> txDevice, Ptr<ThreeGppAntennaArrayModel> txAntenna, Ptr<NetDevice> rxDevice, Ptr<ThreeGppAntennaArrayModel> rxAntenna)
+DoBeamforming (Ptr<NetDevice> txDevice, Ptr<UniformPlanarArray> txAntenna, Ptr<NetDevice> rxDevice, Ptr<UniformPlanarArray> rxAntenna)
 {
   Ptr<MobilityModel> thisMob = txDevice->GetNode ()->GetObject<MobilityModel> ();
   Ptr<MobilityModel> otherMob = rxDevice->GetNode ()->GetObject<MobilityModel> ();
@@ -309,10 +309,10 @@ main (int argc, char *argv[])
   spectrumLossModel = CreateObjectWithAttributes<ThreeGppSpectrumPropagationLossModel> ("ChannelModel", PointerValue (qdChannel));
 
   // Create the antenna objects and set their dimensions
-  txAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
+  txAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
   txNode->AggregateObject(txAntenna);
 
-  rxAntenna = CreateObjectWithAttributes<ThreeGppAntennaArrayModel> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
+  rxAntenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumColumns", UintegerValue (2), "NumRows", UintegerValue (2));
   rxNode->AggregateObject(rxAntenna);
 
   // Initialize the devices in the ThreeGppSpectrumPropagationLossModel
