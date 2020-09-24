@@ -163,7 +163,7 @@ FileBeamformingCodebook::ValidateAntenna (std::ifstream &cbFile) const
               double fileValue {std::atof (value.c_str ())};
 
               NS_ABORT_MSG_IF (fileValue != attributeValue.Get (),
-                               fileValue << " != " << attributeValue.Get ());
+                               attribute << ": " << fileValue << " != " << attributeValue.Get ());
             }
           else if (attribute == "NumRows"
                    || attribute == "NumColumns")
@@ -173,7 +173,7 @@ FileBeamformingCodebook::ValidateAntenna (std::ifstream &cbFile) const
               uint64_t fileValue {std::stoul (value)};
 
               NS_ABORT_MSG_IF (fileValue != attributeValue.Get (),
-                               fileValue << " != " << attributeValue.Get ());
+                               attribute << ": " << fileValue << " != " << attributeValue.Get ());
             }
           else if (attribute == "AntennaElement")
             {
@@ -182,7 +182,7 @@ FileBeamformingCodebook::ValidateAntenna (std::ifstream &cbFile) const
               std::string fileValue {value};
 
               NS_ABORT_MSG_IF (fileValue != attributeValue.GetObject ()->GetInstanceTypeId ().GetName (),
-                               fileValue << " != " << attributeValue.GetObject ()->GetInstanceTypeId ().GetName ());
+                               attribute << ": " << fileValue << " != " << attributeValue.GetObject ()->GetInstanceTypeId ().GetName ());
             }
           else
             {
