@@ -13,7 +13,14 @@ NS_OBJECT_ENSURE_REGISTERED (UniformPlanarArray);
 
 
 
-UniformPlanarArray::UniformPlanarArray () : PhasedArrayModel ()
+UniformPlanarArray::UniformPlanarArray ()
+  : PhasedArrayModel (),
+  m_numColumns {1},
+  m_numRows {1},
+  m_disV {0.5},
+  m_disH {0.5},
+  m_alpha {0},
+  m_beta {0}
 {
 
 }
@@ -33,23 +40,27 @@ UniformPlanarArray::GetTypeId (void)
     .AddAttribute ("AntennaHorizontalSpacing",
                    "Horizontal spacing between antenna elements, in multiples of wave length",
                    DoubleValue (0.5),
-                   MakeDoubleAccessor (&UniformPlanarArray::m_disH),
-                   MakeDoubleChecker<double> ())
+                   MakeDoubleAccessor (&UniformPlanarArray::SetAntennaHorizontalSpacing,
+                                       &UniformPlanarArray::GetAntennaHorizontalSpacing),
+                   MakeDoubleChecker<double> (0.0))
     .AddAttribute ("AntennaVerticalSpacing",
                    "Vertical spacing between antenna elements, in multiples of wave length",
                    DoubleValue (0.5),
-                   MakeDoubleAccessor (&UniformPlanarArray::m_disV),
-                   MakeDoubleChecker<double> ())
+                   MakeDoubleAccessor (&UniformPlanarArray::SetAntennaVerticalSpacing,
+                                       &UniformPlanarArray::GetAntennaVerticalSpacing),
+                   MakeDoubleChecker<double> (0.0))
     .AddAttribute ("NumColumns",
                    "Horizontal size of the array",
                    UintegerValue (4),
-                   MakeUintegerAccessor (&UniformPlanarArray::m_numColumns),
-                   MakeUintegerChecker<uint32_t> ())
+                   MakeUintegerAccessor (&UniformPlanarArray::SetNumColumns,
+                                         &UniformPlanarArray::GetNumColumns),
+                   MakeUintegerChecker<uint32_t> (1))
     .AddAttribute ("NumRows",
                    "Vertical size of the array",
                    UintegerValue (4),
-                   MakeUintegerAccessor (&UniformPlanarArray::m_numRows),
-                   MakeUintegerChecker<uint32_t> ())
+                   MakeUintegerAccessor (&UniformPlanarArray::SetNumRows,
+                                         &UniformPlanarArray::GetNumRows),
+                   MakeUintegerChecker<uint32_t> (1))
     .AddAttribute ("BearingAngle",
                    "The bearing angle in radians",
                    DoubleValue (0.0),
@@ -62,6 +73,70 @@ UniformPlanarArray::GetTypeId (void)
                    MakeDoubleChecker<double> (0, M_PI))
   ;
   return tid;
+}
+
+
+void
+UniformPlanarArray::SetNumColumns (uint32_t n)
+{
+  NS_LOG_FUNCTION (this << n);
+  m_numColumns = n;
+  m_beamformingVector = ComplexVector (GetNumberOfElements (), std::complex<double> (0, 0));
+}
+
+
+uint32_t
+UniformPlanarArray::GetNumColumns (void) const
+{
+  return m_numColumns;
+}
+
+
+void
+UniformPlanarArray::SetNumRows (uint32_t n)
+{
+  NS_LOG_FUNCTION (this << n);
+  m_numRows = n;
+  m_beamformingVector = ComplexVector (GetNumberOfElements (), std::complex<double> (0, 0));
+}
+
+
+uint32_t
+UniformPlanarArray::GetNumRows (void) const
+{
+  return m_numRows;
+}
+
+
+void
+UniformPlanarArray::SetAntennaHorizontalSpacing (double s)
+{
+  NS_LOG_FUNCTION (this << s);
+  m_disH = s;
+  m_beamformingVector = ComplexVector (GetNumberOfElements (), std::complex<double> (0, 0));
+}
+
+
+double
+UniformPlanarArray::GetAntennaHorizontalSpacing (void) const
+{
+  return m_disH;
+}
+
+
+void
+UniformPlanarArray::SetAntennaVerticalSpacing (double s)
+{
+  NS_LOG_FUNCTION (this << s);
+  m_disV = s;
+  m_beamformingVector = ComplexVector (GetNumberOfElements (), std::complex<double> (0, 0));
+}
+
+
+double
+UniformPlanarArray::GetAntennaVerticalSpacing (void) const
+{
+  return m_disV;
 }
 
 

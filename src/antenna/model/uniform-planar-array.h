@@ -69,8 +69,71 @@ public:
    */
   uint64_t GetNumberOfElements (void) const override;
 
-
 private:
+  /**
+   * Set the number of columns of the phased array
+   * This method resets the stored beamforming vector to a ComplexVector
+   * of the correct size, but zero-filled
+   * \param n the number of columns
+   */
+  void SetNumColumns (uint32_t n);
+
+
+  /**
+   * Get the number of columns of the phased array
+   * \return the number of columns
+   */
+  uint32_t GetNumColumns (void) const;
+
+
+  /**
+   * Set the number of rows of the phased array
+   * This method resets the stored beamforming vector to a ComplexVector
+   * of the correct size, but zero-filled
+   * \param n the number of rows
+   */
+  void SetNumRows (uint32_t n);
+
+
+  /**
+   * Get the number of rows of the phased array
+   * \return the number of rows
+   */
+  uint32_t GetNumRows (void) const;
+
+
+  /**
+   * Set the horizontal spacing for the antenna elements of the phased array
+   * This method resets the stored beamforming vector to a ComplexVector
+   * of the correct size, but zero-filled
+   * \param s the horizontal spacing
+   */
+  void SetAntennaHorizontalSpacing (double s);
+
+
+  /**
+   * Get the horizontal spacing for the antenna elements of the phased array
+   * \return the horizontal spacing
+   */
+  double GetAntennaHorizontalSpacing (void) const;
+
+
+  /**
+   * Set the vertical spacing for the antenna elements of the phased array
+   * This method resets the stored beamforming vector to a ComplexVector
+   * of the correct size, but zero-filled
+   * \param s the vertical spacing
+   */
+  void SetAntennaVerticalSpacing (double s);
+
+
+  /**
+   * Get the vertical spacing for the antenna elements of the phased array
+   * \return the vertical spacing
+   */
+  double GetAntennaVerticalSpacing (void) const;
+
+
   uint32_t m_numColumns; //!< number of columns
   uint32_t m_numRows; //!< number of rows
   double m_disV; //!< antenna spacing in the vertical direction in multiples of wave length
