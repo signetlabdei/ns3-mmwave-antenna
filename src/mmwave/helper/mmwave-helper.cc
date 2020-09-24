@@ -95,6 +95,13 @@ MmWaveHelper::MmWaveHelper (void)
 
   m_lteUeAntennaModelFactory.SetTypeId (IsotropicAntennaModel::GetTypeId ());
   m_lteEnbAntennaModelFactory.SetTypeId (IsotropicAntennaModel::GetTypeId ());
+
+  m_uePhasedArrayModelFactory.SetTypeId (UniformPlanarArray::GetTypeId ());
+  m_uePhasedArrayModelFactory.Set ("NumColumns", UintegerValue (2));
+  m_uePhasedArrayModelFactory.Set ("NumRows", UintegerValue (2));
+  m_enbPhasedArrayModelFactory.SetTypeId (UniformPlanarArray::GetTypeId ());
+  m_enbPhasedArrayModelFactory.Set ("NumColumns", UintegerValue (8));
+  m_enbPhasedArrayModelFactory.Set ("NumRows", UintegerValue (8));
   
   m_bfModelFactory.SetTypeId (MmWaveSvdBeamforming::GetTypeId ());
 }
@@ -551,6 +558,20 @@ MmWaveHelper::SetBeamformingModelAttribute (std::string name, const AttributeVal
 }
 
 void
+MmWaveHelper::SetUePhasedArrayModelAttribute (std::string name, const AttributeValue &value)
+{
+  NS_LOG_FUNCTION (this << name);
+  m_uePhasedArrayModelFactory.Set (name, value);
+}
+
+void
+MmWaveHelper::SetEnbPhasedArrayModelAttribute (std::string name, const AttributeValue &value)
+{
+  NS_LOG_FUNCTION (this << name);
+  m_enbPhasedArrayModelFactory.Set (name, value);
+}
+
+void
 MmWaveHelper::SetSchedulerType (std::string type)
 {
   NS_LOG_FUNCTION (this << type);
@@ -606,6 +627,20 @@ MmWaveHelper::SetLteHandoverAlgorithmType (std::string type)
   NS_LOG_FUNCTION (this << type);
   m_lteHandoverAlgorithmFactory = ObjectFactory ();
   m_lteHandoverAlgorithmFactory.SetTypeId (type);
+}
+
+void
+MmWaveHelper::SetUePhasedArrayModelType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  m_uePhasedArrayModelFactory = ObjectFactory (type);
+}
+
+void
+MmWaveHelper::SetEnbPhasedArrayModelType (std::string type)
+{
+  NS_LOG_FUNCTION (this << type);
+  m_enbPhasedArrayModelFactory = ObjectFactory (type);
 }
 
 void
@@ -823,8 +858,7 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       dlPhy->SetMobility (mm);
       ulPhy->SetMobility (mm);
 
-      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())),
-                                                                                      "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = m_uePhasedArrayModelFactory.Create<PhasedArrayModel> ();
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model
@@ -1429,8 +1463,7 @@ pCtrl->AddCallback (MakeCallback (&LteUePhy::GenerateCtrlCqiReport, phy));
       dlPhy->SetMobility (mm);
       ulPhy->SetMobility (mm);
 
-      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())),
-                                                                                      "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = m_uePhasedArrayModelFactory.Create<PhasedArrayModel> ();
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model
@@ -1638,9 +1671,7 @@ MmWaveHelper::InstallSingleEnbDevice (Ptr<Node> n)
         }
 
       NS_LOG_DEBUG ("Create antenna");
-      // TODO how to support other kinds of antennas?
-      Ptr<PhasedArrayModel> antenna = CreateObjectWithAttributes<UniformPlanarArray> ("NumRows", UintegerValue (sqrt (device->GetAntennaNum())),
-                                                                                      "NumColumns", UintegerValue (sqrt (device->GetAntennaNum())));
+      Ptr<PhasedArrayModel> antenna = m_enbPhasedArrayModelFactory.Create<PhasedArrayModel> ();
       NS_ASSERT_MSG (antenna, "error in creating the AntennaModel object");
 
       // initialize the 3GPP channel model

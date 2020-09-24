@@ -111,6 +111,22 @@ public:
   void SetChannelConditionModelType (std::string type);
   void SetPathlossModelType (std::string type);
   void SetChannelModelType (std::string type);
+  void SetUePhasedArrayModelType (std::string type);
+  void SetEnbPhasedArrayModelType (std::string type);
+
+  /**
+   * Set an attribute to the PhasedArrayModel for the UEs
+   * \param name name of the attribute to set
+   * \param value value to set
+   */
+  void SetUePhasedArrayModelAttribute (std::string name, const AttributeValue &value);
+
+  /**
+   * Set an attribute to the PhasedArrayModel for the eNBs
+   * \param name name of the attribute to set
+   * \param value value to set
+   */
+  void SetEnbPhasedArrayModelAttribute (std::string name, const AttributeValue &value);
 
   /**
    * Set an attribute to the SpectrumPropagationLossModels
@@ -394,6 +410,9 @@ private:
 
   ObjectFactory m_lteUeAntennaModelFactory;             /// Factory of antenna object for Lte UE.
   ObjectFactory m_lteEnbAntennaModelFactory;       /// Factory of antenna objects for Lte eNB.
+
+  ObjectFactory m_uePhasedArrayModelFactory;          /// Factory of PhasedArrayModel objects for UEs
+  ObjectFactory m_enbPhasedArrayModelFactory;         ///Factory of PhasedArrayModel objects for eNBs
 
   ObjectFactory m_bfModelFactory; //!< Factory for the beamforming model 
   /**

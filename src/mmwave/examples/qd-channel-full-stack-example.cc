@@ -118,8 +118,11 @@ main (int argc, char *argv[])
 
   // Create the MmWave helper
   Ptr<MmWaveHelper> mmwaveHelper = CreateObject<MmWaveHelper> ();
-  mmwaveHelper->SetMmWaveEnbNetDeviceAttribute("AntennaNum", UintegerValue (enbAntennaNum));
-  mmwaveHelper->SetMmWaveUeNetDeviceAttribute("AntennaNum", UintegerValue (ueAntennaNum));
+  // set the number of antennas in the devices
+  mmwaveHelper->SetUePhasedArrayModelAttribute ("NumColumns" , UintegerValue (std::sqrt (ueAntennaNum)));
+  mmwaveHelper->SetUePhasedArrayModelAttribute ("NumRows" , UintegerValue (std::sqrt (ueAntennaNum)));
+  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumColumns" , UintegerValue (std::sqrt (enbAntennaNum)));
+  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumRows" , UintegerValue (std::sqrt (enbAntennaNum)));
 
   mmwaveHelper->SetSchedulerType ("ns3::MmWaveFlexTtiMacScheduler");
   Ptr<MmWavePointToPointEpcHelper>  epcHelper = CreateObject<MmWavePointToPointEpcHelper> ();
