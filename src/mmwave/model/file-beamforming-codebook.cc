@@ -158,31 +158,31 @@ FileBeamformingCodebook::ValidateAntenna (std::ifstream &cbFile) const
           if (attribute == "AntennaHorizontalSpacing"
               || attribute == "AntennaVerticalSpacing")
             {
-              DoubleValue attrVal;
-              m_array->GetAttribute (attribute, attrVal);
-              double val {std::atof (value.c_str ())};
+              DoubleValue attributeValue;
+              m_array->GetAttribute (attribute, attributeValue);
+              double fileValue {std::atof (value.c_str ())};
 
-              NS_ABORT_MSG_IF (val != attrVal.Get (),
-                               val << " != " << attrVal.Get ());
+              NS_ABORT_MSG_IF (fileValue != attributeValue.Get (),
+                               fileValue << " != " << attributeValue.Get ());
             }
           else if (attribute == "NumRows"
                    || attribute == "NumColumns")
             {
-              UintegerValue attrVal;
-              m_array->GetAttribute (attribute, attrVal);
-              uint64_t val {std::stoul (value)};
+              UintegerValue attributeValue;
+              m_array->GetAttribute (attribute, attributeValue);
+              uint64_t fileValue {std::stoul (value)};
 
-              NS_ABORT_MSG_IF (val != attrVal.Get (),
-                               val << " != " << attrVal.Get ());
+              NS_ABORT_MSG_IF (fileValue != attributeValue.Get (),
+                               fileValue << " != " << attributeValue.Get ());
             }
           else if (attribute == "AntennaElement")
             {
-              PointerValue attrVal;
-              m_array->GetAttribute (attribute, attrVal);
-              std::string val {value};
+              PointerValue attributeValue;
+              m_array->GetAttribute (attribute, attributeValue);
+              std::string fileValue {value};
 
-              NS_ABORT_MSG_IF (val != attrVal.GetObject ()->GetInstanceTypeId ().GetName (),
-                               val << " != " << attrVal.GetObject ()->GetInstanceTypeId ().GetName ());
+              NS_ABORT_MSG_IF (fileValue != attributeValue.GetObject ()->GetInstanceTypeId ().GetName (),
+                               fileValue << " != " << attributeValue.GetObject ()->GetInstanceTypeId ().GetName ());
             }
           else
             {
