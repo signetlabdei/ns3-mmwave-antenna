@@ -103,11 +103,8 @@ main (int argc, char *argv[])
   Time simTime = qdModel->GetQdSimTime ();
   Config::SetDefault ("ns3::ThreeGppSpectrumPropagationLossModel::ChannelModel", PointerValue (qdModel));
 
-  // Bandwidth = ChunkPerRB * ChunkWidth (about 400 MHz)
-  Config::SetDefault ("ns3::MmWavePhyMacCommon::ChunkPerRB", UintegerValue (29));
-  Config::SetDefault ("ns3::MmWavePhyMacCommon::ChunkWidth", DoubleValue (13.889e6));
-
   // Set power and noise figure
+  Config::SetDefault ("ns3::MmWavePhyMacCommon::Bandwidth", DoubleValue (400e6));
   Config::SetDefault ("ns3::MmWaveEnbPhy::TxPower", DoubleValue (txPower));
   Config::SetDefault ("ns3::MmWaveEnbPhy::NoiseFigure", DoubleValue (noiseFigure));
   Config::SetDefault ("ns3::MmWaveUePhy::TxPower", DoubleValue (txPower));

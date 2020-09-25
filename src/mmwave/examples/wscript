@@ -1,7 +1,7 @@
 # -*- Mode: python; py-indent-offset: 4; indent-tabs-mode: nil; coding: utf-8; -*-
 
 def build(bld):
-    bld.env['ENABLE_QD_CHANNEL'] = False
+    bld.env['ENABLE_QD_CHANNEL'] = True
 
     obj = bld.create_ns3_program('mmwave-example', ['mmwave'])
     obj.source = 'mmwave-example.cc'
@@ -37,5 +37,5 @@ def build(bld):
     obj.source = 'mmwave-beamforming-codebook-example.cc' 
 
     if bld.env['ENABLE_QD_CHANNEL']:
-        obj = bld.create_ns3_program('qd-channel-full-stack-example', ['mmwave'])
+        obj = bld.create_ns3_program('qd-channel-full-stack-example', ['mmwave','qd-channel'])
         obj.source = 'qd-channel-full-stack-example.cc'
