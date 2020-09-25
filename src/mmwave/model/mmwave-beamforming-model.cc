@@ -537,15 +537,6 @@ MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDe
 
   MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherDevice, otherAntenna);
 
-  for (uint32_t thisIdx = 0; thisIdx < powerMatrix.size (); thisIdx++)
-    {
-      for (uint32_t otherIdx = 0; otherIdx < powerMatrix[0].size (); otherIdx++)
-        {
-          std::cout << 10 * std::log10 (powerMatrix[thisIdx][otherIdx]) + 30 << ",";
-        }
-      std::cout << std::endl;
-    }
-
   // find best beam couple
   std::vector<double> maxPowers;
   maxPowers.reserve (powerMatrix.size ());
