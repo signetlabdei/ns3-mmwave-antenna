@@ -49,8 +49,8 @@ using namespace mmwave;
 int
 main (int argc, char *argv[])
 {
-  std::string qdFilesPath = "src/spectrum/model/QD/"; // The path of the folder with the QD scenarios
-  std::string scenario = "Indoor1"; // The name of the scenario
+  std::string qdFilesPath = "contrib/qd-channel/model/QD/"; // The path of the folder with the QD scenarios
+  std::string scenario = "ParkingLot-old"; // The name of the scenario
   uint32_t interPacketInterval = 1e3; // App inter packet arrival [us]
   double txPower = 30.0; // Transmitted power for both eNB and UE [dBm]
   double noiseFigure = 9.0; // Noise figure for both eNB and UE [dB]
@@ -82,19 +82,25 @@ main (int argc, char *argv[])
   // Create the tx and rx nodes
   NodeContainer ueNodes;
   NodeContainer enbNodes;
-  enbNodes.Create (1);
-  ueNodes.Create (1);
+  enbNodes.Create (2);
+  ueNodes.Create (2);
 
   // Create the tx and rx mobility models, set the positions to be equal to the
   // initial positions of the nodes in the ray tracer
-  Ptr<MobilityModel> ueRefMob = CreateObject<ConstantPositionMobilityModel> ();
-  ueRefMob->SetPosition (Vector (5, 0.1, 1.5));
   Ptr<MobilityModel> enb1Mob = CreateObject<ConstantPositionMobilityModel> ();
-  enb1Mob->SetPosition (Vector (5, 0.1, 2.9));
-
+  enb1Mob->SetPosition (Vector (22, 32, 3));
+  Ptr<MobilityModel> enb2Mob = CreateObject<ConstantPositionMobilityModel> ();
+  enb2Mob->SetPosition (Vector (32, -37, 3));
+  Ptr<MobilityModel> ue1Mob = CreateObject<ConstantPositionMobilityModel> ();
+  ue1Mob->SetPosition (Vector (40, 50, 1.6));
+  Ptr<MobilityModel> ue2Mob = CreateObject<ConstantPositionMobilityModel> ();
+  ue2Mob->SetPosition (Vector (0, 0, 1.5));
+  
   // Assign the mobility models to the nodes
   enbNodes.Get (0)->AggregateObject (enb1Mob);
-  ueNodes.Get (0)->AggregateObject (ueRefMob);
+  enbNodes.Get (1)->AggregateObject (enb2Mob);
+  ueNodes.Get (0)->AggregateObject (ue1Mob);
+  ueNodes.Get (1)->AggregateObject (ue2Mob);
 
   // Configure the channel
   Config::SetDefault ("ns3::MmWaveHelper::PathlossModel", StringValue (""));
