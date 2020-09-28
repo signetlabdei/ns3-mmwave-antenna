@@ -469,6 +469,11 @@ MmWaveCodebookBeamforming::GetTypeId ()
                    PointerValue (),
                    MakePointerAccessor (&MmWaveCodebookBeamforming::SetMmWavePhyMacCommon),
                    MakePointerChecker<MmWavePhyMacCommon> ())
+    .AddAttribute ("UpdatePeriod",
+                   "Specify the channel coherence time",
+                   TimeValue (MilliSeconds (0.0)),
+                   MakeTimeAccessor (&MmWaveCodebookBeamforming::m_updatePeriod),
+                   MakeTimeChecker ())
   ;
   return tid;
 }
@@ -534,34 +539,69 @@ void
 MmWaveCodebookBeamforming::SetBeamformingVectorForDevice (Ptr<NetDevice> otherDevice, Ptr<PhasedArrayModel> otherAntenna)
 {
   NS_LOG_FUNCTION (this << otherDevice << otherAntenna);
-
-  MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherDevice, otherAntenna);
-
-  // find best beam couple
-  std::vector<double> maxPowers;
-  maxPowers.reserve (powerMatrix.size ());
-  std::vector<uint32_t> argMaxPowers;
-  argMaxPowers.reserve (powerMatrix.size ());
-
-  for (uint32_t i = 0; i < powerMatrix.size (); i++)
+  
+  uint32_t thisCbIdx; // index of the codeword selected for this antenna
+  uint32_t otherCbIdx; // index of the codeword selected for the other antenna
+  
+  // check if the best beam pair has already been computed
+  bool notFound = true; 
+  bool update = false;
+  auto it = m_codebookIdsCache.find (otherAntenna);
+  if (it != m_codebookIdsCache.end ())
+  {
+    notFound = false;
+    thisCbIdx = it->second.thisCbIdx;
+    otherCbIdx = it->second.otherCbIdx;
+    
+    // check if it has to be updated
+    if (!m_updatePeriod.IsZero () && Simulator::Now () - it->second.lastUpdate > m_updatePeriod)
+    {
+      update = true;
+    }
+    
+    NS_LOG_DEBUG (this << " found an entry in the map for antenna " << otherAntenna);
+    NS_LOG_DEBUG ("Codebook index for this antenna " << it->second.thisCbIdx);
+    NS_LOG_DEBUG ("Codebook index for other antenna " << it->second.otherCbIdx);
+    NS_LOG_DEBUG ("Last update " << it->second.lastUpdate.GetSeconds() << " s ");
+    NS_LOG_DEBUG ("Now " << Simulator::Now ().GetSeconds () << ", update? " << update);
+  }
+  
+  if (notFound || update)
+  {
+    MmWaveCodebookBeamforming::Matrix2D powerMatrix = ComputeBeamformingCodebookMatrix (otherDevice, otherAntenna);
+    
+    // find best beam couple
+    std::vector<double> maxPowers;
+    maxPowers.reserve (powerMatrix.size ());
+    std::vector<uint32_t> argMaxPowers;
+    argMaxPowers.reserve (powerMatrix.size ());
+    
+    for (uint32_t i = 0; i < powerMatrix.size (); i++)
     {
       auto argMaxIt = std::max_element (powerMatrix[i].begin (), powerMatrix[i].end ());
       argMaxPowers.push_back (std::distance (powerMatrix[i].begin (), argMaxIt));
       maxPowers.push_back (*argMaxIt);
     }
-
-  auto argMaxIt = std::max_element (maxPowers.begin (), maxPowers.end ());
-  uint32_t thisCbIdx = std::distance (maxPowers.begin (), argMaxIt);
-  uint32_t otherCbIdx = argMaxPowers[thisCbIdx];
-
-  NS_LOG_DEBUG ("Best beam pair: thisCbIdx=" << thisCbIdx << ", otherCbIdx=" << otherCbIdx <<
-                " with power " << 10 * std::log10 (*argMaxIt) + 30 << " dBm");
+    
+    auto argMaxIt = std::max_element (maxPowers.begin (), maxPowers.end ());
+    thisCbIdx = std::distance (maxPowers.begin (), argMaxIt);
+    otherCbIdx = argMaxPowers[thisCbIdx];
+    
+    NS_LOG_DEBUG ("Best beam pair: thisCbIdx=" << thisCbIdx << ", otherCbIdx=" << otherCbIdx <<
+    " with power " << 10 * std::log10 (*argMaxIt) + 30 << " dBm");
+    
+    // insert the new entry in the map
+    Entry newEntry; 
+    newEntry.thisCbIdx = thisCbIdx;
+    newEntry.otherCbIdx = otherCbIdx;
+    newEntry.lastUpdate = Simulator::Now ();
+    m_codebookIdsCache [otherAntenna] = newEntry;    
+  }
 
   // set best BF codewords for both devices
-  // TODO the whole process is done twice, it should be cached (?)
   Ptr<BeamformingCodebook> thisCodebook = m_antenna->GetObject<BeamformingCodebook> ();
   Ptr<BeamformingCodebook> otherCodebook = otherAntenna->GetObject<BeamformingCodebook> ();
-
+  
   PhasedArrayModel::ComplexVector thisAntennaWeights = thisCodebook->GetCodeword (thisCbIdx);
   PhasedArrayModel::ComplexVector otherAntennaWeights = otherCodebook->GetCodeword (otherCbIdx);
 
