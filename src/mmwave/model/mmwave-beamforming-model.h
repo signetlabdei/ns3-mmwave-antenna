@@ -25,6 +25,7 @@
 #include "ns3/spectrum-propagation-loss-model.h"
 #include "ns3/spectrum-value.h"
 #include "ns3/object-factory.h"
+#include "ns3/simulator.h"
 #include <map>
 
 namespace ns3 {
@@ -261,6 +262,16 @@ private:
   ObjectFactory m_beamformingCodebookFactory;
   Ptr<SpectrumPropagationLossModel> m_splm; //!<
   Ptr<SpectrumValue> m_txPsd;
+  
+  /* struct used to store the selected beam pairs */
+  struct Entry
+  {
+    uint32_t thisCbIdx; //!< index of the codeword for this antenna  
+    uint32_t otherCbIdx; //!< index of the codeword for the other antenna
+    Time lastUpdate; //!< time stamp
+  };
+  std::map<Ptr<PhasedArrayModel>, Entry> m_codebookIdsCache; //!< stores the selected beam pairs 
+  Time m_updatePeriod; //!< defines the refresh period for updating the beam pairs
 };
 
 
