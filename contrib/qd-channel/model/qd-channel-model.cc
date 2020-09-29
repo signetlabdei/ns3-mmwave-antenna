@@ -21,7 +21,6 @@
 #include "ns3/qd-channel-model.h"
 #include "ns3/log.h"
 #include "ns3/net-device.h"
-#include "ns3/three-gpp-antenna-array-model.h"
 #include "ns3/node.h"
 #include "ns3/double.h"
 #include "ns3/string.h"
@@ -557,9 +556,22 @@ QdChannelModel::GetNewChannel (Ptr<const MobilityModel> aMob,
     {
       double initialPhase = -2 * M_PI * qdInfo.delay_s[mpcIndex] * m_frequency + qdInfo.phase_rad[mpcIndex];
       double pathGain = pow (10, qdInfo.pathGain_dbpow[mpcIndex] / 20);
-      // double rxElementGain = bAntenna->GetRadiationPattern (qdInfo.elAoa_deg[mpcIndex], qdInfo.azAoa_deg[mpcIndex]);
-      // double txElementGain = aAntenna->GetRadiationPattern (qdInfo.elAod_deg[mpcIndex], qdInfo.azAod_deg[mpcIndex]);
-      double pgTimesGains = pathGain; // pathGain * rxElementGain * txElementGain;
+      
+      Angles rxAngle = Angles (qdInfo.azAoa_deg[mpcIndex], qdInfo.elAoa_deg[mpcIndex]);
+      rxAngle.NormalizeAngles ();
+      NS_LOG_DEBUG ("rx angle " << rxAngle);
+      Angles txAngle = Angles (qdInfo.azAod_deg[mpcIndex], qdInfo.elAod_deg[mpcIndex]);
+      txAngle.NormalizeAngles ();
+      NS_LOG_DEBUG ("tx angle " << txAngle);
+      
+      double rxFieldPattH, rxFieldPattV, txFieldPattH, txFieldPattV;
+      std::tie (rxFieldPattH, rxFieldPattV) = bAntenna->GetElementFieldPattern (rxAngle);
+      double rxElementGain = rxFieldPattH * rxFieldPattH + rxFieldPattV * rxFieldPattV; 
+      std::tie (txFieldPattH, txFieldPattV) = aAntenna->GetElementFieldPattern (txAngle);
+      double txElementGain = txFieldPattH * txFieldPattH + txFieldPattV * txFieldPattV; 
+      
+      double pgTimesGains = pathGain * rxElementGain * txElementGain;
+      
       for (uint64_t uIndex = 0; uIndex < uSize; ++uIndex)
         {
           Vector uLoc = bAntenna->GetElementLocation (uIndex);
