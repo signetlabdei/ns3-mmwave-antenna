@@ -22,7 +22,8 @@
 #define ANGLES_H
 
 
-#include <ns3/vector.h>
+#include "ns3/vector.h"
+#include <vector>
 
 namespace ns3 {
 
@@ -37,6 +38,15 @@ namespace ns3 {
 double DegreesToRadians (double degrees);
 
 /** 
+ * \brief converts degrees to radians
+ * 
+ * \param degrees the angles in degrees
+ * 
+ * \return the angles in radians
+ */
+std::vector<double> DegreesToRadians (const std::vector<double> &degrees);
+
+/** 
  * \brief converts radians to degrees
  * 
  * \param radians the angle in radians
@@ -44,6 +54,15 @@ double DegreesToRadians (double degrees);
  * \return the angle in degrees
  */
 double RadiansToDegrees (double radians);
+
+/** 
+ * \brief converts radians to degrees
+ * 
+ * \param radians the angles in radians
+ * 
+ * \return the angles in degrees
+ */
+std::vector<double> RadiansToDegrees (const std::vector<double> &radians);
 
 /** 
  * 

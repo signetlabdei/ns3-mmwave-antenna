@@ -28,15 +28,42 @@ namespace ns3 {
 
 NS_LOG_COMPONENT_DEFINE ("Angles");
 
-double DegreesToRadians (double degrees)
+double
+DegreesToRadians (double degrees)
 {
   return degrees * M_PI / 180.0;
 
 }
 
-double RadiansToDegrees (double radians)
+std::vector<double>
+DegreesToRadians (const std::vector<double> &degrees)
+{
+  std::vector<double> radians;
+  radians.reserve (degrees.size ());
+  for (size_t i = 0; i < degrees.size () ; i++)
+  {
+    radians.push_back (DegreesToRadians (degrees[i]));
+  }
+  return radians;
+
+}
+
+double
+RadiansToDegrees (double radians)
 {
   return radians * 180.0 / M_PI;
+}
+
+std::vector<double>
+RadiansToDegrees (const std::vector<double> &radians)
+{
+  std::vector<double> degrees;
+  degrees.reserve (radians.size ());
+  for (size_t i = 0; i < radians.size () ; i++)
+  {
+    degrees.push_back (RadiansToDegrees (radians[i]));
+  }
+  return degrees;
 }
 
 std::ostream& operator<< (std::ostream& os, const Angles& a)
