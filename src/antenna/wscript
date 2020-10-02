@@ -22,6 +22,7 @@ def build(bld):
         'test/test-isotropic-antenna.cc',
         'test/test-cosine-antenna.cc',
         'test/test-parabolic-antenna.cc',
+        'test/test-uniform-planar-array.cc',
         ]
 
     # Tests encapsulating example programs should be listed here
