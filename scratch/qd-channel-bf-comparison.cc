@@ -51,12 +51,14 @@ int
 main (int argc, char *argv[])
 {
   std::string qdFilesPath = "contrib/qd-channel/model/QD/"; // The path of the folder with the QD scenarios
-  std::string scenario = "L-Room"; // The name of the scenario
+  std::string scenario = "ParkingLotCars"; // The name of the scenario
   uint32_t interPacketInterval = 1e3; // App inter packet arrival [us]
   double txPower = 30.0; // Transmitted power for both eNB and UE [dBm]
   double noiseFigure = 9.0; // Noise figure for both eNB and UE [dB]
-  uint16_t enbAntennaNum = 64; // The number of antenna elements for the gNBs antenna arrays, assuming a square architecture
-  uint16_t ueAntennaNum = 16; // The number of antenna elements for the UE antenna arrays, assuming a square architecture
+  uint16_t enbAntennaNumRows = 4; // The number of rows for the gNBs antenna arrays
+  uint16_t enbAntennaNumColumns = 4; // The number of columns for the gNBs antenna arrays
+  uint16_t ueAntennaNumRows = 1; // The number of rows for the UE antenna arrays
+  uint16_t ueAntennaNumColumns = 4; // The number of columns for the UE antenna arrays
   uint32_t appPacketSize = 1460; // Application packet size [B]
   std::string bfModelType = "ns3::MmWaveSvdBeamforming"; // Beamforming model type
   double cbUpdatePeriod = 1.0; // Refresh period for updating the beam pairs [ms]
@@ -69,8 +71,10 @@ main (int argc, char *argv[])
   cmd.AddValue ("ipi", "App inter packet arrival [us]", interPacketInterval);
   cmd.AddValue ("txPower", "Transmitted power for both eNB and UE [dBm]", txPower);
   cmd.AddValue ("noiseFigure", "Noise figure for both eNB and UE [dB]", noiseFigure);
-  cmd.AddValue ("enbAntennaNum", "The number of antenna elements for the gNBs antenna arrays, assuming a square architecture", enbAntennaNum);
-  cmd.AddValue ("ueAntennaNum", "The number of antenna elements for the UE antenna arrays, assuming a square architecture", ueAntennaNum);
+  cmd.AddValue ("enbAntennaNumRows", "The number of rows for the gNBs antenna arrays", enbAntennaNumRows);
+  cmd.AddValue ("enbAntennaNumColumns", "The number of columns for the gNBs antenna arrays", enbAntennaNumColumns);
+  cmd.AddValue ("ueAntennaNumRows", "The number of rows for the UE antenna arrays", ueAntennaNumRows);
+  cmd.AddValue ("ueAntennaNumColumns", "The number of columns for the UE antenna arrays", ueAntennaNumColumns);
   cmd.AddValue ("appPacketSize", "Application packet size [B]", appPacketSize);
   cmd.AddValue ("bfModelType", "Beamforming model type", bfModelType);
   cmd.AddValue ("cbUpdatePeriod", "Refresh period for updating the beam pairs [ms]", cbUpdatePeriod);
@@ -148,9 +152,6 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveUePhy::TxPower", DoubleValue (txPower));
   Config::SetDefault ("ns3::MmWaveUePhy::NoiseFigure", DoubleValue (noiseFigure));
 
-  // Setup antenna configuration
-  Config::SetDefault ("ns3::PhasedArrayModel::AntennaElement", PointerValue (CreateObject<IsotropicAntennaModel> ()));
-
   // Create the MmWave helper
   Ptr<MmWaveHelper> mmwaveHelper = CreateObject<MmWaveHelper> ();
   
@@ -164,17 +165,17 @@ main (int argc, char *argv[])
   mmwaveHelper->SetEnbPhasedArrayModelAttribute ("AntennaElement", PointerValue (ueAntennaModelFactory.Create<AntennaModel> ()));
   
   // set the number of antennas in the devices
-  mmwaveHelper->SetUePhasedArrayModelAttribute ("NumColumns" , UintegerValue (std::sqrt (ueAntennaNum)));
-  mmwaveHelper->SetUePhasedArrayModelAttribute ("NumRows" , UintegerValue (std::sqrt (ueAntennaNum)));
-  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumColumns" , UintegerValue (std::sqrt (enbAntennaNum)));
-  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumRows" , UintegerValue (std::sqrt (enbAntennaNum)));
+  mmwaveHelper->SetUePhasedArrayModelAttribute ("NumRows" , UintegerValue (ueAntennaNumRows));
+  mmwaveHelper->SetUePhasedArrayModelAttribute ("NumColumns" , UintegerValue (ueAntennaNumColumns));
+  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumRows" , UintegerValue (enbAntennaNumRows));
+  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumColumns" , UintegerValue (enbAntennaNumColumns));
 
   mmwaveHelper->SetUeBeamformingCodebookAttribute ("CodebookFilename", StringValue ("src/mmwave/model/Codebooks/" + 
-                                                                                    std::to_string ((uint8_t) std::sqrt (ueAntennaNum)) + "x" + 
-                                                                                    std::to_string ((uint8_t) std::sqrt (ueAntennaNum)) + ".txt"));
+                                                                                    std::to_string (ueAntennaNumRows) + "x" + 
+                                                                                    std::to_string (ueAntennaNumColumns) + ".txt"));
   mmwaveHelper->SetEnbBeamformingCodebookAttribute ("CodebookFilename", StringValue ("src/mmwave/model/Codebooks/" + 
-                                                                                     std::to_string ((uint8_t) std::sqrt (enbAntennaNum)) + "x" + 
-                                                                                     std::to_string ((uint8_t) std::sqrt (enbAntennaNum)) + ".txt"));    
+                                                                                     std::to_string (enbAntennaNumRows) + "x" + 
+                                                                                     std::to_string (enbAntennaNumColumns) + ".txt"));    
 
   mmwaveHelper->SetSchedulerType ("ns3::MmWaveFlexTtiMacScheduler");
   Ptr<MmWavePointToPointEpcHelper>  epcHelper = CreateObject<MmWavePointToPointEpcHelper> ();
