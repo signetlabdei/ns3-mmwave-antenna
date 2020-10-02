@@ -2,3 +2,4 @@
 
 # ignore large scenarios
 model/QD/L-Room/**
+model/QD/ParkingLotCars/**

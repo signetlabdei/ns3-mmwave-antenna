@@ -181,8 +181,9 @@ FileBeamformingCodebook::ValidateAntenna (std::ifstream &cbFile) const
               m_array->GetAttribute (attribute, attributeValue);
               std::string fileValue {value};
 
-              NS_ABORT_MSG_IF (fileValue != attributeValue.GetObject ()->GetInstanceTypeId ().GetName (),
-                               attribute << ": " << fileValue << " != " << attributeValue.GetObject ()->GetInstanceTypeId ().GetName ());
+              // Ignore antenna element for the moment
+              // NS_ABORT_MSG_IF (fileValue != attributeValue.GetObject ()->GetInstanceTypeId ().GetName (),
+              //                  attribute << ": " << fileValue << " != " << attributeValue.GetObject ()->GetInstanceTypeId ().GetName ());
             }
           else
             {

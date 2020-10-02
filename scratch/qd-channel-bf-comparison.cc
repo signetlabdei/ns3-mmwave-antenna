@@ -40,6 +40,7 @@
 #include "ns3/config-store.h"
 #include "ns3/mmwave-point-to-point-epc-helper.h"
 #include "ns3/isotropic-antenna-model.h"
+#include "ns3/three-gpp-antenna-model.h"
 
 NS_LOG_COMPONENT_DEFINE ("QdChannelModelExample");
 
@@ -59,7 +60,8 @@ main (int argc, char *argv[])
   uint32_t appPacketSize = 1460; // Application packet size [B]
   std::string bfModelType = "ns3::MmWaveSvdBeamforming"; // Beamforming model type
   double cbUpdatePeriod = 1.0; // Refresh period for updating the beam pairs [ms]
-  std::string antennaType = "ns3::IsotropicAntennaModel"; // The type of antenna model
+  std::string enbAntennaType = "ns3::ThreeGppAntennaModel"; // The type of antenna model for eNBs
+  std::string ueAntennaType = "ns3::IsotropicAntennaModel"; // The type of antenna model for UEs
   
   CommandLine cmd;
   cmd.AddValue ("qdFilesPath", "The path of the folder with the QD scenarios", qdFilesPath);
@@ -72,7 +74,8 @@ main (int argc, char *argv[])
   cmd.AddValue ("appPacketSize", "Application packet size [B]", appPacketSize);
   cmd.AddValue ("bfModelType", "Beamforming model type", bfModelType);
   cmd.AddValue ("cbUpdatePeriod", "Refresh period for updating the beam pairs [ms]", cbUpdatePeriod);
-  cmd.AddValue ("antennaType", "The type of antenna model", antennaType);
+  cmd.AddValue ("enbAntennaType", "The type of antenna model", enbAntennaType);
+  cmd.AddValue ("ueAntennaType", "The type of antenna model", ueAntennaType);
   cmd.Parse (argc, argv);
 
   // Setup
@@ -94,24 +97,31 @@ main (int argc, char *argv[])
 
   // Create the tx and rx mobility models, set the positions to be equal to the
   // initial positions of the nodes in the ray tracer
+  Ptr<MobilityModel> enb0Mob = CreateObject<ConstantPositionMobilityModel> ();
   Ptr<MobilityModel> enb1Mob = CreateObject<ConstantPositionMobilityModel> ();
-  Ptr<MobilityModel> enb2Mob = CreateObject<ConstantPositionMobilityModel> ();
+  Ptr<MobilityModel> ue0Mob = CreateObject<ConstantPositionMobilityModel> ();
   Ptr<MobilityModel> ue1Mob = CreateObject<ConstantPositionMobilityModel> ();
-  Ptr<MobilityModel> ue2Mob = CreateObject<ConstantPositionMobilityModel> ();
   
   if (scenario == "ParkingLot-old")
   {
-    enb1Mob->SetPosition (Vector (22, 32, 3));
-    enb2Mob->SetPosition (Vector (32, -37, 3));
-    ue1Mob->SetPosition (Vector (40, 50, 1.6));
-    ue2Mob->SetPosition (Vector (0, 0, 1.5));
+    enb0Mob->SetPosition (Vector (22,  32,   3));
+    enb1Mob->SetPosition (Vector (32, -37,   3));
+    ue0Mob->SetPosition  (Vector (40,  50, 1.6));
+    ue1Mob->SetPosition  (Vector ( 0,   0, 1.5));
+  }
+  else if (scenario == "ParkingLotCars")
+  {
+    enb0Mob->SetPosition (Vector (40,  55,   3));
+    enb1Mob->SetPosition (Vector (55, -13,   3));
+    ue0Mob->SetPosition  (Vector (40,  56, 1.5));
+    ue1Mob->SetPosition  (Vector (20,  15, 1.5));
   }
   else if (scenario == "L-Room")
   {
-    enb1Mob->SetPosition (Vector (8,18.8,2.5));
-    enb2Mob->SetPosition (Vector (0.1,3,2.5));
-    ue1Mob->SetPosition (Vector (8,2.5,1.5));
-    ue2Mob->SetPosition (Vector (0.5,3,1.5));
+    enb0Mob->SetPosition (Vector (0.1,    3, 2.5));
+    enb1Mob->SetPosition (Vector (  8, 18.8, 2.5));
+    ue0Mob->SetPosition  (Vector (0.5,    3, 1.5));
+    ue1Mob->SetPosition  (Vector (  8,  2.5, 1.5));
   }
   else 
   {
@@ -119,10 +129,10 @@ main (int argc, char *argv[])
   }
   
   // Assign the mobility models to the nodes
-  enbNodes.Get (0)->AggregateObject (enb1Mob);
-  enbNodes.Get (1)->AggregateObject (enb2Mob);
-  ueNodes.Get (0)->AggregateObject (ue1Mob);
-  ueNodes.Get (1)->AggregateObject (ue2Mob);
+  enbNodes.Get (0)->AggregateObject (enb0Mob);
+  enbNodes.Get (1)->AggregateObject (enb1Mob);
+  ueNodes.Get (0)->AggregateObject (ue0Mob);
+  ueNodes.Get (1)->AggregateObject (ue1Mob);
 
   // Configure the channel
   Config::SetDefault ("ns3::MmWaveHelper::PathlossModel", StringValue (""));
@@ -148,9 +158,10 @@ main (int argc, char *argv[])
   mmwaveHelper->SetBeamformingModelType (bfModelType);
   
   // set the antenna type
-  ObjectFactory antennaModelFactory = ObjectFactory (antennaType);
-  mmwaveHelper->SetUePhasedArrayModelAttribute ("AntennaElement", PointerValue (antennaModelFactory.Create<AntennaModel> ()));
-  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("AntennaElement", PointerValue (antennaModelFactory.Create<AntennaModel> ()));
+  ObjectFactory enbAntennaModelFactory = ObjectFactory (enbAntennaType);
+  ObjectFactory ueAntennaModelFactory = ObjectFactory (ueAntennaType);
+  mmwaveHelper->SetUePhasedArrayModelAttribute ("AntennaElement", PointerValue (enbAntennaModelFactory.Create<AntennaModel> ()));
+  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("AntennaElement", PointerValue (ueAntennaModelFactory.Create<AntennaModel> ()));
   
   // set the number of antennas in the devices
   mmwaveHelper->SetUePhasedArrayModelAttribute ("NumColumns" , UintegerValue (std::sqrt (ueAntennaNum)));
@@ -192,9 +203,40 @@ main (int argc, char *argv[])
   Ptr<Ipv4StaticRouting> remoteHostStaticRouting = ipv4RoutingHelper.GetStaticRouting (remoteHost->GetObject<Ipv4> ());
   remoteHostStaticRouting->AddNetworkRouteTo (Ipv4Address ("7.0.0.0"), Ipv4Mask ("255.0.0.0"), 1);
 
-  // Create the tx and rx devices
-  NetDeviceContainer enbMmWaveDevs = mmwaveHelper->InstallEnbDevice (enbNodes);
+  // Install MmWaveDevices
   NetDeviceContainer ueMmWaveDevs = mmwaveHelper->InstallUeDevice (ueNodes);
+  NetDeviceContainer enbMmWaveDevs;
+  if (scenario == "ParkingLot-old" ||
+      scenario == "ParkingLotCars")
+  {
+    // eNBs
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (-76.2107)));
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    NetDeviceContainer enbMmWaveDev0 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (0)));
+
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (105.826)));
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    NetDeviceContainer enbMmWaveDev1 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (1)));
+    
+    enbMmWaveDevs = NetDeviceContainer (enbMmWaveDev0, enbMmWaveDev1);
+  }
+  else if (scenario == "L-Room")
+  {
+    // eNBs
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (-90.0)));
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    NetDeviceContainer enbMmWaveDev0 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (0)));
+
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (0.0)));
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    NetDeviceContainer enbMmWaveDev1 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (1)));
+    
+    enbMmWaveDevs = NetDeviceContainer (enbMmWaveDev0, enbMmWaveDev1);
+  }
+  else 
+  {
+    NS_FATAL_ERROR ("Unsupported scenario: " << scenario);
+  }
 
   // Install the IP stack on the UEs
   internet.Install (ueNodes);
@@ -208,6 +250,7 @@ main (int argc, char *argv[])
 
   // This performs the attachment of each UE to a specific eNB
   mmwaveHelper->AttachToEnbWithIndex (ueMmWaveDevs.Get (0), enbMmWaveDevs, 0);
+  mmwaveHelper->AttachToEnbWithIndex (ueMmWaveDevs.Get (1), enbMmWaveDevs, 1);
 
   // Add apps
   uint16_t dlPort = 1234;
