@@ -88,7 +88,7 @@ UniformPlanarArray::GetTypeId (void)
                    "The downtilt angle in radians",
                    DoubleValue (0.0),
                    MakeDoubleAccessor (&UniformPlanarArray::m_beta),
-                   MakeDoubleChecker<double> (0, M_PI))
+                   MakeDoubleChecker<double> (-M_PI, M_PI))
   ;
   return tid;
 }
