@@ -41,16 +41,27 @@
 #include "ns3/mmwave-point-to-point-epc-helper.h"
 #include "ns3/isotropic-antenna-model.h"
 #include "ns3/three-gpp-antenna-model.h"
+// #include <unistd.h>
+// #define GetCurrentDir getcwd
 
 NS_LOG_COMPONENT_DEFINE ("QdChannelModelExample");
 
 using namespace ns3;
 using namespace mmwave;
 
+// std::string GetCurrentWorkingDir( void ) {
+//   char buff[FILENAME_MAX];
+//   GetCurrentDir( buff, FILENAME_MAX );
+//   std::string current_working_dir(buff);
+//   return current_working_dir;
+// }
+
 int
 main (int argc, char *argv[])
 {
+  // std::cout << GetCurrentWorkingDir() << std::endl;  
   std::string qdFilesPath = "contrib/qd-channel/model/QD/"; // The path of the folder with the QD scenarios
+  std::string codebookFilesPath = "src/mmwave/model/Codebooks/"; // The path of the folder with the codebooks are
   std::string scenario = "ParkingLotCars"; // The name of the scenario
   uint32_t interPacketInterval = 1e3; // App inter packet arrival [us]
   double txPower = 30.0; // Transmitted power for both eNB and UE [dBm]
@@ -67,6 +78,7 @@ main (int argc, char *argv[])
   
   CommandLine cmd;
   cmd.AddValue ("qdFilesPath", "The path of the folder with the QD scenarios", qdFilesPath);
+  cmd.AddValue ("codebookFilesPath", "path of the folder with the codebooks are", codebookFilesPath);
   cmd.AddValue ("scenario", "The name of the scenario", scenario);
   cmd.AddValue ("ipi", "App inter packet arrival [us]", interPacketInterval);
   cmd.AddValue ("txPower", "Transmitted power for both eNB and UE [dBm]", txPower);
@@ -170,10 +182,10 @@ main (int argc, char *argv[])
   mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumRows" , UintegerValue (enbAntennaNumRows));
   mmwaveHelper->SetEnbPhasedArrayModelAttribute ("NumColumns" , UintegerValue (enbAntennaNumColumns));
 
-  mmwaveHelper->SetUeBeamformingCodebookAttribute ("CodebookFilename", StringValue ("src/mmwave/model/Codebooks/" + 
+  mmwaveHelper->SetUeBeamformingCodebookAttribute ("CodebookFilename", StringValue (codebookFilesPath + 
                                                                                     std::to_string (ueAntennaNumRows) + "x" + 
                                                                                     std::to_string (ueAntennaNumColumns) + ".txt"));
-  mmwaveHelper->SetEnbBeamformingCodebookAttribute ("CodebookFilename", StringValue ("src/mmwave/model/Codebooks/" + 
+  mmwaveHelper->SetEnbBeamformingCodebookAttribute ("CodebookFilename", StringValue (codebookFilesPath + 
                                                                                      std::to_string (enbAntennaNumRows) + "x" + 
                                                                                      std::to_string (enbAntennaNumColumns) + ".txt"));    
 
