@@ -157,6 +157,8 @@ QdChannelModel::ReadNodesPosition ()
       rtIdToNs3IdMap.insert (std::make_pair (id, matchedNodeId));
       m_ns3IdToRtIdMap.insert (std::make_pair (matchedNodeId, id));
 
+      NS_LOG_LOGIC ("qdId=" << id << " (" << x << "," << y << "," << z << ") matches NodeId=" << matchedNodeId);
+
       ++id;
     }
 
@@ -528,26 +530,26 @@ QdChannelModel::GetNewChannel (Ptr<const MobilityModel> aMob,
 
   QdInfo qdInfo = m_qdInfoMap.at (channelId)[timestep];
 
-  uint64_t uSize = bAntenna->GetNumberOfElements ();
-  uint64_t sSize = aAntenna->GetNumberOfElements ();
+  uint64_t bSize = bAntenna->GetNumberOfElements ();
+  uint64_t aSize = aAntenna->GetNumberOfElements ();
 
   // channel coffecient H[u][s][n];
   // considering only 1 cluster for retrocompatibility -> n=1
   MatrixBasedChannelModel::Complex3DVector H;
 
-  H.resize (uSize);
-  for (uint64_t uIndex = 0; uIndex < uSize; uIndex++)
+  H.resize (bSize);
+  for (uint64_t bIndex = 0; bIndex < bSize; bIndex++)
     {
-      H[uIndex].resize (sSize);
-      for (uint64_t sIndex = 0; sIndex < sSize; sIndex++)
+      H[bIndex].resize (aSize);
+      for (uint64_t aIndex = 0; aIndex < aSize; aIndex++)
         {
           if (qdInfo.numMpcs > 0)
             {
-              H[uIndex][sIndex].resize (1, std::complex<double> (0,0));
+              H[bIndex][aIndex].resize (1, std::complex<double> (0,0));
             }
           else
             {
-              H[uIndex][sIndex].resize (0, std::complex<double> (0,0));
+              H[bIndex][aIndex].resize (0, std::complex<double> (0,0));
             }
         }
     }
@@ -557,39 +559,34 @@ QdChannelModel::GetNewChannel (Ptr<const MobilityModel> aMob,
       double initialPhase = -2 * M_PI * qdInfo.delay_s[mpcIndex] * m_frequency + qdInfo.phase_rad[mpcIndex];
       double pathGain = pow (10, qdInfo.pathGain_dbpow[mpcIndex] / 20);
       
-      Angles rxAngle = Angles (qdInfo.azAoa_rad[mpcIndex], qdInfo.elAoa_rad[mpcIndex]);
-      rxAngle.NormalizeAngles ();
-      NS_LOG_DEBUG ("rx angle " << rxAngle);
-      Angles txAngle = Angles (qdInfo.azAod_rad[mpcIndex], qdInfo.elAod_rad[mpcIndex]);
-      txAngle.NormalizeAngles ();
-      NS_LOG_DEBUG ("tx angle " << txAngle);
+      Angles bAngle = Angles (qdInfo.azAoa_rad[mpcIndex], qdInfo.elAoa_rad[mpcIndex]);
+      NS_LOG_DEBUG ("bAngle (rx): " << bAngle);
+      Angles aAngle = Angles (qdInfo.azAod_rad[mpcIndex], qdInfo.elAod_rad[mpcIndex]);
+      NS_LOG_DEBUG ("aAngle (tx): " << aAngle);
       
-      double rxFieldPattH, rxFieldPattV, txFieldPattH, txFieldPattV;
-      std::tie (rxFieldPattH, rxFieldPattV) = bAntenna->GetElementFieldPattern (rxAngle);
-      double rxElementGain = rxFieldPattH * rxFieldPattH + rxFieldPattV * rxFieldPattV; 
-      std::tie (txFieldPattH, txFieldPattV) = aAntenna->GetElementFieldPattern (txAngle);
-      double txElementGain = txFieldPattH * txFieldPattH + txFieldPattV * txFieldPattV; 
+      // ignore polarization
+      double bFieldPattH, bFieldPattV, aFieldPattH, aFieldPattV;
+      std::tie (bFieldPattH, bFieldPattV) = bAntenna->GetElementFieldPattern (bAngle);
+      double bElementGain = std::sqrt (bFieldPattH * bFieldPattH + bFieldPattV * bFieldPattV);
+      std::tie (aFieldPattH, aFieldPattV) = aAntenna->GetElementFieldPattern (aAngle);
+      double aElementGain = std::sqrt (aFieldPattH * aFieldPattH + aFieldPattV * aFieldPattV);
       
-      double pgTimesGains = pathGain * rxElementGain * txElementGain;
+      double pgTimesGains = pathGain * bElementGain * aElementGain;
+      std::complex<double> complexRay = pgTimesGains * std::polar (1.0, initialPhase);
+
+      PhasedArrayModel::ComplexVector bSv = bAntenna->GetSteeringVector (bAngle);
+      NS_ASSERT_MSG (bSv.size () == bSize,
+                     bSv.size () << "!=" << bSize);
+      PhasedArrayModel::ComplexVector aSv = aAntenna->GetSteeringVector (aAngle);
+      NS_ASSERT_MSG (aSv.size () == aSize,
+                     aSv.size () << "!=" << aSize);
       
-      for (uint64_t uIndex = 0; uIndex < uSize; ++uIndex)
+      for (uint64_t bIndex = 0; bIndex < bSize; ++bIndex)
         {
-          Vector uLoc = bAntenna->GetElementLocation (uIndex);
-          double rxPhaseDiff = 2 * M_PI * (sin (qdInfo.elAoa_rad[mpcIndex]) * cos (qdInfo.azAoa_rad[mpcIndex]) * uLoc.x
-                                           + sin (qdInfo.elAoa_rad[mpcIndex]) * sin (qdInfo.azAoa_rad[mpcIndex]) * uLoc.y
-                                           + cos (qdInfo.elAoa_rad[mpcIndex]) * uLoc.z);
-
-          for (uint64_t sIndex = 0; sIndex < sSize; ++sIndex)
+          for (uint64_t aIndex = 0; aIndex < aSize; ++aIndex)
             {
-              Vector sLoc = aAntenna->GetElementLocation (sIndex);
-              // minus sign: complex conjugate for TX steering vector
-              double txPhaseDiff = 2 * M_PI * (sin (qdInfo.elAod_rad[mpcIndex]) * cos (qdInfo.azAod_rad[mpcIndex]) * sLoc.x
-                                               + sin (qdInfo.elAod_rad[mpcIndex]) * sin (qdInfo.azAod_rad[mpcIndex]) * sLoc.y
-                                               + cos (qdInfo.elAod_rad[mpcIndex]) * sLoc.z);
-
-              std::complex<double> ray =  pgTimesGains * exp (std::complex<double> (0, initialPhase + rxPhaseDiff + txPhaseDiff));
-
-              H[uIndex][sIndex][0] += ray;
+              std::complex<double> ray =  complexRay * std::conj (bSv[bIndex]) * std::conj(aSv[aIndex]);
+              H[bIndex][aIndex][0] += ray;
             }
         }
     }

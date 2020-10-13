@@ -85,8 +85,7 @@ std::istream &operator >> (std::istream &is, Angles &a)
 
 
 Angles::Angles ()
-  : phi (0),
-    theta (0)
+  : Angles (0, M_PI / 2)
 {
 }
 
@@ -95,18 +94,19 @@ Angles::Angles (double p, double t)
   : phi (p),
     theta (t)
 {
+  NormalizeAngles ();
 }
 
 
 Angles::Angles (Vector v)
-  : phi (std::atan2 (v.y, v.x)),
-    theta (std::acos (v.z / v.GetLength ()))
+  : Angles (std::atan2 (v.y, v.x),
+            std::acos (v.z / v.GetLength ()))
 {
 }
 
 Angles::Angles (Vector v, Vector o)
-  : phi (std::atan2 (v.y - o.y, v.x - o.x)),
-    theta (std::acos ((v.z - o.z) / CalculateDistance (v, o)))
+  : Angles (std::atan2 (v.y - o.y, v.x - o.x),
+            std::acos ((v.z - o.z) / CalculateDistance (v, o)))
 {
 }
 
