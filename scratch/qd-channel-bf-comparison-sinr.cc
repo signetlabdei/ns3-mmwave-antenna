@@ -130,6 +130,8 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveHelper::HarqEnabled", BooleanValue (harqEnabled));
   Config::SetDefault ("ns3::MmWaveFlexTtiMacScheduler::HarqEnabled", BooleanValue (harqEnabled));
   Config::SetDefault ("ns3::MmWaveCodebookBeamforming::UpdatePeriod", TimeValue (MilliSeconds (cbUpdatePeriod)));
+  Config::SetDefault ("ns3::CosineAntennaModel::VerticalBeamwidth", DoubleValue (180)); 
+  Config::SetDefault ("ns3::CosineAntennaModel::HorizontalBeamwidth", DoubleValue (180)); 
 
   // Create the tx and rx nodes
   NodeContainer ueNodes;
