@@ -252,11 +252,11 @@ main (int argc, char *argv[])
   {
     // eNBs
     mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (-76.2107)));
-    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (12.0)));
     NetDeviceContainer enbMmWaveDev0 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (0)));
 
     mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (105.826)));
-    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (12.0)));
     NetDeviceContainer enbMmWaveDev1 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (1)));
     
     enbMmWaveDevs = NetDeviceContainer (enbMmWaveDev0, enbMmWaveDev1);
@@ -265,11 +265,11 @@ main (int argc, char *argv[])
   {
     // eNBs
     mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (-90.0)));
-    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (12.0)));
     NetDeviceContainer enbMmWaveDev0 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (0)));
 
     mmwaveHelper->SetEnbPhasedArrayModelAttribute ("BearingAngle" , DoubleValue (DegreesToRadians (0.0)));
-    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (0.0))); // TODO
+    mmwaveHelper->SetEnbPhasedArrayModelAttribute ("DowntiltAngle" , DoubleValue (DegreesToRadians (12.0)));
     NetDeviceContainer enbMmWaveDev1 = mmwaveHelper->InstallEnbDevice (NodeContainer (enbNodes.Get (1)));
     
     enbMmWaveDevs = NetDeviceContainer (enbMmWaveDev0, enbMmWaveDev1);
