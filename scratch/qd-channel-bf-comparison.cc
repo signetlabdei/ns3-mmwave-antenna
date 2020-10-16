@@ -75,6 +75,8 @@ main (int argc, char *argv[])
   double cbUpdatePeriod = 1.0; // Refresh period for updating the beam pairs [ms]
   std::string enbAntennaType = "ns3::ThreeGppAntennaModel"; // The type of antenna model for eNBs
   std::string ueAntennaType = "ns3::IsotropicAntennaModel"; // The type of antenna model for UEs
+  bool harqEnabled = true;
+  bool rlcAmEnabled = true;
   
   CommandLine cmd;
   cmd.AddValue ("qdFilesPath", "The path of the folder with the QD scenarios", qdFilesPath);
@@ -92,13 +94,13 @@ main (int argc, char *argv[])
   cmd.AddValue ("cbUpdatePeriod", "Refresh period for updating the beam pairs [ms]", cbUpdatePeriod);
   cmd.AddValue ("enbAntennaType", "The type of antenna model", enbAntennaType);
   cmd.AddValue ("ueAntennaType", "The type of antenna model", ueAntennaType);
+  cmd.AddValue ("harqEnabled", "Enable HARQ", harqEnabled);
+  cmd.AddValue ("rlcAmEnabled", "Use RLC AM", rlcAmEnabled);
   cmd.Parse (argc, argv);
 
   // Setup
   LogComponentEnableAll (LOG_PREFIX_ALL);
 
-  bool harqEnabled = true;
-  bool rlcAmEnabled = true;
 
   Config::SetDefault ("ns3::MmWaveHelper::RlcAmEnabled", BooleanValue (rlcAmEnabled));
   Config::SetDefault ("ns3::MmWaveHelper::HarqEnabled", BooleanValue (harqEnabled));
@@ -106,6 +108,18 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveCodebookBeamforming::UpdatePeriod", TimeValue (MilliSeconds (cbUpdatePeriod)));
   Config::SetDefault ("ns3::CosineAntennaModel::VerticalBeamwidth", DoubleValue (180)); 
   Config::SetDefault ("ns3::CosineAntennaModel::HorizontalBeamwidth", DoubleValue (180)); 
+  
+  Config::SetDefault ("ns3::LteRlcAm::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
+  Config::SetDefault ("ns3::LteRlcUmLowLat::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
+  Config::SetDefault ("ns3::LteRlcUm::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
+  
+  Config::SetDefault ("ns3::LteRlcUmLowLat::ReorderingTimeExpires", TimeValue (MilliSeconds (10.0)));
+  Config::SetDefault ("ns3::LteRlcUm::ReorderingTimer", TimeValue (MilliSeconds (10.0)));
+	Config::SetDefault ("ns3::LteRlcAm::ReorderingTimer", TimeValue (MilliSeconds (10.0)));
+  
+  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (10 * 1024 * 1024));
+  Config::SetDefault ("ns3::LteRlcUmLowLat::MaxTxBufferSize", UintegerValue (10 * 1024 * 1024));
+  Config::SetDefault ("ns3::LteRlcAm::MaxTxBufferSize", UintegerValue (10 * 1024 * 1024));
 
   // Create the tx and rx nodes
   NodeContainer ueNodes;
@@ -269,22 +283,26 @@ main (int argc, char *argv[])
 
   // Add apps
   uint16_t dlPort = 1234;
-  uint16_t ulPort = 2000;
-  uint16_t otherPort = 3000;
   ApplicationContainer clientApps;
   ApplicationContainer serverApps;
-  ++ulPort;
-  ++otherPort;
-  PacketSinkHelper dlPacketSinkHelper ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
-  serverApps.Add (dlPacketSinkHelper.Install (ueNodes.Get (0)));
+  PacketSinkHelper dlPacketSinkHelper0 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
+  serverApps.Add (dlPacketSinkHelper0.Install (ueNodes.Get (0)));
 
-  UdpClientHelper dlClient (ueIpIface.GetAddress (0), dlPort);
-  dlClient.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
-  dlClient.SetAttribute ("MaxPackets", UintegerValue (1000000));
-  dlClient.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
+  UdpClientHelper dlClient0 (ueIpIface.GetAddress (0), dlPort++);
+  dlClient0.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
+  dlClient0.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
+  dlClient0.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
+  clientApps.Add (dlClient0.Install (remoteHost));
 
-  clientApps.Add (dlClient.Install (remoteHost));
-
+  PacketSinkHelper dlPacketSinkHelper1 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
+  serverApps.Add (dlPacketSinkHelper1.Install (ueNodes.Get (1)));
+  
+  UdpClientHelper dlClient1 (ueIpIface.GetAddress (1), dlPort++);
+  dlClient1.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
+  dlClient1.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
+  dlClient1.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
+  clientApps.Add (dlClient1.Install (remoteHost));
+    
   serverApps.Start (Seconds (0.01));
   clientApps.Start (Seconds (0.01));
   mmwaveHelper->EnableTraces ();
