@@ -201,8 +201,8 @@ main (int argc, char *argv[])
   // set the antenna type
   ObjectFactory enbAntennaModelFactory = ObjectFactory (enbAntennaType);
   ObjectFactory ueAntennaModelFactory = ObjectFactory (ueAntennaType);
-  mmwaveHelper->SetUePhasedArrayModelAttribute ("AntennaElement", PointerValue (enbAntennaModelFactory.Create<AntennaModel> ()));
-  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("AntennaElement", PointerValue (ueAntennaModelFactory.Create<AntennaModel> ()));
+  mmwaveHelper->SetEnbPhasedArrayModelAttribute ("AntennaElement", PointerValue (enbAntennaModelFactory.Create<AntennaModel> ()));
+  mmwaveHelper->SetUePhasedArrayModelAttribute ("AntennaElement", PointerValue (ueAntennaModelFactory.Create<AntennaModel> ()));
   
   // set the number of antennas in the devices
   mmwaveHelper->SetUePhasedArrayModelAttribute ("NumRows" , UintegerValue (ueAntennaNumRows));
