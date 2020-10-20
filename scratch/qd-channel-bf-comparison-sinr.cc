@@ -101,6 +101,8 @@ main (int argc, char *argv[])
   double cbUpdatePeriod = 1.0; // Refresh period for updating the beam pairs [ms]
   std::string enbAntennaType = "ns3::ThreeGppAntennaModel"; // The type of antenna model for eNBs
   std::string ueAntennaType = "ns3::IsotropicAntennaModel"; // The type of antenna model for UEs
+  bool fullStack = true; // If true, run a full stack simulation. If false, evalute the SINR only.
+  bool activateInterferer = true; // Choose whether to add the interferer or not
   
   CommandLine cmd;
   cmd.AddValue ("qdFilesPath", "The path of the folder with the QD scenarios", qdFilesPath);
@@ -118,6 +120,8 @@ main (int argc, char *argv[])
   cmd.AddValue ("cbUpdatePeriod", "Refresh period for updating the beam pairs [ms]", cbUpdatePeriod);
   cmd.AddValue ("enbAntennaType", "The type of antenna model", enbAntennaType);
   cmd.AddValue ("ueAntennaType", "The type of antenna model", ueAntennaType);
+  cmd.AddValue ("fullStack", "If true, run a full stack simulation. If false, evalute the SINR only.", fullStack);
+  cmd.AddValue ("activateInterferer", "Add the interfering UE/eNB pair", activateInterferer);
   cmd.Parse (argc, argv);
 
   // Setup
@@ -279,29 +283,78 @@ main (int argc, char *argv[])
     NS_FATAL_ERROR ("Unsupported scenario: " << scenario);
   }
   
-  // create the psd of the transmitted signal and of the noise
-  Ptr<MmWavePhyMacCommon> mwpmc = DynamicCast<MmWaveEnbNetDevice> (enbMmWaveDevs.Get (0))->GetPhy ()->GetConfigurationParameters ();
-  std::vector <int> activeRbs;
-  for (uint32_t i = 0; i < mwpmc->GetNumChunks (); i++)
+  if (!fullStack)
+  {
+    // create the psd of the transmitted signal and of the noise
+    Ptr<MmWavePhyMacCommon> mwpmc = DynamicCast<MmWaveEnbNetDevice> (enbMmWaveDevs.Get (0))->GetPhy ()->GetConfigurationParameters ();
+    std::vector <int> activeRbs;
+    for (uint32_t i = 0; i < mwpmc->GetNumChunks (); i++)
     {
       activeRbs.push_back (i);
     }
-  Ptr<SpectrumValue> txPsd = MmWaveSpectrumValueHelper::CreateTxPowerSpectralDensity (mwpmc, txPower, activeRbs);
-  Ptr<SpectrumValue> noisePsd = MmWaveSpectrumValueHelper::CreateNoisePowerSpectralDensity (mwpmc, noiseFigure);
-  
-  Time timeStep = MicroSeconds (5000);
-  for (auto i = 0; i < simTime.GetMicroSeconds () / timeStep.GetMicroSeconds (); i++)
+    Ptr<SpectrumValue> txPsd = MmWaveSpectrumValueHelper::CreateTxPowerSpectralDensity (mwpmc, txPower, activeRbs);
+    Ptr<SpectrumValue> noisePsd = MmWaveSpectrumValueHelper::CreateNoisePowerSpectralDensity (mwpmc, noiseFigure);
+    
+    Time timeStep = MicroSeconds (5000);
+    for (auto i = 0; i < simTime.GetMicroSeconds () / timeStep.GetMicroSeconds (); i++)
+    {
+      Simulator::Schedule (timeStep * i + timeStep / 2 , &ComputeSinr, enbMmWaveDevs.Get (0), ueMmWaveDevs.Get (0), 
+      enbMmWaveDevs.Get (1), ueMmWaveDevs.Get (1), 
+      txPsd, noisePsd);
+    }
+    
+    // prepare the output file
+    std::ofstream f;
+    f.open ("sinr-trace.txt");
+    f << "time[s] snr[dB] sinr[dB]\n";
+    f.close ();
+  }
+  else
   {
-    Simulator::Schedule (timeStep * i + timeStep / 2 , &ComputeSinr, enbMmWaveDevs.Get (0), ueMmWaveDevs.Get (0), 
-                                                                     enbMmWaveDevs.Get (1), ueMmWaveDevs.Get (1), 
-                                                                     txPsd, noisePsd);
+    // Install the IP stack on the UEs
+    internet.Install (ueNodes);
+    Ipv4InterfaceContainer ueIpIface;
+    ueIpIface = epcHelper->AssignUeIpv4Address (NetDeviceContainer (ueMmWaveDevs));
+    // Assign IP address to UEs, and install applications
+    Ptr<Node> ueNode = ueNodes.Get (0);
+    // Set the default gateway for the UE
+    Ptr<Ipv4StaticRouting> ueStaticRouting = ipv4RoutingHelper.GetStaticRouting (ueNode->GetObject<Ipv4> ());
+    ueStaticRouting->SetDefaultRoute (epcHelper->GetUeDefaultGatewayAddress (), 1);
+
+    // This performs the attachment of each UE to a specific eNB
+    mmwaveHelper->AttachToEnbWithIndex (ueMmWaveDevs.Get (0), enbMmWaveDevs, 0);
+    mmwaveHelper->AttachToEnbWithIndex (ueMmWaveDevs.Get (1), enbMmWaveDevs, 1);
+
+    // Add apps
+    uint16_t dlPort = 1234;
+    ApplicationContainer clientApps;
+    ApplicationContainer serverApps;
+    PacketSinkHelper dlPacketSinkHelper0 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
+    serverApps.Add (dlPacketSinkHelper0.Install (ueNodes.Get (0)));
+
+    UdpClientHelper dlClient0 (ueIpIface.GetAddress (0), dlPort++);
+    dlClient0.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
+    dlClient0.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
+    dlClient0.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
+    clientApps.Add (dlClient0.Install (remoteHost));
+
+    if (activateInterferer)
+      {
+        PacketSinkHelper dlPacketSinkHelper1 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
+        serverApps.Add (dlPacketSinkHelper1.Install (ueNodes.Get (1)));
+        
+        UdpClientHelper dlClient1 (ueIpIface.GetAddress (1), dlPort++);
+        dlClient1.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
+        dlClient1.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
+        dlClient1.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
+        clientApps.Add (dlClient1.Install (remoteHost));
+      }
+      
+    serverApps.Start (Seconds (0.01));
+    clientApps.Start (Seconds (0.01));
+    mmwaveHelper->EnableTraces ();
   }
 
-  // prepare the output file
-  std::ofstream f;
-  f.open ("sinr-trace.txt");
-  f << "time[s] snr[dB] sinr[dB]\n";
-  f.close ();
   
   Simulator::Stop (simTime);
   Simulator::Run ();
