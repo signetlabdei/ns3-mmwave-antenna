@@ -77,6 +77,7 @@ main (int argc, char *argv[])
   std::string ueAntennaType = "ns3::IsotropicAntennaModel"; // The type of antenna model for UEs
   bool harqEnabled = true;
   bool rlcAmEnabled = true;
+  bool activateInterferer = true; // Choose whether to add the interferer or not
   
   CommandLine cmd;
   cmd.AddValue ("qdFilesPath", "The path of the folder with the QD scenarios", qdFilesPath);
@@ -96,6 +97,7 @@ main (int argc, char *argv[])
   cmd.AddValue ("ueAntennaType", "The type of antenna model", ueAntennaType);
   cmd.AddValue ("harqEnabled", "Enable HARQ", harqEnabled);
   cmd.AddValue ("rlcAmEnabled", "Use RLC AM", rlcAmEnabled);
+  cmd.AddValue ("activateInterferer", "Add the interfering UE/eNB pair", activateInterferer);
   cmd.Parse (argc, argv);
 
   // Setup
@@ -294,14 +296,17 @@ main (int argc, char *argv[])
   dlClient0.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
   clientApps.Add (dlClient0.Install (remoteHost));
 
-  PacketSinkHelper dlPacketSinkHelper1 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
-  serverApps.Add (dlPacketSinkHelper1.Install (ueNodes.Get (1)));
-  
-  UdpClientHelper dlClient1 (ueIpIface.GetAddress (1), dlPort++);
-  dlClient1.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
-  dlClient1.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
-  dlClient1.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
-  clientApps.Add (dlClient1.Install (remoteHost));
+  if (activateInterferer)
+    {
+      PacketSinkHelper dlPacketSinkHelper1 ("ns3::UdpSocketFactory", InetSocketAddress (Ipv4Address::GetAny (), dlPort));
+      serverApps.Add (dlPacketSinkHelper1.Install (ueNodes.Get (1)));
+      
+      UdpClientHelper dlClient1 (ueIpIface.GetAddress (1), dlPort++);
+      dlClient1.SetAttribute ("Interval", TimeValue (MicroSeconds (interPacketInterval)));
+      dlClient1.SetAttribute ("MaxPackets", UintegerValue (0xFFFFFFFF));
+      dlClient1.SetAttribute ("PacketSize", UintegerValue (appPacketSize));
+      clientApps.Add (dlClient1.Install (remoteHost));
+    }
     
   serverApps.Start (Seconds (0.01));
   clientApps.Start (Seconds (0.01));
