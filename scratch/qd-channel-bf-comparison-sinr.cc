@@ -103,6 +103,8 @@ main (int argc, char *argv[])
   std::string ueAntennaType = "ns3::IsotropicAntennaModel"; // The type of antenna model for UEs
   bool fullStack = true; // If true, run a full stack simulation. If false, evalute the SINR only.
   bool activateInterferer = true; // Choose whether to add the interferer or not
+  bool harqEnabled = true;
+  bool rlcAmEnabled = true;
   
   CommandLine cmd;
   cmd.AddValue ("qdFilesPath", "The path of the folder with the QD scenarios", qdFilesPath);
@@ -122,13 +124,12 @@ main (int argc, char *argv[])
   cmd.AddValue ("ueAntennaType", "The type of antenna model", ueAntennaType);
   cmd.AddValue ("fullStack", "If true, run a full stack simulation. If false, evalute the SINR only.", fullStack);
   cmd.AddValue ("activateInterferer", "Add the interfering UE/eNB pair", activateInterferer);
+  cmd.AddValue ("harqEnabled", "Enable HARQ", harqEnabled);
+  cmd.AddValue ("rlcAmEnabled", "Use RLC AM", rlcAmEnabled);
   cmd.Parse (argc, argv);
 
   // Setup
   LogComponentEnableAll (LOG_PREFIX_ALL);
-
-  bool harqEnabled = true;
-  bool rlcAmEnabled = true;
 
   Config::SetDefault ("ns3::MmWaveHelper::RlcAmEnabled", BooleanValue (rlcAmEnabled));
   Config::SetDefault ("ns3::MmWaveHelper::HarqEnabled", BooleanValue (harqEnabled));
@@ -136,6 +137,18 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveCodebookBeamforming::UpdatePeriod", TimeValue (MilliSeconds (cbUpdatePeriod)));
   Config::SetDefault ("ns3::CosineAntennaModel::VerticalBeamwidth", DoubleValue (180)); 
   Config::SetDefault ("ns3::CosineAntennaModel::HorizontalBeamwidth", DoubleValue (180)); 
+  
+  Config::SetDefault ("ns3::LteRlcAm::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
+  Config::SetDefault ("ns3::LteRlcUmLowLat::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
+  Config::SetDefault ("ns3::LteRlcUm::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
+  
+  Config::SetDefault ("ns3::LteRlcUmLowLat::ReorderingTimeExpires", TimeValue (MilliSeconds (10.0)));
+  Config::SetDefault ("ns3::LteRlcUm::ReorderingTimer", TimeValue (MilliSeconds (10.0)));
+  Config::SetDefault ("ns3::LteRlcAm::ReorderingTimer", TimeValue (MilliSeconds (10.0)));
+  
+  Config::SetDefault ("ns3::LteRlcUm::MaxTxBufferSize", UintegerValue (10 * 1024 * 1024));
+  Config::SetDefault ("ns3::LteRlcUmLowLat::MaxTxBufferSize", UintegerValue (10 * 1024 * 1024));
+  Config::SetDefault ("ns3::LteRlcAm::MaxTxBufferSize", UintegerValue (10 * 1024 * 1024));
 
   // Create the tx and rx nodes
   NodeContainer ueNodes;
