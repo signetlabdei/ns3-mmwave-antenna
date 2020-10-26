@@ -135,8 +135,9 @@ main (int argc, char *argv[])
   Config::SetDefault ("ns3::MmWaveHelper::HarqEnabled", BooleanValue (harqEnabled));
   Config::SetDefault ("ns3::MmWaveFlexTtiMacScheduler::HarqEnabled", BooleanValue (harqEnabled));
   Config::SetDefault ("ns3::MmWaveCodebookBeamforming::UpdatePeriod", TimeValue (MilliSeconds (cbUpdatePeriod)));
-  Config::SetDefault ("ns3::CosineAntennaModel::VerticalBeamwidth", DoubleValue (180)); 
-  Config::SetDefault ("ns3::CosineAntennaModel::HorizontalBeamwidth", DoubleValue (180)); 
+  Config::SetDefault ("ns3::CosineAntennaModel::VerticalBeamwidth", DoubleValue (120)); 
+  Config::SetDefault ("ns3::CosineAntennaModel::HorizontalBeamwidth", DoubleValue (120)); 
+  Config::SetDefault ("ns3::CosineAntennaModel::MaxGain", DoubleValue (5.6856)); 
   
   Config::SetDefault ("ns3::LteRlcAm::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
   Config::SetDefault ("ns3::LteRlcUmLowLat::ReportBufferStatusTimer", TimeValue (MicroSeconds (100.0)));
